@@ -1,0 +1,502 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useRef, useCallback } from 'react';
+     4→     4→
+     5→     5→/* ──────────── DATA ──────────── */
+     6→     6→
+     7→     7→const NAV_LINKS = ['Destinations', 'Experiences', 'Pricing', 'Stories', 'Guides'];
+     8→     8→
+     9→     9→const TOURS = [
+    10→    10→  { title: 'Everest Base Camp Trek', days: 16, difficulty: 'moderate' as const, price: 4299, country: 'Nepal', altitude: '5,364m', rating: 5, gradient: 'from-emerald-900/40 to-teal-900/40' },
+    11→    11→  { title: 'Annapurna Circuit', days: 18, difficulty: 'challenging' as const, price: 3199, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-900/40 to-orange-900/40' },
+    12→    12→  { title: 'Bhutan Dragon Trail', days: 12, difficulty: 'moderate' as const, price: 5499, country: 'Bhutan', altitude: '4,200m', rating: 5, gradient: 'from-blue-900/40 to-indigo-900/40' },
+    13→    13→  { title: 'K2 Base Camp Trek', days: 20, difficulty: 'strenuous' as const, price: 4899, country: 'Pakistan', altitude: '5,150m', rating: 5, gradient: 'from-rose-900/40 to-red-900/40' },
+    14→    14→  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 2199, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-900/40 to-emerald-900/40' },
+    15→    15→  { title: 'Upper Mustang Trek', days: 14, difficulty: 'moderate' as const, price: 3599, country: 'Nepal', altitude: '4,230m', rating: 5, gradient: 'from-yellow-900/40 to-amber-900/40' },
+    16→    16→];
+    17→    17→
+    18→    18→const DESTINATIONS = [
+    19→    19→  { name: 'Nepal', tagline: 'Himalayan Kingdom', trips: 45, priceFrom: 1999, rating: 4.9, gradient: 'from-emerald-900/50 to-teal-900/50' },
+    20→    20→  { name: 'Bhutan', tagline: 'Land of the Thunder Dragon', trips: 12, priceFrom: 3499, rating: 4.8, gradient: 'from-blue-900/50 to-indigo-900/50' },
+    21→    21→  { name: 'Tibet', tagline: 'Roof of the World', trips: 8, priceFrom: 2999, rating: 4.7, gradient: 'from-amber-900/50 to-orange-900/50' },
+    22→    22→  { name: 'Pakistan', tagline: 'K2 & Karakoram', trips: 6, priceFrom: 3199, rating: 4.9, gradient: 'from-rose-900/50 to-red-900/50' },
+    23→    23→  { name: 'India', tagline: 'Ladakh & Sikkim', trips: 10, priceFrom: 2499, rating: 4.6, gradient: 'from-yellow-900/50 to-amber-900/50' },
+    24→    24→  { name: 'China', tagline: 'Mount Kailash', trips: 4, priceFrom: 3999, rating: 4.7, gradient: 'from-purple-900/50 to-fuchsia-900/50' },
+    25→    25→];
+    26→    26→
+    27→    27→const FEATURES = [
+    28→    28→  { title: 'Expert Guided Treks', desc: 'Led by certified mountaineers with 15+ years of Himalayan experience and WFR certification.', icon: 'compass' },
+    29→    29→  { title: 'GPS Live Tracking', desc: 'Real-time location sharing with family and emergency monitoring on every expedition.', icon: 'gps' },
+    30→    30→  { title: 'Smart Itineraries', desc: 'AI-optimized schedules with acclimatization days built in for safety and comfort.', icon: 'calendar' },
+    31→    31→  { title: 'Altitude Analytics', desc: 'Personalized altitude adaptation plans with real-time health monitoring during treks.', icon: 'chart' },
+    32→    32→];
+    33→    33→
+    34→    34→const PACKING_ITEMS: Record<string, string[]> = {
+    35→    35→  Clothing: ['Down Jacket', 'Thermal Base Layers', 'Fleece Pullover', 'Trekking Pants', 'Rain Shell', 'Warm Hat', 'Gloves', 'Buff/Neck Gaiter'],
+    36→    36→  Footwear: ['Trekking Boots', 'Camp Shoes', 'Trekking Socks (3 pairs)'],
+    37→    37→  Gear: ['Daypack', 'Sleeping Bag', 'Trekking Poles', 'Headlamp', 'Water Bottles', 'Sunglasses'],
+    38→    38→  Documents: ['Passport', 'Travel Insurance', 'Flight Tickets', 'Visa Documents', 'Emergency Contacts Card'],
+    39→    39→  Electronics: ['Phone + Charger', 'Power Bank', 'Camera', 'Adapter'],
+    40→    40→  Medications: ['Altitude Sickness Pills', 'First Aid Kit', 'Personal Medications', 'Water Purification Tablets'],
+    41→    41→};
+    42→    42→
+    43→    43→const FAQ_DATA = [
+    44→    44→  { q: 'How far in advance should I book?', a: 'We recommend booking at least 3-6 months in advance for popular treks like EBC and Annapurna. For peak seasons (Oct-Nov and Mar-May), booking 6-12 months ahead ensures availability. Last-minute bookings may be possible but subject to availability.', cat: 'Booking' },
+    45→    45→  { q: 'What is included in the tour price?', a: 'Our tour prices include airport transfers, accommodation, meals during the trek, experienced guide and porter services, permits and entry fees, and emergency evacuation arrangements. International flights, travel insurance, and personal expenses are not included.', cat: 'Booking' },
+    46→    46→  { q: 'What payment methods do you accept?', a: 'We accept Visa, Mastercard, PayPal, bank transfers, and Apple Pay. A 30% deposit is required to confirm your booking, with the balance due 30 days before departure.', cat: 'Payment' },
+    47→    47→  { q: 'Can I pay in installments?', a: 'Yes! We offer flexible payment plans. You can split the total cost into 3 monthly installments with no additional fees. A 30% deposit is still required upfront to secure your spot.', cat: 'Payment' },
+    48→    48→  { q: 'What is your cancellation policy?', a: 'Cancellations 60+ days before departure receive a full refund minus a $200 admin fee. 30-59 days: 50% refund. Under 30 days: no refund. We strongly recommend travel insurance to cover cancellation costs.', cat: 'Cancellation' },
+    49→    49→  { q: 'Do you offer refunds?', a: 'Refunds are processed according to our cancellation policy. In cases of trip cancellation by Himalayan Explorer due to weather or safety concerns, you receive a full refund or the option to reschedule at no extra cost.', cat: 'Cancellation' },
+    50→    50→  { q: 'Is travel insurance mandatory?', a: 'Yes, comprehensive travel insurance covering high-altitude trekking (up to 6,000m), emergency evacuation, and trip cancellation is mandatory for all our expeditions. We can help you find suitable coverage.', cat: 'Insurance' },
+    51→    51→  { q: 'What does the insurance cover?', a: 'Our recommended insurance covers emergency helicopter evacuation, medical treatment, trip cancellation, lost baggage, and repatriation. High-altitude coverage up to 6,000m is included in our partner plans.', cat: 'Insurance' },
+    52→    52→  { q: 'How do I prepare for altitude?', a: 'Start cardiovascular training 3-4 months before your trek. Focus on hiking, running, and stair climbing. We provide a detailed fitness plan upon booking. During the trek, stay hydrated, ascend gradually, and follow your guide\'s acclimatization advice.', cat: 'Health' },
+    53→    53→  { q: 'What gear do I need to bring?', a: 'Essential items include trekking boots, down jacket, sleeping bag, daypack, headlamp, and proper layering. We provide a comprehensive packing list tailored to your specific trek. Rental gear is available in Kathmandu.', cat: 'Gear' },
+    54→    54→];
+    55→    55→
+    56→    56→const TESTIMONIALS = [
+    57→    57→  { name: 'Sarah Chen', trip: 'EBC 2024', initials: 'SC', quote: 'The EBC expedition changed my life. The guides were incredibly knowledgeable and supportive, and the scenery was beyond anything I could have imagined. Every detail was perfectly managed.' },
+    58→    58→  { name: 'Marcus Weber', trip: 'Annapurna Circuit', initials: 'MW', quote: 'From the moment I landed in Kathmandu, everything was seamless. The team\'s attention to acclimatization and safety gave me complete peace of mind while pushing my limits.' },
+    59→    59→  { name: 'Priya Sharma', trip: 'Dragon Trail', initials: 'PS', quote: 'Bhutan was beyond anything I imagined. The cultural immersion combined with stunning Himalayan views made this the most enriching travel experience of my life.' },
+    60→    60→  { name: 'James Morrison', trip: 'K2 Base Camp', initials: 'JM', quote: 'The most challenging and rewarding experience of my life. Our guide Tenzing was extraordinary — his expertise and calm presence made all the difference at high altitude.' },
+    61→    61→];
+    62→    62→
+    63→    63→const BLOG_POSTS = [
+    64→    64→  { title: 'Preparing for High Altitude: A Complete Guide', category: 'Trekking Tips', readTime: '8 min', excerpt: 'Essential advice for acclimatization and fitness preparation before your Himalayan adventure...', gradient: 'from-teal-900/50 to-cyan-900/50' },
+    65→    65→  { title: 'Hidden Gems of the Annapurna Region', category: 'Destination', readTime: '6 min', excerpt: 'Beyond the popular circuit lie untouched valleys and ancient monasteries waiting to be explored...', gradient: 'from-amber-900/50 to-yellow-900/50' },
+    66→    66→  { title: 'Sustainable Travel in the Himalayas', category: 'Responsible Travel', readTime: '5 min', excerpt: 'How we minimize our impact while maximizing the positive contribution to local communities...', gradient: 'from-green-900/50 to-emerald-900/50' },
+    67→    67→];
+    68→    68→
+    69→    69→const TRUST_ITEMS = [
+    70→    70→  { title: '24/7 Emergency Hotline', desc: '+977-1-XXXX-XXXX', icon: 'phone' },
+    71→    71→  { title: 'Certified Guides', desc: 'WFR, CPR/AED, Mountain Leader', icon: 'shield' },
+    72→    72→  { title: 'Safety Track Record', desc: '11 years, 5000+ treks, zero major incidents', icon: 'check-circle' },
+    73→    73→  { title: 'Satellite Communication', desc: 'GPS tracking on all remote treks', icon: 'satellite' },
+    74→    74→  { title: 'Travel Insurance Partners', desc: 'World Nomads, Allianz, SafetyWing', icon: 'insurance' },
+    75→    75→  { title: 'Industry Certifications', desc: 'ATTA, GSTC, Nepal Tourism Board', icon: 'award' },
+    76→    76→];
+    77→    77→
+    78→    78→const PRICING_TIERS = [
+    79→    79→  { name: 'Explorer', price: 2499, features: ['Group treks (8-12 people)', 'Teahouse accommodation', 'Licensed trekking guide', 'Basic meals during trek', 'Permits & entry fees', 'Airport transfers', 'Emergency evacuation coverage'], highlighted: false },
+    80→    80→  { name: 'Adventurer', price: 4999, features: ['Small group treks (4-6 people)', 'Best available lodges', 'Senior mountain guide', 'All meals + snacks', 'All permits & fees', 'Airport transfers & domestic flights', 'GPS tracking device', 'Emergency evacuation coverage', 'Pre-trip fitness plan'], highlighted: true },
+    81→    81→  { name: 'Summit', price: 8999, features: ['Private or duo expedition', 'Luxury lodges & premium camps', 'Expert mountaineer guide', 'Gourmet meals & supplements', 'All permits, fees & visas', 'All flights & transfers', 'GPS + satellite communication', 'Comprehensive insurance', 'Personal porter', 'Post-trip recovery package'], highlighted: false },
+    82→    82→];
+    83→    83→
+    84→    84→const TEAM_MEMBERS = [
+    85→    85→  { name: 'Tenzing Dorje', role: 'Founder & CEO', initials: 'TD', bio: 'Born in the Everest region, Tenzing has summited Everest 3 times and led over 200 expeditions across the Himalayas.' },
+    86→    86→  { name: 'Lakpa Sherpa', role: 'Head Guide', initials: 'LS', bio: 'IFMGA-certified guide with 18 years of experience. Specializes in technical climbs and high-altitude rescue.' },
+    87→    87→  { name: 'Anita Rai', role: 'Operations Director', initials: 'AR', bio: 'MBA from Kathmandu University. Ensures every expedition runs seamlessly with meticulous attention to logistics.' },
+    88→    88→  { name: 'Dawa Yangjin', role: 'Sustainability Lead', initials: 'DY', bio: 'Environmental scientist dedicated to making Himalayan tourism sustainable and beneficial for local communities.' },
+    89→    89→];
+    90→    90→
+    91→    91→const RESOURCES = [
+    92→    92→  { title: 'Visa Information', desc: 'Complete visa requirements for Nepal, Bhutan, Tibet, and Pakistan. Check by nationality.', cta: 'Check Visa Requirements', icon: 'passport' },
+    93→    93→  { title: 'Travel Insurance', desc: 'Comprehensive coverage for high-altitude treks. Partnered with World Nomads & Allianz.', cta: 'Get Insurance Quote', icon: 'shield' },
+    94→    94→  { title: 'Health & Vaccinations', desc: 'Required and recommended vaccinations, altitude sickness prevention, and health tips.', cta: 'View Health Guide', icon: 'heart' },
+    95→    95→  { title: 'Packing Guide', desc: 'Interactive packing checklists customized for your specific trip and season.', cta: 'Open Packing List', icon: 'backpack' },
+    96→    96→  { title: 'Currency & Budgeting', desc: 'Exchange rates, tipping customs, and daily budget estimates per destination.', cta: 'Currency Guide', icon: 'wallet' },
+    97→    97→  { title: 'Cultural Etiquette', desc: "Local customs, do's and don'ts, and cultural sensitivity guides for each region.", cta: 'Learn More', icon: 'book' },
+    98→    98→];
+    99→    99→
+   100→   100→const GALLERY_ITEMS = [
+   101→   101→  { title: 'Sunrise at Poon Hill', location: 'Nepal', gradient: 'from-orange-900/60 to-amber-900/60' },
+   102→   102→  { title: 'Tiger\'s Nest Monastery', location: 'Bhutan', gradient: 'from-blue-900/60 to-indigo-900/60' },
+   103→   103→  { title: 'Everest Panorama', location: 'Nepal', gradient: 'from-slate-900/60 to-zinc-900/60' },
+   104→   104→  { title: 'K2 at Dawn', location: 'Pakistan', gradient: 'from-rose-900/60 to-pink-900/60' },
+   105→   105→  { title: 'Potala Palace', location: 'Tibet', gradient: 'from-red-900/60 to-orange-900/60' },
+   106→   106→  { title: 'Annapurna Range', location: 'Nepal', gradient: 'from-teal-900/60 to-cyan-900/60' },
+   107→   107→  { title: 'Paro Valley', location: 'Bhutan', gradient: 'from-emerald-900/60 to-green-900/60' },
+   108→   108→  { title: 'Mount Kailash', location: 'China', gradient: 'from-purple-900/60 to-fuchsia-900/60' },
+   109→   109→];
+   110→   110→
+   111→   111→/* ──────────── HELPERS ──────────── */
+   112→   112→
+   113→   113→function MountainSVG({ className = '', color = 'rgba(255,255,255,0.06)' }: { className?: string; color?: string }) {
+   114→   114→  return (
+   115→   115→    <svg className={className} viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+   116→   116→      <path d="M0 200L80 80L130 130L200 40L270 120L320 70L400 200Z" fill={color} />
+   117→   117→      <path d="M200 40L230 85L170 85Z" fill="rgba(255,255,255,0.04)" />
+   118→   118→    </svg>
+   119→   119→  );
+   120→   120→}
+   121→   121→
+   122→   122→function StarRating({ count }: { count: number }) {
+   123→   123→  return (
+   124→   124→    <div className="flex gap-0.5">
+   125→   125→      {Array.from({ length: 5 }, (_, i) => (
+   126→   126→        <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 20 20" fill={i < count ? '#d4a853' : 'rgba(255,255,255,0.15)'}>
+   127→   127→          <path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.51.91-5.33L2.27 6.68l5.34-.78L10 1z" />
+   128→   128→        </svg>
+   129→   129→      ))}
+   130→   130→    </div>
+   131→   131→  );
+   132→   132→}
+   133→   133→
+   134→   134→function ResourceIcon({ type }: { type: string }) {
+   135→   135→  const icons: Record<string, JSX.Element> = {
+   136→   136→    passport: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 18h10"/></svg>,
+   137→   137→    shield: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>,
+   138→   138→    heart: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 21C12 21 3 13.5 3 8.5 3 5.42 5.42 3 8.5 3c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0117.5 3C20.58 3 23 5.42 23 8.5 23 13.5 12 21 12 21z"/></svg>,
+   139→   139→    backpack: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="6" width="14" height="16" rx="2"/><path d="M8 6V4a4 4 0 018 0v2"/><path d="M5 10h14"/></svg>,
+   140→   140→    wallet: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M16 14h2"/></svg>,
+   141→   141→    book: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z"/></svg>,
+   142→   142→  };
+   143→   143→  return icons[type] || icons.book;
+   144→   144→}
+   145→   145→
+   146→   146→function FeatureIcon({ type }: { type: string }) {
+   147→   147→  const icons: Record<string, JSX.Element> = {
+   148→   148→    compass: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>,
+   149→   149→    gps: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="8" strokeDasharray="4 4"/></svg>,
+   150→   150→    calendar: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
+   151→   151→    chart: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>,
+   152→   152→  };
+   153→   153→  return icons[type] || icons.chart;
+   154→   154→}
+   155→   155→
+   156→   156→function TrustIcon({ type }: { type: string }) {
+   157→   157→  const icons: Record<string, JSX.Element> = {
+   158→   158→    phone: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
+   159→   159→    shield: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>,
+   160→   160→    'check-circle': <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>,
+   161→   161→    satellite: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M12 12l4-4"/><path d="M17.5 6.5a2.12 2.12 0 013 3L17.5 6.5z"/><path d="M2 12l4-4"/><path d="M6 8l4 4"/><circle cx="12" cy="12" r="3"/></svg>,
+   162→   162→    insurance: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
+   163→   163→    award: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>,
+   164→   164→  };
+   165→   165→  return icons[type] || icons.award;
+   166→   166→}
+   167→   167→
+   168→   168→/* ──────────── MAIN COMPONENT ──────────── */
+   169→   169→
+   170→   170→export default function HimalayanExplorer() {
+   171→   171→  /* State */
+   172→   172→  const [scrolled, setScrolled] = useState(false);
+   173→   173→  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+   174→   174→  const [chatOpen, setChatOpen] = useState(false);
+   175→   175→  const [chatMessage, setChatMessage] = useState('');
+   176→   176→  const [activeToolTab, setActiveToolTab] = useState<'budget' | 'altitude' | 'packing' | 'difficulty'>('budget');
+   177→   177→  const [faqOpenIndex, setFaqOpenIndex] = useState<number | null>(null);
+   178→   178→  const [faqCategory, setFaqCategory] = useState('All');
+   179→   179→  const [galleryFilter, setGalleryFilter] = useState('All');
+   180→   180→  const [backToTopVisible, setBackToTopVisible] = useState(false);
+   181→   181→  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+   182→   182→  const [heroMouse, setHeroMouse] = useState({ x: 0, y: 0 });
+   183→   183→  const [statsAnimated, setStatsAnimated] = useState(false);
+   184→   184→  const [statsValues, setStatsValues] = useState([0, 0, 0, 0]);
+   185→   185→  const [wishlistCount] = useState(3);
+   186→   186→  const [currency, setCurrency] = useState('USD');
+   187→   187→  const [language, setLanguage] = useState('EN');
+   188→   188→  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+   189→   189→  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+   190→   190→
+   191→   191→  /* Tool states */
+   192→   192→  const [budgetDest, setBudgetDest] = useState('nepal');
+   193→   193→  const [budgetDuration, setBudgetDuration] = useState(10);
+   194→   194→  const [budgetStyle, setBudgetStyle] = useState('mid');
+   195→   195→  const [budgetTravelers, setBudgetTravelers] = useState(2);
+   196→   196→  const [budgetResult, setBudgetResult] = useState<Record<string, number> | null>(null);
+   197→   197→
+   198→   198→  const [altMax, setAltMax] = useState(5364);
+   199→   199→  const [altStart, setAltStart] = useState(2800);
+   200→   200→  const [altDays, setAltDays] = useState(10);
+   201→   201→  const [altResult, setAltResult] = useState<{ risk: string; acclimDays: number; maxDailyGain: number; oxygenPct: number; symptoms: string[] } | null>(null);
+   202→   202→
+   203→   203→  const [packedItems, setPackedItems] = useState<Record<string, boolean>>(() => {
+   204→   204→    if (typeof window === 'undefined') return {};
+   205→   205→    try {
+   206→   206→      const saved = localStorage.getItem('himalaya-packing');
+   207→   207→      if (saved) return JSON.parse(saved);
+   208→   208→    } catch { /* ignore */ }
+   209→   209→    return {};
+   210→   210→  });
+   211→   211→
+   212→   212→  const [diffDistance, setDiffDistance] = useState(65);
+   213→   213→  const [diffAltitude, setDiffAltitude] = useState(5400);
+   214→   214→  const [diffAscent, setDiffAscent] = useState(2500);
+   215→   215→  const [diffTerrain, setDiffTerrain] = useState('rocky');
+   216→   216→  const [diffFitness, setDiffFitness] = useState('intermediate');
+   217→   217→  const [diffResult, setDiffResult] = useState<{ score: number; label: string; time: string; training: string } | null>(null);
+   218→   218→
+   219→   219→  const [newsletterEmail, setNewsletterEmail] = useState('');
+   220→   220→  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+   221→   221→
+   222→   222→  const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', trip: '', message: '' });
+   223→   223→
+   224→   224→  const heroRef = useRef<HTMLDivElement>(null);
+   225→   225→  const statsRef = useRef<HTMLDivElement>(null);
+   226→   226→  const chatMessagesRef = useRef<HTMLDivElement>(null);
+   227→   227→
+   228→   228→  /* Countdown timer - 45 days from a fixed epoch */
+   229→   229→  useEffect(() => {
+   230→   230→    const targetDate = new Date('2026-09-15T06:00:00Z');
+   231→   231→    const interval = setInterval(() => {
+   232→   232→      const now = new Date();
+   233→   233→      const diff = targetDate.getTime() - now.getTime();
+   234→   234→      if (diff <= 0) {
+   235→   235→        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+   236→   236→        return;
+   237→   237→      }
+   238→   238→      setCountdown({
+   239→   239→        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+   240→   240→        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+   241→   241→        minutes: Math.floor((diff / (1000 * 60)) % 60),
+   242→   242→        seconds: Math.floor((diff / 1000) % 60),
+   243→   243→      });
+   244→   244→    }, 1000);
+   245→   245→    return () => clearInterval(interval);
+   246→   246→  }, []);
+   247→   247→
+   248→   248→  /* Scroll listener */
+   249→   249→  useEffect(() => {
+   250→   250→    const onScroll = () => {
+   251→   251→      setScrolled(window.scrollY > 50);
+   252→   252→      setBackToTopVisible(window.scrollY > 500);
+   253→   253→    };
+   254→   254→    window.addEventListener('scroll', onScroll, { passive: true });
+   255→   255→    return () => window.removeEventListener('scroll', onScroll);
+   256→   256→  }, []);
+   257→   257→
+   258→   258→  /* IntersectionObserver for reveal animations */
+   259→   259→  useEffect(() => {
+   260→   260→    const observer = new IntersectionObserver(
+   261→   261→      (entries) => {
+   262→   262→        entries.forEach((entry) => {
+   263→   263→          if (entry.isIntersecting) {
+   264→   264→            entry.target.classList.add('visible');
+   265→   265→          }
+   266→   266→        });
+   267→   267→      },
+   268→   268→      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+   269→   269→    );
+   270→   270→    document.querySelectorAll('.reveal, .reveal-scale').forEach((el) => observer.observe(el));
+   271→   271→    return () => observer.disconnect();
+   272→   272→  }, []);
+   273→   273→
+   274→   274→  /* Stats counter animation */
+   275→   275→  useEffect(() => {
+   276→   276→    if (!statsRef.current) return;
+   277→   277→    const observer = new IntersectionObserver(
+   278→   278→      (entries) => {
+   279→   279→        if (entries[0].isIntersecting && !statsAnimated) {
+   280→   280→          setStatsAnimated(true);
+   281→   281→          const targets = [5000, 50, 300, 11];
+   282→   282→          const durations = 2000;
+   283→   283→          const startTime = Date.now();
+   284→   284→          const animate = () => {
+   285→   285→            const elapsed = Date.now() - startTime;
+   286→   286→            const progress = Math.min(elapsed / durations, 1);
+   287→   287→            const eased = 1 - Math.pow(1 - progress, 3);
+   288→   288→            setStatsValues(targets.map((t) => Math.round(t * eased)));
+   289→   289→            if (progress < 1) requestAnimationFrame(animate);
+   290→   290→          };
+   291→   291→          requestAnimationFrame(animate);
+   292→   292→        }
+   293→   293→      },
+   294→   294→      { threshold: 0.3 }
+   295→   295→    );
+   296→   296→    observer.observe(statsRef.current);
+   297→   297→    return () => observer.disconnect();
+   298→   298→  }, [statsAnimated]);
+   299→   299→
+   300→   300→  /* Save packing state */
+   301→   301→  useEffect(() => {
+   302→   302→    try {
+   303→   303→      localStorage.setItem('himalaya-packing', JSON.stringify(packedItems));
+   304→   304→    } catch { /* ignore */ }
+   305→   305→  }, [packedItems]);
+   306→   306→
+   307→   307→  /* Budget calculator */
+   308→   308→  const calculateBudget = useCallback(() => {
+   309→   309→    const destCosts: Record<string, Record<string, number>> = {
+   310→   310→      nepal: { flights: 800, accommodation: 50, food: 30, activities: 40, insurance: 12, visa: 30 },
+   311→   311→      bhutan: { flights: 1200, accommodation: 80, food: 45, activities: 60, insurance: 15, visa: 40 },
+   312→   312→      tibet: { flights: 1000, accommodation: 70, food: 35, activities: 50, insurance: 14, visa: 50 },
+   313→   313→      pakistan: { flights: 900, accommodation: 55, food: 25, activities: 45, insurance: 13, visa: 35 },
+   314→   314→      india: { flights: 700, accommodation: 45, food: 20, activities: 35, insurance: 11, visa: 25 },
+   315→   315→      china: { flights: 1100, accommodation: 75, food: 40, activities: 55, insurance: 14, visa: 60 },
+   316→   316→    };
+   317→   317→    const styleMult: Record<string, number> = { budget: 0.7, mid: 1, luxury: 1.8 };
+   318→   318→    const d = destCosts[budgetDest] || destCosts.nepal;
+   319→   319→    const m = styleMult[budgetStyle] || 1;
+   320→   320→    setBudgetResult({
+   321→   321→      Flights: Math.round(d.flights * budgetTravelers * m),
+   322→   322→      Accommodation: Math.round(d.accommodation * budgetDuration * budgetTravelers * m),
+   323→   323→      Food: Math.round(d.food * budgetDuration * budgetTravelers * m),
+   324→   324→      Activities: Math.round(d.activities * budgetDuration * m),
+   325→   325→      Insurance: Math.round(d.insurance * budgetDuration * budgetTravelers),
+   326→   326→      Visa: Math.round(d.visa * budgetTravelers),
+   327→   327→    });
+   328→   328→  }, [budgetDest, budgetDuration, budgetStyle, budgetTravelers]);
+   329→   329→
+   330→   330→  /* Altitude calculator */
+   331→   331→  const calculateAltitude = useCallback(() => {
+   332→   332→    const gain = altMax - altStart;
+   333→   333→    const acclimDays = altMax > 3500 ? Math.ceil((altMax - 3500) / 500) + 2 : 0;
+   334→   334→    const maxDailyGain = altMax > 3000 ? 500 : 800;
+   335→   335→    const oxygenPct = Math.round((Math.exp(-0.0001217 * altMax)) * 100 * 20.9) / 10;
+   336→   336→    let risk = 'Low';
+   337→   337→    if (altMax > 5500) risk = 'Extreme';
+   338→   338→    else if (altMax > 4500) risk = 'High';
+   339→   339→    else if (altMax > 3500) risk = 'Moderate';
+   340→   340→    const symptoms: string[] = [];
+   341→   341→    if (altMax > 2500) symptoms.push('Headache', 'Nausea');
+   342→   342→    if (altMax > 3500) symptoms.push('Shortness of breath', 'Dizziness');
+   343→   343→    if (altMax > 4500) symptoms.push('Confusion', 'Severe fatigue');
+   344→   344→    if (altMax > 5500) symptoms.push('Cyanosis', 'Loss of coordination');
+   345→   345→    setAltResult({ risk, acclimDays, maxDailyGain, oxygenPct, symptoms });
+   346→   346→  }, [altMax, altStart, altDays]);
+   347→   347→
+   348→   348→  /* Difficulty estimator */
+   349→   349→  const calculateDifficulty = useCallback(() => {
+   350→   350→    let score = 0;
+   351→   351→    score += (diffDistance / 200) * 2.5;
+   352→   352→    score += (diffAltitude / 8849) * 2.5;
+   353→   353→    score += (diffAscent / 5000) * 2;
+   354→   354→    const terrainMult: Record<string, number> = { trail: 0.7, rocky: 1, snow: 1.3, ice: 1.6, mixed: 1.4 };
+   355→   355→    score *= terrainMult[diffTerrain] || 1;
+   356→   356→    const fitnessMult: Record<string, number> = { beginner: 1.5, intermediate: 1.2, advanced: 0.9, elite: 0.7 };
+   357→   357→    score *= fitnessMult[diffFitness] || 1;
+   358→   358→    score = Math.min(10, Math.max(1, Math.round(score * 10) / 10));
+   359→   359→    let label = 'Easy';
+   360→   360→    if (score >= 8) label = 'Strenuous';
+   361→   361→    else if (score >= 6) label = 'Challenging';
+   362→   362→    else if (score >= 3.5) label = 'Moderate';
+   363→   363→    const baseTime = diffDistance / 3;
+   364→   364→    const time = `${Math.round(baseTime * (score / 5))}-${Math.round(baseTime * (score / 5) + 2)} days`;
+   365→   365→    const trainingRecs: Record<string, string> = {
+   366→   366→      Easy: 'Regular walking 3x/week. Basic fitness sufficient.',
+   367→   367→      Moderate: 'Cardio 4x/week, hiking with a pack, stair climbing recommended.',
+   368→   368→      Challenging: 'Intensive cardio 5x/week, strength training, practice hikes at altitude if possible.',
+   369→   369→      Strenuous: 'Elite-level preparation required. Mountaineering experience essential. 6+ months dedicated training.',
+   370→   370→    };
+   371→   371→    setDiffResult({ score, label, time, training: trainingRecs[label] });
+   372→   372→  }, [diffDistance, diffAltitude, diffAscent, diffTerrain, diffFitness]);
+   373→   373→
+   374→   374→  /* Hero mouse move */
+   375→   375→  const handleHeroMouseMove = useCallback((e: React.MouseEvent) => {
+   376→   376→    if (!heroRef.current) return;
+   377→   377→    const rect = heroRef.current.getBoundingClientRect();
+   378→   378→    setHeroMouse({
+   379→   379→      x: ((e.clientX - rect.left) / rect.width - 0.5) * 20,
+   380→   380→      y: ((e.clientY - rect.top) / rect.height - 0.5) * 20,
+   381→   381→    });
+   382→   382→  }, []);
+   383→   383→
+   384→   384→  /* Packing progress */
+   385→   385→  const totalItems = Object.values(PACKING_ITEMS).flat().length;
+   386→   386→  const packedCount = Object.values(PACKING_ITEMS).flat().filter((item) => packedItems[item]).length;
+   387→   387→  const packedPct = totalItems > 0 ? Math.round((packedCount / totalItems) * 100) : 0;
+   388→   388→
+   389→   389→  /* Filtered FAQs */
+   390→   390→  const filteredFaqs = faqCategory === 'All' ? FAQ_DATA : FAQ_DATA.filter((f) => f.cat === faqCategory);
+   391→   391→  /* Filtered gallery */
+   392→   392→  const filteredGallery = galleryFilter === 'All' ? GALLERY_ITEMS : GALLERY_ITEMS.filter((g) => g.location === galleryFilter);
+   393→   393→
+   394→   394→  /* ──────────── RENDER ──────────── */
+   395→   395→  return (
+   396→   396→    <main className="min-h-screen bg-black text-[#f0f4f8] overflow-x-hidden">
+   397→   397→      {/* ═══════════ 1. NAVIGATION ═══════════ */}
+   398→   398→      <nav className={`fixed top-0 left-0 right-0 z-50 nav-blur ${scrolled ? 'nav-scrolled' : 'bg-transparent'}`}>
+   399→   399→        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   400→   400→          <div className="flex items-center justify-between h-16 md:h-18">
+   401→   401→            {/* Logo */}
+   402→   402→            <div className="flex items-center gap-2">
+   403→   403→              <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+   404→   404→                <path d="M16 4L4 28h24L16 4z" fill="#d4a853" opacity="0.8"/>
+   405→   405→                <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
+   406→   406→                <path d="M12 28L18 18L24 28" fill="#a07830" opacity="0.3"/>
+   407→   407→              </svg>
+   408→   408→              <span className="text-lg font-bold tracking-tight">Himalayan <span className="gradient-text">Explorer</span></span>
+   409→   409→            </div>
+   410→   410→
+   411→   411→            {/* Desktop Nav */}
+   412→   412→            <div className="hidden md:flex items-center gap-6">
+   413→   413→              {NAV_LINKS.map((link) => (
+   414→   414→                <a key={link} href={`#${link.toLowerCase()}`} className="text-sm text-white/50 hover:text-himalaya-gold transition-colors">{link}</a>
+   415→   415→              ))}
+   416→   416→            </div>
+   417→   417→
+   418→   418→            {/* Right side */}
+   419→   419→            <div className="hidden md:flex items-center gap-3">
+   420→   420→              {/* Currency */}
+   421→   421→              <div className="relative">
+   422→   422→                <button onClick={() => { setShowCurrencyDropdown(!showCurrencyDropdown); setShowLanguageDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
+   423→   423→                  {currency} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+   424→   424→                </button>
+   425→   425→                {showCurrencyDropdown && (
+   426→   426→                  <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
+   427→   427→                    {['USD','EUR','GBP','INR'].map((c) => (
+   428→   428→                      <button key={c} onClick={() => { setCurrency(c); setShowCurrencyDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${currency === c ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{c}</button>
+   429→   429→                    ))}
+   430→   430→                  </div>
+   431→   431→                )}
+   432→   432→              </div>
+   433→   433→              {/* Language */}
+   434→   434→              <div className="relative">
+   435→   435→                <button onClick={() => { setShowLanguageDropdown(!showLanguageDropdown); setShowCurrencyDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
+   436→   436→                  {language} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+   437→   437→                </button>
+   438→   438→                {showLanguageDropdown && (
+   439→   439→                  <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
+   440→   440→                    {[['EN','English'],['FR','Français'],['DE','Deutsch'],['NE','नेपाली']].map(([code, label]) => (
+   441→   441→                      <button key={code} onClick={() => { setLanguage(code); setShowLanguageDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${language === code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</button>
+   442→   442→                    ))}
+   443→   443→                  </div>
+   444→   444→                )}
+   445→   445→              </div>
+   446→   446→              {/* Wishlist */}
+   447→   447→              <button className="relative p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+   448→   448→                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+   449→   449→                {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-himalaya-gold text-black text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
+   450→   450→              </button>
+   451→   451→              {/* User */}
+   452→   452→              <button className="p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+   453→   453→                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
+   454→   454→              </button>
+   455→   455→              {/* CTA */}
+   456→   456→              <button className="btn-primary text-xs !py-2 !px-4">Book Expedition</button>
+   457→   457→            </div>
+   458→   458→
+   459→   459→            {/* Mobile hamburger */}
+   460→   460→            <button className="md:hidden p-2 text-white/60" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+   461→   461→              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+   462→   462→                {mobileMenuOpen ? <path d="M6 6l12 12M6 18L18 6"/> : <><path d="M4 6h16M4 12h16M4 18h16"/></>}
+   463→   463→              </svg>
+   464→   464→            </button>
+   465→   465→          </div>
+   466→   466→        </div>
+   467→   467→
+   468→   468→        {/* Mobile Menu */}
+   469→   469→        {mobileMenuOpen && (
+   470→   470→          <div className="md:hidden glass-card-strong border-t border-white/5 p-4 space-y-3">
+   471→   471→            {NAV_LINKS.map((link) => (
+   472→   472→              <a key={link} href={`#${link.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-himalaya-gold py-2 transition-colors">{link}</a>
+   473→   473→            ))}
+   474→   474→            <div className="flex gap-2 pt-2 border-t border-white/5">
+   475→   475→              {['USD','EUR','GBP','INR'].map((c) => (
+   476→   476→                <button key={c} onClick={() => setCurrency(c)} className={`text-xs px-3 py-1 rounded ${currency === c ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/40'}`}>{c}</button>
+   477→   477→              ))}
+   478→   478→            </div>
+   479→   479→            <button className="btn-primary w-full text-sm">Book Expedition</button>
+   480→   480→          </div>
+   481→   481→        )}
+   482→   482→      </nav>
+   483→   483→
+   484→   484→      {/* ═══════════ 2. HERO SECTION ═══════════ */}
+   485→   485→      <section ref={heroRef} onMouseMove={handleHeroMouseMove} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+   486→   486→        {/* Background patterns */}
+   487→   487→        <div className="pattern-overlay">
+   488→   488→          {/* Dot grid */}
+   489→   489→          <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
+   490→   490→            <defs><pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="white"/></pattern></defs>
+   491→   491→            <rect width="100%" height="100%" fill="url(#dots)"/>
+   492→   492→          </svg>
+   493→   493→          {/* Geometric mountains */}
+   494→   494→          <svg className="absolute bottom-0 left-0 w-full h-2/3 opacity-[0.04]" viewBox="0 0 1200 600" fill="none">
+   495→   495→            <path d="M0 600L200 250L350 400L500 150L650 350L800 200L1000 400L1200 300V600Z" fill="white"/>
+   496→   496→          </svg>
+   497→   497→          {/* Gradient orbs */}
+   498→   498→          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-himalaya-gold/5 rounded-full blur-[120px] animate-pulse-glow" />
+   499→   499→          <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/5 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+   500→   500→          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-himalaya-blue/5 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+
+[showing lines 1-500 of 1644; use offset=501 with limit to continue reading]

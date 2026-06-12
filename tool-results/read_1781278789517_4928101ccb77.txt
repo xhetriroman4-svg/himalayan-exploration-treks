@@ -1,0 +1,923 @@
+     1→- main
+     2→  - navigation
+     3→    - image
+     4→    - StaticText "Himalayan "
+     5→    - StaticText "Explorer"
+     6→    - link "Destinations" [ref=e2]
+     7→    - link "Experiences" [ref=e3]
+     8→    - link "Pricing" [ref=e4]
+     9→    - link "Stories" [ref=e5]
+    10→    - link "Guides" [ref=e6]
+    11→    - button "USD" [ref=e121]
+    12→      - StaticText "USD"
+    13→      - image
+    14→    - button "EN" [ref=e122]
+    15→      - StaticText "EN"
+    16→      - image
+    17→    - button "3" [ref=e7]
+    18→      - image
+    19→      - StaticText "3"
+    20→    - button [ref=e8]
+    21→      - image
+    22→    - button "Book Expedition" [ref=e9]
+    23→  - generic
+    24→    - generic
+    25→      - image
+    26→      - image
+    27→    - generic
+    28→      - StaticText "🏔️ PREMIUM HIMALAYAN EXPEDITIONS"
+    29→      - heading "Discover theRoof of the World" [level=1, ref=e123]
+    30→        - StaticText "Discover theRoof of the World"
+    31→      - paragraph
+    32→        - StaticText "Curated expeditions through the world's highest peaks. From Everest Base Camp to hidden Himalayan valleys, embark on journeys that transform."
+    33→      - link "Explore Expeditions" [ref=e124]
+    34→      - button "Watch Documentary" [ref=e125]
+    35→        - image
+    36→        - StaticText "Watch Documentary"
+    37→      - StaticText "8,849m"
+    38→      - StaticText "Highest Peak"
+    39→      - StaticText "150+"
+    40→      - StaticText "Expeditions"
+    41→      - StaticText "12"
+    42→      - StaticText "Countries"
+    43→      - StaticText "98%"
+    44→      - StaticText "Satisfaction"
+    45→    - image
+    46→  - LabelText
+    47→    - StaticText "Destination"
+    48→  - combobox [expanded=false, ref=e10]: All Destinations
+    49→    - MenuListPopup
+    50→      - option "All Destinations" [selected, ref=e162]
+    51→      - option "Nepal" [ref=e163]
+    52→      - option "Bhutan" [ref=e164]
+    53→      - option "Tibet" [ref=e165]
+    54→      - option "Pakistan" [ref=e166]
+    55→      - option "India" [ref=e167]
+    56→  - LabelText
+    57→    - StaticText "Dates"
+    58→  - Date
+    59→    - generic
+    60→      - spinbutton "Month" [ref=e168]: 0
+    61→        - StaticText "mm"
+    62→      - StaticText "/"
+    63→      - spinbutton "Day" [ref=e169]: 0
+    64→        - StaticText "dd"
+    65→      - StaticText "/"
+    66→      - spinbutton "Year" [ref=e170]: 0
+    67→        - StaticText "yyyy"
+    68→    - button "Show date picker" [ref=e126]
+    69→  - LabelText
+    70→    - StaticText "Travelers"
+    71→  - combobox [expanded=false, ref=e11]: 1 Traveler
+    72→    - MenuListPopup
+    73→      - option "1 Traveler" [selected, ref=e171]
+    74→      - option "2 Travelers" [ref=e172]
+    75→      - option "3 Travelers" [ref=e173]
+    76→      - option "4 Travelers" [ref=e174]
+    77→      - option "5 Travelers" [ref=e175]
+    78→      - option "6 Travelers" [ref=e176]
+    79→      - option "7 Travelers" [ref=e177]
+    80→      - option "8 Travelers" [ref=e178]
+    81→      - option "9 Travelers" [ref=e179]
+    82→      - option "10+ Travelers" [ref=e180]
+    83→  - LabelText
+    84→    - StaticText "Trip Type"
+    85→  - combobox [expanded=false, ref=e12]: Trekking
+    86→    - MenuListPopup
+    87→      - option "Trekking" [selected, ref=e181]
+    88→      - option "Cultural" [ref=e182]
+    89→      - option "Adventure" [ref=e183]
+    90→      - option "Luxury" [ref=e184]
+    91→      - option "Family" [ref=e185]
+    92→  - button "Search" [ref=e13]
+    93→    - image
+    94→    - StaticText "Search"
+    95→  - generic
+    96→    - StaticText "0+"
+    97→  - StaticText "Happy Travelers"
+    98→  - generic
+    99→    - StaticText "0+"
+   100→  - StaticText "Destinations"
+   101→  - generic
+   102→    - StaticText "0+"
+   103→  - StaticText "Tours"
+   104→  - StaticText "0"
+   105→  - StaticText "Years Experience"
+   106→  - StaticText "⛰️ POPULAR EXPEDITIONS"
+   107→  - heading "Popular Expeditions" [level=2, ref=e14]
+   108→    - StaticText "Popular Expeditions"
+   109→  - paragraph
+   110→    - StaticText "Handpicked treks through the most spectacular landscapes on Earth"
+   111→  - generic
+   112→    - image
+   113→    - StaticText "$"
+   114→    - StaticText "4,299"
+   115→    - StaticText "Nepal"
+   116→  - heading "Everest Base Camp Trek" [level=3, ref=e15]
+   117→  - image
+   118→  - StaticText "16"
+   119→  - StaticText " Days"
+   120→  - image
+   121→  - StaticText "5,364m"
+   122→  - StaticText "Moderate"
+   123→  - image
+   124→  - image
+   125→  - image
+   126→  - image
+   127→  - image
+   128→  - link "View Details →" [ref=e16]
+   129→  - generic
+   130→    - image
+   131→    - StaticText "$"
+   132→    - StaticText "3,199"
+   133→    - StaticText "Nepal"
+   134→  - heading "Annapurna Circuit" [level=3, ref=e17]
+   135→  - image
+   136→  - StaticText "18"
+   137→  - StaticText " Days"
+   138→  - image
+   139→  - StaticText "5,416m"
+   140→  - StaticText "Challenging"
+   141→  - image
+   142→  - image
+   143→  - image
+   144→  - image
+   145→  - image
+   146→  - link "View Details →" [ref=e18]
+   147→  - generic
+   148→    - image
+   149→    - StaticText "$"
+   150→    - StaticText "5,499"
+   151→    - StaticText "Bhutan"
+   152→  - heading "Bhutan Dragon Trail" [level=3, ref=e19]
+   153→  - image
+   154→  - StaticText "12"
+   155→  - StaticText " Days"
+   156→  - image
+   157→  - StaticText "4,200m"
+   158→  - StaticText "Moderate"
+   159→  - image
+   160→  - image
+   161→  - image
+   162→  - image
+   163→  - image
+   164→  - link "View Details →" [ref=e20]
+   165→  - generic
+   166→    - image
+   167→    - StaticText "$"
+   168→    - StaticText "4,899"
+   169→    - StaticText "Pakistan"
+   170→  - heading "K2 Base Camp Trek" [level=3, ref=e21]
+   171→  - image
+   172→  - StaticText "20"
+   173→  - StaticText " Days"
+   174→  - image
+   175→  - StaticText "5,150m"
+   176→  - StaticText "Strenuous"
+   177→  - image
+   178→  - image
+   179→  - image
+   180→  - image
+   181→  - image
+   182→  - link "View Details →" [ref=e22]
+   183→  - generic
+   184→    - image
+   185→    - StaticText "$"
+   186→    - StaticText "2,199"
+   187→    - StaticText "Nepal"
+   188→  - heading "Langtang Valley Trek" [level=3, ref=e23]
+   189→  - image
+   190→  - StaticText "10"
+   191→  - StaticText " Days"
+   192→  - image
+   193→  - StaticText "4,984m"
+   194→  - StaticText "Easy"
+   195→  - image
+   196→  - image
+   197→  - image
+   198→  - image
+   199→  - image
+   200→  - link "View Details →" [ref=e24]
+   201→  - generic
+   202→    - image
+   203→    - StaticText "$"
+   204→    - StaticText "3,599"
+   205→    - StaticText "Nepal"
+   206→  - heading "Upper Mustang Trek" [level=3, ref=e25]
+   207→  - image
+   208→  - StaticText "14"
+   209→  - StaticText " Days"
+   210→  - image
+   211→  - StaticText "4,230m"
+   212→  - StaticText "Moderate"
+   213→  - image
+   214→  - image
+   215→  - image
+   216→  - image
+   217→  - image
+   218→  - link "View Details →" [ref=e26]
+   219→  - button "View All Expeditions" [ref=e127]
+   220→  - StaticText "✨ WHY US"
+   221→  - heading "Why Choose Himalayan Explorer" [level=2, ref=e27]
+   222→    - StaticText "Why Choose Himalayan Explorer"
+   223→  - image
+   224→  - heading "Expert Guided Treks" [level=3, ref=e28]
+   225→  - paragraph
+   226→    - StaticText "Led by certified mountaineers with 15+ years of Himalayan experience and WFR certification."
+   227→  - link "Learn more →" [ref=e29]
+   228→  - image
+   229→  - heading "GPS Live Tracking" [level=3, ref=e30]
+   230→  - paragraph
+   231→    - StaticText "Real-time location sharing with family and emergency monitoring on every expedition."
+   232→  - link "Learn more →" [ref=e31]
+   233→  - image
+   234→  - heading "Smart Itineraries" [level=3, ref=e32]
+   235→  - paragraph
+   236→    - StaticText "AI-optimized schedules with acclimatization days built in for safety and comfort."
+   237→  - link "Learn more →" [ref=e33]
+   238→  - image
+   239→  - heading "Altitude Analytics" [level=3, ref=e34]
+   240→  - paragraph
+   241→    - StaticText "Personalized altitude adaptation plans with real-time health monitoring during treks."
+   242→  - link "Learn more →" [ref=e35]
+   243→  - StaticText "🏔️ FEATURED EXPEDITION"
+   244→  - heading "Everest Base Camp Trek" [level=2, ref=e36]
+   245→  - paragraph
+   246→    - StaticText "Journey to the foot of the world's highest peak through Sherpa villages, ancient monasteries, and breathtaking Himalayan landscapes. This iconic trek is a bucket-list experience for every adventurer."
+   247→  - StaticText "⏱ Duration"
+   248→  - StaticText "16 Days"
+   249→  - StaticText "🗻 Altitude"
+   250→  - StaticText "5,364m"
+   251→  - StaticText "⚡ Difficulty"
+   252→  - StaticText "Moderate"
+   253→  - StaticText "👥 Group Size"
+   254→  - StaticText "4-8"
+   255→  - button "Book This Trek" [ref=e37]
+   256→  - button "View Itinerary" [ref=e38]
+   257→  - generic
+   258→    - image
+   259→    - image
+   260→    - generic
+   261→      - StaticText "5,364m altitude"
+   262→    - StaticText "⭐ 4.9/5 rating"
+   263→  - generic
+   264→    - generic
+   265→      - StaticText "🌍 DESTINATIONS"
+   266→      - heading "Explore Destinations" [level=2, ref=e128]
+   267→      - generic
+   268→        - image
+   269→        - heading "Nepal" [level=3, ref=e186]
+   270→        - paragraph
+   271→      - generic
+   272→        - StaticText "45 trips · From $1,999"
+   273→      - image
+   274→      - StaticText "4.9"
+   275→      - generic
+   276→        - image
+   277→        - heading "Bhutan" [level=3, ref=e187]
+   278→        - paragraph
+   279→      - generic
+   280→        - StaticText "12 trips · From $3,499"
+   281→      - image
+   282→      - StaticText "4.8"
+   283→      - generic
+   284→        - image
+   285→        - heading "Tibet" [level=3, ref=e188]
+   286→        - paragraph
+   287→      - generic
+   288→        - StaticText "8 trips · From $2,999"
+   289→      - image
+   290→      - StaticText "4.7"
+   291→      - generic
+   292→        - image
+   293→        - heading "Pakistan" [level=3, ref=e189]
+   294→        - paragraph
+   295→      - generic
+   296→        - StaticText "6 trips · From $3,199"
+   297→      - image
+   298→      - StaticText "4.9"
+   299→      - generic
+   300→        - image
+   301→        - heading "India" [level=3, ref=e190]
+   302→        - paragraph
+   303→      - generic
+   304→        - StaticText "10 trips · From $2,499"
+   305→      - image
+   306→      - StaticText "4.6"
+   307→      - generic
+   308→        - image
+   309→        - heading "China" [level=3, ref=e191]
+   310→        - paragraph
+   311→      - generic
+   312→        - StaticText "4 trips · From $3,999"
+   313→      - image
+   314→      - StaticText "4.7"
+   315→  - StaticText "🛠️ TOOLS"
+   316→  - heading "Plan Your Adventure" [level=2, ref=e39]
+   317→    - StaticText "Plan Your Adventure"
+   318→  - button "💰 Budget Calculator" [ref=e40]
+   319→  - button "🗻 Altitude Calculator" [ref=e41]
+   320→  - button "🎒 Packing Checklist" [ref=e42]
+   321→  - button "📊 Trek Difficulty" [ref=e43]
+   322→  - LabelText
+   323→    - StaticText "Destination"
+   324→  - combobox [expanded=false, ref=e44]: Nepal
+   325→    - MenuListPopup
+   326→      - option "Nepal" [selected, ref=e192]
+   327→      - option "Bhutan" [ref=e193]
+   328→      - option "Tibet" [ref=e194]
+   329→      - option "Pakistan" [ref=e195]
+   330→      - option "India" [ref=e196]
+   331→      - option "China" [ref=e197]
+   332→  - LabelText
+   333→    - StaticText "Duration: 10 days"
+   334→  - slider [ref=e45]: 10
+   335→  - LabelText
+   336→    - StaticText "Travel Style"
+   337→  - radio "Budget" [checked=false, ref=e46]
+   338→  - radio "Mid-range" [checked=true, ref=e47]
+   339→  - radio "Luxury" [checked=false, ref=e48]
+   340→  - LabelText
+   341→    - StaticText "Travelers"
+   342→  - combobox [expanded=false, ref=e49]: 2
+   343→    - MenuListPopup
+   344→      - option "1" [ref=e198]
+   345→      - option "2" [selected, ref=e199]
+   346→      - option "3" [ref=e200]
+   347→      - option "4" [ref=e201]
+   348→      - option "5" [ref=e202]
+   349→      - option "6" [ref=e203]
+   350→      - option "7" [ref=e204]
+   351→      - option "8" [ref=e205]
+   352→      - option "9" [ref=e206]
+   353→      - option "10" [ref=e207]
+   354→  - button "Calculate Budget" [ref=e50]
+   355→    - StaticText "Calculate Budget"
+   356→  - StaticText "Configure your trip and click Calculate"
+   357→  - generic
+   358→    - generic
+   359→      - generic
+   360→        - generic
+   361→        - generic
+   362→      - StaticText "🏔️ OUR STORY"
+   363→      - heading "About Himalayan Explorer" [level=2, ref=e129]
+   364→      - paragraph
+   365→        - StaticText "Founded in Kathmandu in 2015, Himalayan Explorer was born from a passion for the mountains and a desire to share the transformative power of Himalayan expeditions with the world."
+   366→      - paragraph
+   367→        - StaticText "Our team of experienced mountaineers, local experts, and travel enthusiasts work together to create journeys that are safe, sustainable, and unforgettable."
+   368→      - StaticText "11"
+   369→      - StaticText "Years"
+   370→      - StaticText "50+"
+   371→      - StaticText "Destinations"
+   372→      - StaticText "0"
+   373→      - StaticText "Major Incidents"
+   374→      - StaticText "🏔️"
+   375→      - heading "Adventure" [level=4, ref=e130]
+   376→      - paragraph
+   377→        - StaticText "Pushing boundaries while respecting the mountains"
+   378→      - StaticText "🌱"
+   379→      - heading "Sustainability" [level=4, ref=e131]
+   380→      - paragraph
+   381→        - StaticText "Minimizing impact, maximizing positive contribution"
+   382→      - StaticText "🛡️"
+   383→      - heading "Safety" [level=4, ref=e132]
+   384→      - paragraph
+   385→        - StaticText "Every decision prioritized around your wellbeing"
+   386→      - StaticText "🙏"
+   387→      - heading "Authenticity" [level=4, ref=e133]
+   388→      - paragraph
+   389→        - StaticText "Genuine cultural experiences with local communities"
+   390→      - heading "Meet Our Team" [level=3, ref=e134]
+   391→      - StaticText "TD"
+   392→      - heading "Tenzing Dorje" [level=4, ref=e135]
+   393→      - StaticText "Founder & CEO"
+   394→      - paragraph
+   395→        - StaticText "Born in the Everest region, Tenzing has summited Everest 3 times and led over 200 expeditions across the Himalayas."
+   396→      - StaticText "LS"
+   397→      - heading "Lakpa Sherpa" [level=4, ref=e136]
+   398→      - StaticText "Head Guide"
+   399→      - paragraph
+   400→        - StaticText "IFMGA-certified guide with 18 years of experience. Specializes in technical climbs and high-altitude rescue."
+   401→      - StaticText "AR"
+   402→      - heading "Anita Rai" [level=4, ref=e137]
+   403→      - StaticText "Operations Director"
+   404→      - paragraph
+   405→        - StaticText "MBA from Kathmandu University. Ensures every expedition runs seamlessly with meticulous attention to logistics."
+   406→      - StaticText "DY"
+   407→      - heading "Dawa Yangjin" [level=4, ref=e138]
+   408→      - StaticText "Sustainability Lead"
+   409→      - paragraph
+   410→        - StaticText "Environmental scientist dedicated to making Himalayan tourism sustainable and beneficial for local communities."
+   411→  - StaticText "📖 RESOURCES"
+   412→  - heading "Travel Guides & Resources" [level=2, ref=e51]
+   413→  - image
+   414→  - heading "Visa Information" [level=3, ref=e52]
+   415→  - paragraph
+   416→    - StaticText "Complete visa requirements for Nepal, Bhutan, Tibet, and Pakistan. Check by nationality."
+   417→  - button "Check Visa Requirements" [ref=e53]
+   418→  - image
+   419→  - heading "Travel Insurance" [level=3, ref=e54]
+   420→  - paragraph
+   421→    - StaticText "Comprehensive coverage for high-altitude treks. Partnered with World Nomads & Allianz."
+   422→  - button "Get Insurance Quote" [ref=e55]
+   423→  - image
+   424→  - heading "Health & Vaccinations" [level=3, ref=e56]
+   425→  - paragraph
+   426→    - StaticText "Required and recommended vaccinations, altitude sickness prevention, and health tips."
+   427→  - button "View Health Guide" [ref=e57]
+   428→  - image
+   429→  - heading "Packing Guide" [level=3, ref=e58]
+   430→  - paragraph
+   431→    - StaticText "Interactive packing checklists customized for your specific trip and season."
+   432→  - button "Open Packing List" [ref=e59]
+   433→  - image
+   434→  - heading "Currency & Budgeting" [level=3, ref=e60]
+   435→  - paragraph
+   436→    - StaticText "Exchange rates, tipping customs, and daily budget estimates per destination."
+   437→  - button "Currency Guide" [ref=e61]
+   438→  - image
+   439→  - heading "Cultural Etiquette" [level=3, ref=e62]
+   440→  - paragraph
+   441→    - StaticText "Local customs, do's and don'ts, and cultural sensitivity guides for each region."
+   442→  - button "Learn More" [ref=e63]
+   443→  - StaticText "🛡️ SAFETY"
+   444→  - heading "Your Safety, Our Priority" [level=2, ref=e64]
+   445→  - image
+   446→  - heading "24/7 Emergency Hotline" [level=4, ref=e65]
+   447→  - paragraph
+   448→    - StaticText "+977-1-XXXX-XXXX"
+   449→  - image
+   450→  - heading "Certified Guides" [level=4, ref=e66]
+   451→  - paragraph
+   452→    - StaticText "WFR, CPR/AED, Mountain Leader"
+   453→  - image
+   454→  - heading "Safety Track Record" [level=4, ref=e67]
+   455→  - paragraph
+   456→    - StaticText "11 years, 5000+ treks, zero major incidents"
+   457→  - image
+   458→  - heading "Satellite Communication" [level=4, ref=e68]
+   459→  - paragraph
+   460→    - StaticText "GPS tracking on all remote treks"
+   461→  - image
+   462→  - heading "Travel Insurance Partners" [level=4, ref=e69]
+   463→  - paragraph
+   464→    - StaticText "World Nomads, Allianz, SafetyWing"
+   465→  - image
+   466→  - heading "Industry Certifications" [level=4, ref=e70]
+   467→  - paragraph
+   468→    - StaticText "ATTA, GSTC, Nepal Tourism Board"
+   469→  - heading "Emergency Contacts" [level=4, ref=e71]
+   470→  - StaticText "Police"
+   471→  - StaticText "100"
+   472→  - StaticText "Ambulance"
+   473→  - StaticText "102"
+   474→  - StaticText "Fire"
+   475→  - StaticText "101"
+   476→  - StaticText "Emergency Line"
+   477→  - StaticText "+977-1-911-HELP"
+   478→  - StaticText "US Embassy"
+   479→  - StaticText "+977-1-423-4120"
+   480→  - StaticText "UK Embassy"
+   481→  - StaticText "+977-1-441-0583"
+   482→  - StaticText "Trusted Partners & Certifications"
+   483→  - StaticText "ATTA"
+   484→  - StaticText "GSTC"
+   485→  - StaticText "Nepal Tourism Board"
+   486→  - StaticText "World Nomads"
+   487→  - StaticText "Allianz"
+   488→  - StaticText "SafetyWing"
+   489→  - StaticText "📸 GALLERY"
+   490→  - heading "Captured Moments" [level=2, ref=e72]
+   491→    - StaticText "Captured Moments"
+   492→  - button "All" [ref=e73]
+   493→  - button "Nepal" [ref=e74]
+   494→  - button "Bhutan" [ref=e75]
+   495→  - button "Tibet" [ref=e76]
+   496→  - button "Pakistan" [ref=e77]
+   497→  - generic [ref=e78] clickable [cursor:pointer]
+   498→    - generic
+   499→      - image
+   500→      - StaticText "Sunrise at Poon Hill"
+   501→      - StaticText "Nepal"
+   502→  - generic [ref=e79] clickable [cursor:pointer]
+   503→    - generic
+   504→      - image
+   505→      - StaticText "Tiger's Nest Monastery"
+   506→      - StaticText "Bhutan"
+   507→  - generic [ref=e80] clickable [cursor:pointer]
+   508→    - generic
+   509→      - image
+   510→      - StaticText "Everest Panorama"
+   511→      - StaticText "Nepal"
+   512→  - generic [ref=e81] clickable [cursor:pointer]
+   513→    - generic
+   514→      - image
+   515→      - StaticText "K2 at Dawn"
+   516→      - StaticText "Pakistan"
+   517→  - generic [ref=e82] clickable [cursor:pointer]
+   518→    - generic
+   519→      - image
+   520→      - StaticText "Potala Palace"
+   521→      - StaticText "Tibet"
+   522→  - generic [ref=e83] clickable [cursor:pointer]
+   523→    - generic
+   524→      - image
+   525→      - StaticText "Annapurna Range"
+   526→      - StaticText "Nepal"
+   527→  - generic [ref=e84] clickable [cursor:pointer]
+   528→    - generic
+   529→      - image
+   530→      - StaticText "Paro Valley"
+   531→      - StaticText "Bhutan"
+   532→  - generic [ref=e85] clickable [cursor:pointer]
+   533→    - generic
+   534→      - image
+   535→      - StaticText "Mount Kailash"
+   536→      - StaticText "China"
+   537→  - button "View Full Gallery" [ref=e139]
+   538→  - StaticText "💬 REVIEWS"
+   539→  - heading "Voices from the Trail" [level=2, ref=e86]
+   540→    - StaticText "Voices from the Trail"
+   541→  - image
+   542→  - image
+   543→  - image
+   544→  - image
+   545→  - image
+   546→  - StaticText "4.9/5"
+   547→  - StaticText "based on 2,500+ verified reviews"
+   548→  - image
+   549→  - image
+   550→  - image
+   551→  - image
+   552→  - image
+   553→  - paragraph
+   554→    - StaticText "“The EBC expedition changed my life. The guides were incredibly knowledgeable and supportive, and the scenery was beyond anything I could have imagined. Every detail was perfectly managed.”"
+   555→  - StaticText "SC"
+   556→  - StaticText "Sarah Chen"
+   557→  - StaticText "EBC 2024"
+   558→  - image
+   559→  - image
+   560→  - image
+   561→  - image
+   562→  - image
+   563→  - paragraph
+   564→    - StaticText "“From the moment I landed in Kathmandu, everything was seamless. The team's attention to acclimatization and safety gave me complete peace of mind while pushing my limits.”"
+   565→  - StaticText "MW"
+   566→  - StaticText "Marcus Weber"
+   567→  - StaticText "Annapurna Circuit"
+   568→  - image
+   569→  - image
+   570→  - image
+   571→  - image
+   572→  - image
+   573→  - paragraph
+   574→    - StaticText "“Bhutan was beyond anything I imagined. The cultural immersion combined with stunning Himalayan views made this the most enriching travel experience of my life.”"
+   575→  - StaticText "PS"
+   576→  - StaticText "Priya Sharma"
+   577→  - StaticText "Dragon Trail"
+   578→  - image
+   579→  - image
+   580→  - image
+   581→  - image
+   582→  - image
+   583→  - paragraph
+   584→    - StaticText "“The most challenging and rewarding experience of my life. Our guide Tenzing was extraordinary — his expertise and calm presence made all the difference at high altitude.”"
+   585→  - StaticText "JM"
+   586→  - StaticText "James Morrison"
+   587→  - StaticText "K2 Base Camp"
+   588→  - StaticText "📝 BLOG"
+   589→  - heading "Stories & Insights" [level=2, ref=e87]
+   590→    - StaticText "Stories & Insights"
+   591→  - article
+   592→    - generic
+   593→      - image
+   594→      - StaticText "Trekking Tips"
+   595→    - heading "Preparing for High Altitude: A Complete Guide" [level=3, ref=e140]
+   596→    - paragraph
+   597→      - StaticText "Essential advice for acclimatization and fitness preparation before your Himalayan adventure..."
+   598→    - StaticText "8 min"
+   599→    - StaticText " read"
+   600→    - link "Read More →" [ref=e141]
+   601→  - article
+   602→    - generic
+   603→      - image
+   604→      - StaticText "Destination"
+   605→    - heading "Hidden Gems of the Annapurna Region" [level=3, ref=e142]
+   606→    - paragraph
+   607→      - StaticText "Beyond the popular circuit lie untouched valleys and ancient monasteries waiting to be explored..."
+   608→    - StaticText "6 min"
+   609→    - StaticText " read"
+   610→    - link "Read More →" [ref=e143]
+   611→  - article
+   612→    - generic
+   613→      - image
+   614→      - StaticText "Responsible Travel"
+   615→    - heading "Sustainable Travel in the Himalayas" [level=3, ref=e144]
+   616→    - paragraph
+   617→      - StaticText "How we minimize our impact while maximizing the positive contribution to local communities..."
+   618→    - StaticText "5 min"
+   619→    - StaticText " read"
+   620→    - link "Read More →" [ref=e145]
+   621→  - button "View All Stories" [ref=e146]
+   622→  - heading "Frequently Asked Questions" [level=2, ref=e88]
+   623→    - StaticText "Frequently Asked Questions"
+   624→  - button "All" [ref=e89]
+   625→  - button "Booking" [ref=e90]
+   626→  - button "Payment" [ref=e91]
+   627→  - button "Cancellation" [ref=e92]
+   628→  - button "Insurance" [ref=e93]
+   629→  - button "Health" [ref=e94]
+   630→  - button "Gear" [ref=e95]
+   631→  - button "How far in advance should I book?" [ref=e96]
+   632→    - StaticText "How far in advance should I book?"
+   633→    - image
+   634→  - StaticText "We recommend booking at least 3-6 months in advance for popular treks like EBC and Annapurna. For peak seasons (Oct-Nov and Mar-May), booking 6-12 months ahead ensures availability. Last-minute bookings may be possible but subject to availability."
+   635→  - button "What is included in the tour price?" [ref=e97]
+   636→    - StaticText "What is included in the tour price?"
+   637→    - image
+   638→  - StaticText "Our tour prices include airport transfers, accommodation, meals during the trek, experienced guide and porter services, permits and entry fees, and emergency evacuation arrangements. International flights, travel insurance, and personal expenses are not included."
+   639→  - button "What payment methods do you accept?" [ref=e98]
+   640→    - StaticText "What payment methods do you accept?"
+   641→    - image
+   642→  - StaticText "We accept Visa, Mastercard, PayPal, bank transfers, and Apple Pay. A 30% deposit is required to confirm your booking, with the balance due 30 days before departure."
+   643→  - button "Can I pay in installments?" [ref=e99]
+   644→    - StaticText "Can I pay in installments?"
+   645→    - image
+   646→  - StaticText "Yes! We offer flexible payment plans. You can split the total cost into 3 monthly installments with no additional fees. A 30% deposit is still required upfront to secure your spot."
+   647→  - button "What is your cancellation policy?" [ref=e100]
+   648→    - StaticText "What is your cancellation policy?"
+   649→    - image
+   650→  - StaticText "Cancellations 60+ days before departure receive a full refund minus a $200 admin fee. 30-59 days: 50% refund. Under 30 days: no refund. We strongly recommend travel insurance to cover cancellation costs."
+   651→  - button "Do you offer refunds?" [ref=e101]
+   652→    - StaticText "Do you offer refunds?"
+   653→    - image
+   654→  - StaticText "Refunds are processed according to our cancellation policy. In cases of trip cancellation by Himalayan Explorer due to weather or safety concerns, you receive a full refund or the option to reschedule at no extra cost."
+   655→  - button "Is travel insurance mandatory?" [ref=e102]
+   656→    - StaticText "Is travel insurance mandatory?"
+   657→    - image
+   658→  - StaticText "Yes, comprehensive travel insurance covering high-altitude trekking (up to 6,000m), emergency evacuation, and trip cancellation is mandatory for all our expeditions. We can help you find suitable coverage."
+   659→  - button "What does the insurance cover?" [ref=e103]
+   660→    - StaticText "What does the insurance cover?"
+   661→    - image
+   662→  - StaticText "Our recommended insurance covers emergency helicopter evacuation, medical treatment, trip cancellation, lost baggage, and repatriation. High-altitude coverage up to 6,000m is included in our partner plans."
+   663→  - button "How do I prepare for altitude?" [ref=e104]
+   664→    - StaticText "How do I prepare for altitude?"
+   665→    - image
+   666→  - StaticText "Start cardiovascular training 3-4 months before your trek. Focus on hiking, running, and stair climbing. We provide a detailed fitness plan upon booking. During the trek, stay hydrated, ascend gradually, and follow your guide's acclimatization advice."
+   667→  - button "What gear do I need to bring?" [ref=e105]
+   668→    - StaticText "What gear do I need to bring?"
+   669→    - image
+   670→  - StaticText "Essential items include trekking boots, down jacket, sleeping bag, daypack, headlamp, and proper layering. We provide a comprehensive packing list tailored to your specific trek. Rental gear is available in Kathmandu."
+   671→  - link "Still have questions? Contact us →" [ref=e147]
+   672→  - StaticText "💎 PRICING"
+   673→  - heading "Choose Your Adventure" [level=2, ref=e106]
+   674→    - StaticText "Choose Your Adventure"
+   675→  - generic
+   676→    - heading "Explorer" [level=3, ref=e148]
+   677→    - StaticText "$"
+   678→    - StaticText "2,499"
+   679→    - StaticText "/person"
+   680→    - list
+   681→      - listitem [level=1]
+   682→        - image
+   683→        - StaticText "Group treks (8-12 people)"
+   684→      - listitem [level=1]
+   685→        - image
+   686→        - StaticText "Teahouse accommodation"
+   687→      - listitem [level=1]
+   688→        - image
+   689→        - StaticText "Licensed trekking guide"
+   690→      - listitem [level=1]
+   691→        - image
+   692→        - StaticText "Basic meals during trek"
+   693→      - listitem [level=1]
+   694→        - image
+   695→        - StaticText "Permits & entry fees"
+   696→      - listitem [level=1]
+   697→        - image
+   698→        - StaticText "Airport transfers"
+   699→      - listitem [level=1]
+   700→        - image
+   701→        - StaticText "Emergency evacuation coverage"
+   702→    - button "Get Started" [ref=e149]
+   703→  - generic
+   704→    - StaticText "Most Popular"
+   705→    - heading "Adventurer" [level=3, ref=e150]
+   706→    - StaticText "$"
+   707→    - StaticText "4,999"
+   708→    - StaticText "/person"
+   709→    - list
+   710→      - listitem [level=1]
+   711→        - image
+   712→        - StaticText "Small group treks (4-6 people)"
+   713→      - listitem [level=1]
+   714→        - image
+   715→        - StaticText "Best available lodges"
+   716→      - listitem [level=1]
+   717→        - image
+   718→        - StaticText "Senior mountain guide"
+   719→      - listitem [level=1]
+   720→        - image
+   721→        - StaticText "All meals + snacks"
+   722→      - listitem [level=1]
+   723→        - image
+   724→        - StaticText "All permits & fees"
+   725→      - listitem [level=1]
+   726→        - image
+   727→        - StaticText "Airport transfers & domestic flights"
+   728→      - listitem [level=1]
+   729→        - image
+   730→        - StaticText "GPS tracking device"
+   731→      - listitem [level=1]
+   732→        - image
+   733→        - StaticText "Emergency evacuation coverage"
+   734→      - listitem [level=1]
+   735→        - image
+   736→        - StaticText "Pre-trip fitness plan"
+   737→    - button "Get Started" [ref=e151]
+   738→      - StaticText "Get Started"
+   739→  - generic
+   740→    - heading "Summit" [level=3, ref=e152]
+   741→    - StaticText "$"
+   742→    - StaticText "8,999"
+   743→    - StaticText "/person"
+   744→    - list
+   745→      - listitem [level=1]
+   746→        - image
+   747→        - StaticText "Private or duo expedition"
+   748→      - listitem [level=1]
+   749→        - image
+   750→        - StaticText "Luxury lodges & premium camps"
+   751→      - listitem [level=1]
+   752→        - image
+   753→        - StaticText "Expert mountaineer guide"
+   754→      - listitem [level=1]
+   755→        - image
+   756→        - StaticText "Gourmet meals & supplements"
+   757→      - listitem [level=1]
+   758→        - image
+   759→        - StaticText "All permits, fees & visas"
+   760→      - listitem [level=1]
+   761→        - image
+   762→        - StaticText "All flights & transfers"
+   763→      - listitem [level=1]
+   764→        - image
+   765→        - StaticText "GPS + satellite communication"
+   766→      - listitem [level=1]
+   767→        - image
+   768→        - StaticText "Comprehensive insurance"
+   769→      - listitem [level=1]
+   770→        - image
+   771→        - StaticText "Personal porter"
+   772→      - listitem [level=1]
+   773→        - image
+   774→        - StaticText "Post-trip recovery package"
+   775→    - button "Get Started" [ref=e153]
+   776→  - generic
+   777→    - generic
+   778→      - generic
+   779→        - heading "Stay Inspired" [level=2, ref=e239]
+   780→        - paragraph
+   781→        - paragraph
+   782→        - textbox "Enter your email" [ref=e240]
+   783→        - button "Subscribe" [ref=e241]
+   784→        - paragraph
+   785→  - generic
+   786→    - heading "Get in Touch" [level=2, ref=e154]
+   787→    - form
+   788→      - LabelText
+   789→        - StaticText "Name"
+   790→      - textbox "Your name" [ref=e208]
+   791→      - LabelText
+   792→        - StaticText "Email"
+   793→      - textbox "you@example.com" [ref=e209]
+   794→      - LabelText
+   795→        - StaticText "Phone"
+   796→      - textbox "+1 (555) 000-0000" [ref=e210]
+   797→      - LabelText
+   798→        - StaticText "Trip Interest"
+   799→      - combobox [expanded=false, ref=e211]: Select a trip
+   800→        - MenuListPopup
+   801→          - option "Select a trip" [selected, ref=e242]
+   802→          - option "Everest Base Camp" [ref=e243]
+   803→          - option "Annapurna Circuit" [ref=e244]
+   804→          - option "Bhutan Dragon Trail" [ref=e245]
+   805→          - option "K2 Base Camp" [ref=e246]
+   806→          - option "Langtang Valley" [ref=e247]
+   807→          - option "Upper Mustang" [ref=e248]
+   808→          - option "Other" [ref=e249]
+   809→      - LabelText
+   810→      - textbox "Tell us about your dream expedition..." [ref=e212]
+   811→      - button "Send Message" [ref=e213]
+   812→    - StaticText "📧 Email"
+   813→    - StaticText "info@himalayanexplorer.com"
+   814→    - StaticText "📞 Phone"
+   815→    - StaticText "+977-1-4567-890"
+   816→    - StaticText "🚨 Emergency"
+   817→    - StaticText "+977-1-911-HELP"
+   818→    - StaticText "💬 WhatsApp"
+   819→    - StaticText "+977-98XX-XXXXX"
+   820→    - StaticText "📍 Address"
+   821→    - StaticText "Thamel, Kathmandu, Nepal"
+   822→    - StaticText "🕐 Business Hours"
+   823→    - StaticText "Sun-Fri 9AM-6PM NPT"
+   824→    - button "F" [ref=e155]
+   825→    - button "X" [ref=e156]
+   826→    - button "I" [ref=e157]
+   827→    - button "Y" [ref=e158]
+   828→    - generic
+   829→      - image
+   830→      - StaticText "Kathmandu, Nepal"
+   831→  - StaticText "⏰ NEXT DEPARTURE"
+   832→  - heading "Everest Base Camp — Spring 2026" [level=2, ref=e107]
+   833→  - paragraph
+   834→    - StaticText "Limited spots remaining for our most popular expedition"
+   835→  - StaticText "94"
+   836→  - StaticText "Days"
+   837→  - StaticText "14"
+   838→  - StaticText "Hours"
+   839→  - StaticText "20"
+   840→  - StaticText "Min"
+   841→  - StaticText "14"
+   842→  - StaticText "Sec"
+   843→  - button "Reserve Your Spot" [ref=e108]
+   844→    - StaticText "Reserve Your Spot"
+   845→  - generic
+   846→    - generic
+   847→      - image
+   848→    - generic
+   849→      - heading "Ready to Reach New Heights?" [level=2, ref=e159]
+   850→      - paragraph
+   851→      - button "Start Your Journey" [ref=e160]
+   852→      - button "Talk to an Expert" [ref=e161]
+   853→  - sectionfooter
+   854→    - image
+   855→    - StaticText "Himalayan Explorer"
+   856→    - paragraph
+   857→      - StaticText "Curated expeditions through the world's highest peaks since 2015."
+   858→    - button "F" [ref=e109]
+   859→    - button "X" [ref=e110]
+   860→    - button "In" [ref=e111]
+   861→    - button "YT" [ref=e112]
+   862→    - heading "Expeditions" [level=4, ref=e113]
+   863→    - list
+   864→      - listitem [level=1]
+   865→        - link "EBC Trek" [ref=e214]
+   866→      - listitem [level=1]
+   867→        - link "Annapurna Circuit" [ref=e215]
+   868→      - listitem [level=1]
+   869→        - link "K2 Base Camp" [ref=e216]
+   870→      - listitem [level=1]
+   871→        - link "Bhutan Trail" [ref=e217]
+   872→      - listitem [level=1]
+   873→        - link "Langtang Valley" [ref=e218]
+   874→      - listitem [level=1]
+   875→        - link "Upper Mustang" [ref=e219]
+   876→    - heading "Company" [level=4, ref=e114]
+   877→    - list
+   878→      - listitem [level=1]
+   879→        - link "About Us" [ref=e220]
+   880→      - listitem [level=1]
+   881→        - link "Our Team" [ref=e221]
+   882→      - listitem [level=1]
+   883→        - link "Careers" [ref=e222]
+   884→      - listitem [level=1]
+   885→        - link "Press" [ref=e223]
+   886→      - listitem [level=1]
+   887→        - link "Blog" [ref=e224]
+   888→      - listitem [level=1]
+   889→        - link "Contact" [ref=e225]
+   890→    - heading "Support" [level=4, ref=e115]
+   891→    - list
+   892→      - listitem [level=1]
+   893→        - link "Help Center" [ref=e226]
+   894→      - listitem [level=1]
+   895→        - link "Safety" [ref=e227]
+   896→      - listitem [level=1]
+   897→        - link "Travel Insurance" [ref=e228]
+   898→      - listitem [level=1]
+   899→        - link "Visa Guide" [ref=e229]
+   900→      - listitem [level=1]
+   901→        - link "Packing Lists" [ref=e230]
+   902→      - listitem [level=1]
+   903→        - link "FAQ" [ref=e231]
+   904→    - heading "Legal" [level=4, ref=e116]
+   905→    - list
+   906→      - listitem [level=1]
+   907→        - link "Terms & Conditions" [ref=e232]
+   908→      - listitem [level=1]
+   909→        - link "Privacy Policy" [ref=e233]
+   910→      - listitem [level=1]
+   911→        - link "Cancellation Policy" [ref=e234]
+   912→      - listitem [level=1]
+   913→        - link "Refund Policy" [ref=e235]
+   914→      - listitem [level=1]
+   915→        - link "Cookie Policy" [ref=e236]
+   916→      - listitem [level=1]
+   917→        - link "Responsible Travel" [ref=e237]
+   918→    - link "Privacy" [ref=e117]
+   919→    - link "Terms" [ref=e118]
+   920→    - link "Cookies" [ref=e119]
+   921→  - button "Back to top" [ref=e1]
+   922→  - generic [ref=e120] clickable [cursor:pointer, onclick]
+   923→- button "Open Next.js Dev Tools" [expanded=false, ref=e238]

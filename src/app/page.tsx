@@ -7,21 +7,21 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 const NAV_LINKS = ['Destinations', 'Experiences', 'Pricing', 'Stories', 'Guides'];
 
 const TOURS = [
-  { title: 'Everest Base Camp Trek', days: 16, difficulty: 'moderate' as const, price: 4299, country: 'Nepal', altitude: '5,364m', rating: 5, gradient: 'from-emerald-900/40 to-teal-900/40' },
-  { title: 'Annapurna Circuit', days: 18, difficulty: 'challenging' as const, price: 3199, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-900/40 to-orange-900/40' },
-  { title: 'Bhutan Dragon Trail', days: 12, difficulty: 'moderate' as const, price: 5499, country: 'Bhutan', altitude: '4,200m', rating: 5, gradient: 'from-blue-900/40 to-indigo-900/40' },
-  { title: 'K2 Base Camp Trek', days: 20, difficulty: 'strenuous' as const, price: 4899, country: 'Pakistan', altitude: '5,150m', rating: 5, gradient: 'from-rose-900/40 to-red-900/40' },
-  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 2199, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-900/40 to-emerald-900/40' },
-  { title: 'Upper Mustang Trek', days: 14, difficulty: 'moderate' as const, price: 3599, country: 'Nepal', altitude: '4,230m', rating: 5, gradient: 'from-yellow-900/40 to-amber-900/40' },
+  { title: 'Everest Base Camp Trek', days: 16, difficulty: 'moderate' as const, price: 4299, country: 'Nepal', altitude: '5,364m', rating: 5, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
+  { title: 'Annapurna Circuit', days: 18, difficulty: 'challenging' as const, price: 3199, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+  { title: 'Bhutan Dragon Trail', days: 12, difficulty: 'moderate' as const, price: 5499, country: 'Bhutan', altitude: '4,200m', rating: 5, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
+  { title: 'K2 Base Camp Trek', days: 20, difficulty: 'strenuous' as const, price: 4899, country: 'Pakistan', altitude: '5,150m', rating: 5, gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50' },
+  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 2199, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
+  { title: 'Upper Mustang Trek', days: 14, difficulty: 'moderate' as const, price: 3599, country: 'Nepal', altitude: '4,230m', rating: 5, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
 ];
 
 const DESTINATIONS = [
-  { name: 'Nepal', tagline: 'Himalayan Kingdom', trips: 45, priceFrom: 1999, rating: 4.9, gradient: 'from-emerald-900/50 to-teal-900/50' },
-  { name: 'Bhutan', tagline: 'Land of the Thunder Dragon', trips: 12, priceFrom: 3499, rating: 4.8, gradient: 'from-blue-900/50 to-indigo-900/50' },
-  { name: 'Tibet', tagline: 'Roof of the World', trips: 8, priceFrom: 2999, rating: 4.7, gradient: 'from-amber-900/50 to-orange-900/50' },
-  { name: 'Pakistan', tagline: 'K2 & Karakoram', trips: 6, priceFrom: 3199, rating: 4.9, gradient: 'from-rose-900/50 to-red-900/50' },
-  { name: 'India', tagline: 'Ladakh & Sikkim', trips: 10, priceFrom: 2499, rating: 4.6, gradient: 'from-yellow-900/50 to-amber-900/50' },
-  { name: 'China', tagline: 'Mount Kailash', trips: 4, priceFrom: 3999, rating: 4.7, gradient: 'from-purple-900/50 to-fuchsia-900/50' },
+  { name: 'Nepal', tagline: 'Himalayan Kingdom', trips: 45, priceFrom: 1999, rating: 4.9, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
+  { name: 'Bhutan', tagline: 'Land of the Thunder Dragon', trips: 12, priceFrom: 3499, rating: 4.8, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
+  { name: 'Tibet', tagline: 'Roof of the World', trips: 8, priceFrom: 2999, rating: 4.7, gradient: 'from-amber-700/50 via-orange-700/40 to-red-800/50' },
+  { name: 'Pakistan', tagline: 'K2 & Karakoram', trips: 6, priceFrom: 3199, rating: 4.9, gradient: 'from-rose-700/50 via-pink-700/40 to-fuchsia-800/50' },
+  { name: 'India', tagline: 'Ladakh & Sikkim', trips: 10, priceFrom: 2499, rating: 4.6, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
+  { name: 'China', tagline: 'Mount Kailash', trips: 4, priceFrom: 3999, rating: 4.7, gradient: 'from-purple-700/50 via-violet-700/40 to-fuchsia-800/50' },
 ];
 
 const FEATURES = [
@@ -61,9 +61,9 @@ const TESTIMONIALS = [
 ];
 
 const BLOG_POSTS = [
-  { title: 'Preparing for High Altitude: A Complete Guide', category: 'Trekking Tips', readTime: '8 min', excerpt: 'Essential advice for acclimatization and fitness preparation before your Himalayan adventure...', gradient: 'from-teal-900/50 to-cyan-900/50' },
-  { title: 'Hidden Gems of the Annapurna Region', category: 'Destination', readTime: '6 min', excerpt: 'Beyond the popular circuit lie untouched valleys and ancient monasteries waiting to be explored...', gradient: 'from-amber-900/50 to-yellow-900/50' },
-  { title: 'Sustainable Travel in the Himalayas', category: 'Responsible Travel', readTime: '5 min', excerpt: 'How we minimize our impact while maximizing the positive contribution to local communities...', gradient: 'from-green-900/50 to-emerald-900/50' },
+  { title: 'Preparing for High Altitude: A Complete Guide', category: 'Trekking Tips', readTime: '8 min', excerpt: 'Essential advice for acclimatization and fitness preparation before your Himalayan adventure...', gradient: 'from-teal-700/50 via-cyan-700/40 to-blue-800/50' },
+  { title: 'Hidden Gems of the Annapurna Region', category: 'Destination', readTime: '6 min', excerpt: 'Beyond the popular circuit lie untouched valleys and ancient monasteries waiting to be explored...', gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+  { title: 'Sustainable Travel in the Himalayas', category: 'Responsible Travel', readTime: '5 min', excerpt: 'How we minimize our impact while maximizing the positive contribution to local communities...', gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
 ];
 
 const TRUST_ITEMS = [
@@ -82,10 +82,10 @@ const PRICING_TIERS = [
 ];
 
 const TEAM_MEMBERS = [
-  { name: 'Tenzing Dorje', role: 'Founder & CEO', initials: 'TD', bio: 'Born in the Everest region, Tenzing has summited Everest 3 times and led over 200 expeditions across the Himalayas.' },
-  { name: 'Lakpa Sherpa', role: 'Head Guide', initials: 'LS', bio: 'IFMGA-certified guide with 18 years of experience. Specializes in technical climbs and high-altitude rescue.' },
-  { name: 'Anita Rai', role: 'Operations Director', initials: 'AR', bio: 'MBA from Kathmandu University. Ensures every expedition runs seamlessly with meticulous attention to logistics.' },
-  { name: 'Dawa Yangjin', role: 'Sustainability Lead', initials: 'DY', bio: 'Environmental scientist dedicated to making Himalayan tourism sustainable and beneficial for local communities.' },
+  { name: 'Tenzing Dorje', role: 'Founder & CEO', initials: 'TD', bio: 'Born in the Everest region, Tenzing has summited Everest 3 times and led over 200 expeditions across the Himalayas.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
+  { name: 'Lakpa Sherpa', role: 'Head Guide', initials: 'LS', bio: 'IFMGA-certified guide with 18 years of experience. Specializes in technical climbs and high-altitude rescue.', gradient: 'from-himalaya-teal/40 to-himalaya-teal/15' },
+  { name: 'Anita Rai', role: 'Operations Director', initials: 'AR', bio: 'MBA from Kathmandu University. Ensures every expedition runs seamlessly with meticulous attention to logistics.', gradient: 'from-himalaya-blue/40 to-himalaya-blue/15' },
+  { name: 'Dawa Yangjin', role: 'Sustainability Lead', initials: 'DY', bio: 'Environmental scientist dedicated to making Himalayan tourism sustainable and beneficial for local communities.', gradient: 'from-himalaya-emerald/40 to-himalaya-emerald/15' },
 ];
 
 const RESOURCES = [
@@ -98,14 +98,14 @@ const RESOURCES = [
 ];
 
 const GALLERY_ITEMS = [
-  { title: 'Sunrise at Poon Hill', location: 'Nepal', gradient: 'from-orange-900/60 to-amber-900/60' },
-  { title: 'Tiger\'s Nest Monastery', location: 'Bhutan', gradient: 'from-blue-900/60 to-indigo-900/60' },
-  { title: 'Everest Panorama', location: 'Nepal', gradient: 'from-slate-900/60 to-zinc-900/60' },
-  { title: 'K2 at Dawn', location: 'Pakistan', gradient: 'from-rose-900/60 to-pink-900/60' },
-  { title: 'Potala Palace', location: 'Tibet', gradient: 'from-red-900/60 to-orange-900/60' },
-  { title: 'Annapurna Range', location: 'Nepal', gradient: 'from-teal-900/60 to-cyan-900/60' },
-  { title: 'Paro Valley', location: 'Bhutan', gradient: 'from-emerald-900/60 to-green-900/60' },
-  { title: 'Mount Kailash', location: 'China', gradient: 'from-purple-900/60 to-fuchsia-900/60' },
+  { title: 'Sunrise at Poon Hill', location: 'Nepal', gradient: 'from-orange-600/60 via-amber-600/50 to-yellow-700/60' },
+  { title: 'Tiger\'s Nest Monastery', location: 'Bhutan', gradient: 'from-blue-600/60 via-indigo-600/50 to-violet-700/60' },
+  { title: 'Everest Panorama', location: 'Nepal', gradient: 'from-teal-600/60 via-cyan-600/50 to-emerald-700/60' },
+  { title: 'K2 at Dawn', location: 'Pakistan', gradient: 'from-rose-600/60 via-pink-600/50 to-fuchsia-700/60' },
+  { title: 'Potala Palace', location: 'Tibet', gradient: 'from-red-600/60 via-orange-600/50 to-amber-700/60' },
+  { title: 'Annapurna Range', location: 'Nepal', gradient: 'from-emerald-600/60 via-teal-600/50 to-cyan-700/60' },
+  { title: 'Paro Valley', location: 'Bhutan', gradient: 'from-green-600/60 via-emerald-600/50 to-lime-700/60' },
+  { title: 'Mount Kailash', location: 'China', gradient: 'from-purple-600/60 via-violet-600/50 to-indigo-700/60' },
 ];
 
 /* ──────────── HELPERS ──────────── */
@@ -113,8 +113,23 @@ const GALLERY_ITEMS = [
 function MountainSVG({ className = '', color = 'rgba(255,255,255,0.06)' }: { className?: string; color?: string }) {
   return (
     <svg className={className} viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 200L80 80L130 130L200 40L270 120L320 70L400 200Z" fill={color} />
-      <path d="M200 40L230 85L170 85Z" fill="rgba(255,255,255,0.04)" />
+      <defs>
+        <linearGradient id="mtn-sky" x1="200" y1="0" x2="200" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stopColor="rgba(249,115,22,0.15)" />
+          <stop offset="0.5" stopColor="rgba(236,72,153,0.1)" />
+          <stop offset="1" stopColor="rgba(124,58,237,0.05)" />
+        </linearGradient>
+        <linearGradient id="mtn-fill" x1="200" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+          <stop stopColor={color} />
+          <stop offset="1" stopColor="rgba(0,0,0,0.3)" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="100" fill="url(#mtn-sky)" />
+      <path d="M0 200L80 80L130 130L200 40L270 120L320 70L400 200Z" fill="url(#mtn-fill)" />
+      <path d="M0 200L60 120L120 150L180 90L250 140L310 100L400 170V200Z" fill={color} opacity="0.5" />
+      <path d="M200 40L230 85L170 85Z" fill="rgba(212,168,83,0.08)" />
+      <circle cx="340" cy="25" r="8" fill="rgba(212,168,83,0.12)" />
+      <circle cx="340" cy="25" r="5" fill="rgba(212,168,83,0.08)" />
     </svg>
   );
 }
@@ -145,22 +160,22 @@ function ResourceIcon({ type }: { type: string }) {
 
 function FeatureIcon({ type }: { type: string }) {
   const icons: Record<string, JSX.Element> = {
-    compass: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>,
-    gps: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="8" strokeDasharray="4 4"/></svg>,
-    calendar: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
-    chart: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>,
+    compass: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" strokeWidth="1.5"><circle cx="12" cy="12" r="10" stroke="#d4a853"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" stroke="#f0d68a"/></svg>,
+    gps: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="8" strokeDasharray="4 4" stroke="#06b6d4"/></svg>,
+    calendar: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke="#3b82f6"/></svg>,
+    chart: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#2dd4bf"/></svg>,
   };
   return icons[type] || icons.chart;
 }
 
 function TrustIcon({ type }: { type: string }) {
   const icons: Record<string, JSX.Element> = {
-    phone: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
+    phone: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
     shield: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>,
-    'check-circle': <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>,
-    satellite: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M12 12l4-4"/><path d="M17.5 6.5a2.12 2.12 0 013 3L17.5 6.5z"/><path d="M2 12l4-4"/><path d="M6 8l4 4"/><circle cx="12" cy="12" r="3"/></svg>,
-    insurance: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
-    award: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>,
+    'check-circle': <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>,
+    satellite: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5"><path d="M12 12l4-4"/><path d="M17.5 6.5a2.12 2.12 0 013 3L17.5 6.5z"/><path d="M2 12l4-4"/><path d="M6 8l4 4"/><circle cx="12" cy="12" r="3"/></svg>,
+    insurance: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
+    award: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="1.5"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>,
   };
   return icons[type] || icons.award;
 }
@@ -491,13 +506,32 @@ export default function HimalayanExplorer() {
             <rect width="100%" height="100%" fill="url(#dots)"/>
           </svg>
           {/* Geometric mountains */}
-          <svg className="absolute bottom-0 left-0 w-full h-2/3 opacity-[0.04]" viewBox="0 0 1200 600" fill="none">
-            <path d="M0 600L200 250L350 400L500 150L650 350L800 200L1000 400L1200 300V600Z" fill="white"/>
+          <svg className="absolute bottom-0 left-0 w-full h-2/3 opacity-[0.05]" viewBox="0 0 1200 600" fill="none">
+            <defs>
+              <linearGradient id="hero-mtn-grad" x1="600" y1="150" x2="600" y2="600" gradientUnits="userSpaceOnUse">
+                <stop stopColor="rgba(124,58,237,0.3)" />
+                <stop offset="0.5" stopColor="rgba(45,212,191,0.2)" />
+                <stop offset="1" stopColor="rgba(212,168,83,0.1)" />
+              </linearGradient>
+            </defs>
+            <path d="M0 600L200 250L350 400L500 150L650 350L800 200L1000 400L1200 300V600Z" fill="url(#hero-mtn-grad)"/>
           </svg>
-          {/* Gradient orbs */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-himalaya-gold/5 rounded-full blur-[120px] animate-pulse-glow" />
-          <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/5 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-himalaya-blue/5 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+          {/* Colorful aurora gradient orbs */}
+          <div className="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-himalaya-gold/10 via-himalaya-aurora/5 to-transparent rounded-full blur-[120px] animate-aurora" />
+          <div className="absolute top-[30%] right-[5%] w-[400px] h-[400px] bg-gradient-to-br from-himalaya-teal/10 via-himalaya-blue/5 to-transparent rounded-full blur-[100px] animate-aurora" style={{ animationDelay: '3s' }} />
+          <div className="absolute bottom-[10%] left-[30%] w-[450px] h-[450px] bg-gradient-to-br from-himalaya-rose/8 via-himalaya-aurora/4 to-transparent rounded-full blur-[110px] animate-aurora" style={{ animationDelay: '6s' }} />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-himalaya-gold/8 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-himalaya-blue/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+          <div className="absolute bottom-[20%] right-[15%] w-64 h-64 bg-himalaya-aurora/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
+          {/* Twinkling stars */}
+          {[
+            {x:8,y:12,delay:'0s'},{x:15,y:8,delay:'1.5s'},{x:25,y:15,delay:'0.5s'},{x:35,y:5,delay:'2s'},
+            {x:45,y:18,delay:'1s'},{x:55,y:10,delay:'3s'},{x:65,y:14,delay:'0.8s'},{x:75,y:7,delay:'2.5s'},
+            {x:85,y:16,delay:'1.2s'},{x:92,y:9,delay:'0.3s'},{x:40,y:3,delay:'1.8s'},{x:70,y:20,delay:'2.2s'},
+          ].map((s,i) => (
+            <div key={i} className="absolute w-1 h-1 bg-white rounded-full" style={{left:`${s.x}%`,top:`${s.y}%`,animation:`star-twinkle 3s ease-in-out ${s.delay} infinite`}} />
+          ))}
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 text-center" style={{ transform: `translate(${heroMouse.x * 0.3}px, ${heroMouse.y * 0.3}px)` }}>
@@ -609,8 +643,8 @@ export default function HimalayanExplorer() {
       <section id="destinations" className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill">⛰️ Popular Expeditions</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular Expeditions</h2>
+            <span className="category-pill pill-rose">⛰️ Popular Expeditions</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular <span className="gradient-text-sunset">Expeditions</span></h2>
             <p className="text-white/40 mt-2 max-w-lg mx-auto">Handpicked treks through the most spectacular landscapes on Earth</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -653,7 +687,7 @@ export default function HimalayanExplorer() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
             <span className="category-pill">✨ Why Us</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Why Choose Himalayan Explorer</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Why Choose <span className="gradient-text">Himalayan Explorer</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((feat) => (
@@ -698,7 +732,7 @@ export default function HimalayanExplorer() {
             </div>
             <div className="reveal-scale">
               <div className="tilt-card glass-card-static p-4 relative">
-                <div className="relative h-64 sm:h-80 bg-gradient-to-br from-emerald-900/40 to-teal-900/40 rounded-lg overflow-hidden flex items-end">
+                <div className="relative h-64 sm:h-80 bg-gradient-to-br from-emerald-700/40 via-teal-700/30 to-cyan-800/40 rounded-lg overflow-hidden flex items-end">
                   <MountainSVG className="absolute inset-0 w-full h-full opacity-40" />
                   <MountainSVG className="absolute bottom-0 left-0 w-3/4 h-1/2 opacity-20" color="rgba(212,168,83,0.1)" />
                   {/* Floating cards */}
@@ -716,10 +750,13 @@ export default function HimalayanExplorer() {
       </section>
 
       {/* ═══════════ 8. DESTINATIONS GRID ═══════════ */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-16 sm:py-20 relative section-glow-top">
+        <div className="pattern-overlay">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-br from-himalaya-blue/5 via-himalaya-aurora/3 to-transparent rounded-full blur-[120px]" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill">🌍 Destinations</span>
+            <span className="category-pill pill-blue">🌍 Destinations</span>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4">Explore Destinations</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -751,8 +788,8 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-10 reveal">
-            <span className="category-pill">🛠️ Tools</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Plan Your Adventure</h2>
+            <span className="category-pill pill-teal">🛠️ Tools</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Plan Your <span className="gradient-text-forest">Adventure</span></h2>
           </div>
           {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 reveal">
@@ -1032,8 +1069,11 @@ export default function HimalayanExplorer() {
       </section>
 
       {/* ═══════════ 10. ABOUT US ═══════════ */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-16 sm:py-20 relative section-glow-top">
+        <div className="pattern-overlay">
+          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-gold/5 via-himalaya-emerald/3 to-transparent rounded-full blur-[120px]" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12">
             <div className="reveal-scale">
               <div className="relative glass-card-static p-4">
@@ -1098,7 +1138,7 @@ export default function HimalayanExplorer() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {TEAM_MEMBERS.map((member) => (
                 <div key={member.name} className="glass-card p-4 text-center">
-                  <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br from-himalaya-gold/30 to-himalaya-gold/10 flex items-center justify-center text-lg font-bold text-himalaya-gold">
+                  <div className={`w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center text-lg font-bold text-himalaya-gold`}>
                     {member.initials}
                   </div>
                   <h4 className="font-semibold text-sm">{member.name}</h4>
@@ -1186,8 +1226,8 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8 reveal">
-            <span className="category-pill">📸 Gallery</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Captured Moments</h2>
+            <span className="category-pill pill-rose">📸 Gallery</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Captured <span className="gradient-text-sunset">Moments</span></h2>
           </div>
           {/* Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 reveal">
@@ -1222,7 +1262,7 @@ export default function HimalayanExplorer() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
             <span className="category-pill">💬 Reviews</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Voices from the Trail</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Voices from the <span className="gradient-text">Trail</span></h2>
             <div className="mt-3 flex items-center justify-center gap-2">
               <StarRating count={5} />
               <span className="text-sm font-semibold">4.9/5</span>
@@ -1251,8 +1291,8 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill">📝 Blog</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Stories & Insights</h2>
+            <span className="category-pill pill-aurora">📝 Blog</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Stories & <span className="gradient-text-aurora">Insights</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {BLOG_POSTS.map((post) => (
@@ -1282,7 +1322,7 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-10 reveal">
-            <h2 className="text-3xl sm:text-4xl font-bold">Frequently Asked Questions</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold">Frequently Asked <span className="gradient-text-cool">Questions</span></h2>
           </div>
           {/* Category filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-6 reveal">
@@ -1314,11 +1354,11 @@ export default function HimalayanExplorer() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
             <span className="category-pill">💎 Pricing</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Choose Your Adventure</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Choose Your <span className="gradient-text">Adventure</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {PRICING_TIERS.map((tier) => (
-              <div key={tier.name} className={`glass-card p-6 relative ${tier.highlighted ? 'border-himalaya-gold/30 !bg-himalaya-gold/[0.03]' : ''} reveal-scale`}>
+              <div key={tier.name} className={`glass-card p-6 relative ${tier.highlighted ? 'border-himalaya-gold/40 !bg-gradient-to-b from-himalaya-gold/[0.06] to-transparent shadow-[0_0_60px_rgba(212,168,83,0.12)]' : ''} reveal-scale`}>
                 {tier.highlighted && <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] bg-himalaya-gold text-black font-bold px-3 py-0.5 rounded-full">Most Popular</span>}
                 <h3 className="font-bold text-lg mb-1">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mb-4">
@@ -1341,11 +1381,15 @@ export default function HimalayanExplorer() {
       </section>
 
       {/* ═══════════ 18. NEWSLETTER ═══════════ */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-4 reveal">
+      <section className="py-16 sm:py-20 relative section-glow-top">
+        <div className="pattern-overlay">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-aurora/8 via-himalaya-rose/5 to-himalaya-orange/3 rounded-full blur-[120px] animate-aurora" />
+        </div>
+        <div className="max-w-3xl mx-auto px-4 relative z-10 reveal">
           <div className="glass-card-strong p-8 sm:p-10 relative overflow-hidden">
-            {/* Gradient orb */}
-            <div className="absolute -top-20 -right-20 w-64 h-64 bg-himalaya-gold/10 rounded-full blur-[80px]" />
+            {/* Gradient orbs */}
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-himalaya-gold/15 to-himalaya-rose/10 rounded-full blur-[80px]" />
+            <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-gradient-to-br from-himalaya-aurora/10 to-himalaya-teal/10 rounded-full blur-[60px]" />
             <div className="relative z-10 text-center">
               <h2 className="text-2xl sm:text-3xl font-bold mb-2">Stay Inspired</h2>
               <p className="text-white/40 text-sm mb-1">Get exclusive deals, travel tips, and early access to new expeditions.</p>
@@ -1371,8 +1415,11 @@ export default function HimalayanExplorer() {
       </section>
 
       {/* ═══════════ 19. CONTACT ═══════════ */}
-      <section id="contact" className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <section id="contact" className="py-16 sm:py-20 relative section-glow-top">
+        <div className="pattern-overlay">
+          <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-sky/5 via-himalaya-teal/3 to-transparent rounded-full blur-[120px]" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Form */}
             <div className="reveal">
@@ -1456,7 +1503,7 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-3xl mx-auto px-4 reveal">
           <div className="glass-card-strong p-8 text-center">
-            <span className="category-pill mb-4 inline-flex">⏰ Next Departure</span>
+            <span className="category-pill pill-aurora">⏰ Next Departure</span>
             <h2 className="text-2xl font-bold mt-4 mb-2">Everest Base Camp — Spring 2026</h2>
             <p className="text-sm text-white/30 mb-6">Limited spots remaining for our most popular expedition</p>
             <div className="flex justify-center gap-3 mb-6">
@@ -1485,7 +1532,7 @@ export default function HimalayanExplorer() {
           <svg className="absolute bottom-0 right-0 w-1/2 h-1/2 opacity-[0.03]" viewBox="0 0 400 400"><polygon points="0,400 200,100 400,400" fill="white"/></svg>
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center reveal">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach New Heights?</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach <span className="gradient-text-aurora">New Heights</span>?</h2>
           <p className="text-white/40 mb-8 max-w-lg mx-auto">Your Himalayan adventure awaits. Let us craft an unforgettable journey tailored to your dreams, fitness level, and sense of wonder.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="btn-primary">Start Your Journey</button>
