@@ -1,0 +1,2002 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useRef, useCallback } from 'react';
+     4→
+     5→/* ──────────── DATA ──────────── */
+     6→
+     7→const NAV_LINKS = ['Experiences', 'Trekking', 'About', 'Stories', 'Contact'];
+     8→
+     9→const TOURS = [
+    10→  { title: 'Everest Base Camp Trek', days: 14, difficulty: 'strenuous' as const, price: 1299, country: 'Nepal', altitude: '5,545m', rating: 5, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50', desc: 'Join the adventure of a lifetime with the Everest Base Camp Trek. Trek through Sagarmatha National Park, experience genuine Sherpa hospitality, and stand at the foot of the world\'s tallest mountain.', region: 'Everest Region' },
+    11→  { title: 'Annapurna Circuit Trek', days: 21, difficulty: 'strenuous' as const, price: 1150, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50', desc: 'The world\'s most well-known trek through beautiful landscapes, Thorong-La Pass, and Muktinath\'s holiest pilgrimage site. Cross the highest pass at 5,416m with breathtaking mountain scenery.', region: 'Annapurna Region' },
+    12→  { title: 'Upper Mustang Trek', days: 18, difficulty: 'moderate' as const, price: 1890, country: 'Nepal', altitude: '3,800m', rating: 5, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50', desc: 'A life-changing adventure to the Last Forbidden Kingdom, closed until 1992. Explore dramatic landscapes, ancient monasteries, sky caves, and the walled city of Lo Manthang.', region: 'Mustang Region' },
+    13→  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 850, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50', desc: 'A beautiful valley trek north of Kathmandu, offering stunning glacier views, Tamang culture, and diverse wildlife including red pandas. Perfect for beginners seeking Himalayan beauty.', region: 'Langtang Region' },
+    14→  { title: 'Manaslu Circuit Trek', days: 17, difficulty: 'challenging' as const, price: 1350, country: 'Nepal', altitude: '5,106m', rating: 5, gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50', desc: 'A remote and wild circuit around the 8th highest mountain. Cross the Larkya La Pass, experience untouched Tibetan-influenced villages, and trek through pristine valleys far from the crowds.', region: 'Manaslu Region' },
+    15→  { title: 'Upper Dolpo Trek', days: 22, difficulty: 'strenuous' as const, price: 2950, country: 'Nepal', altitude: '5,360m', rating: 5, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50', desc: 'One of Nepal\'s most remote and restricted trekking regions. Explore the mystical Phoksundo Lake, ancient Bon monasteries, and a landscape that remains untouched by modern civilization.', region: 'Dolpo Region' },
+    16→];
+    17→
+    18→const DESTINATIONS = [
+    19→  { name: 'Everest Region', tagline: 'Land of Sherpas & Sagarmatha', trips: 18, priceFrom: 1299, rating: 4.9, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
+    20→  { name: 'Annapurna Region', tagline: 'World\'s Most Popular Trek', trips: 15, priceFrom: 850, rating: 4.8, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+    21→  { name: 'Langtang Region', tagline: 'Valley of Glaciers', trips: 8, priceFrom: 850, rating: 4.7, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
+    22→  { name: 'Manaslu Region', tagline: 'Wild & Untouched Circuit', trips: 6, priceFrom: 1350, rating: 4.9, gradient: 'from-rose-700/50 via-pink-700/40 to-fuchsia-800/50' },
+    23→  { name: 'Mustang Region', tagline: 'Last Forbidden Kingdom', trips: 5, priceFrom: 1890, rating: 4.8, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
+    24→  { name: 'Dolpo Region', tagline: 'Hidden Himalayan Paradise', trips: 4, priceFrom: 2950, rating: 4.9, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
+    25→];
+    26→
+    27→const FEATURES = [
+    28→  { title: 'Expert Local Guides', desc: 'Our team comprises experts in tourism and destinations, knowledgeable local guides who possess a deep understanding of the local culture and history.', icon: 'compass' },
+    29→  { title: 'Your Safety First', desc: 'We place the utmost importance on your safety and enjoyment, going above and beyond to ensure your trip is seamless and unforgettable.', icon: 'gps' },
+    30→  { title: 'Tailored Itineraries', desc: 'Our expertise lies in creating tailored itineraries that cater to your desired experience. Cultural exploration or extreme adventure — we create the perfect trip plan.', icon: 'calendar' },
+    31→  { title: 'Dedicated Support', desc: 'When you travel with us, a dedicated local staff is always available to cater to your every need. From airport pickup to the final farewell, we\'re with you.', icon: 'chart' },
+    32→];
+    33→
+    34→const PACKING_ITEMS: Record<string, string[]> = {
+    35→  Clothing: ['Down Jacket', 'Thermal Base Layers', 'Fleece Pullover', 'Trekking Pants', 'Rain Shell', 'Warm Hat', 'Gloves', 'Buff/Neck Gaiter'],
+    36→  Footwear: ['Trekking Boots', 'Camp Shoes', 'Trekking Socks (3 pairs)'],
+    37→  Gear: ['Daypack', 'Sleeping Bag', 'Trekking Poles', 'Headlamp', 'Water Bottles', 'Sunglasses'],
+    38→  Documents: ['Passport', 'Travel Insurance', 'Flight Tickets', 'Visa Documents', 'Emergency Contacts Card'],
+    39→  Electronics: ['Phone + Charger', 'Power Bank', 'Camera', 'Adapter'],
+    40→  Medications: ['Altitude Sickness Pills', 'First Aid Kit', 'Personal Medications', 'Water Purification Tablets'],
+    41→};
+    42→
+    43→const FAQ_DATA = [
+    44→  { q: 'How far in advance should I book?', a: 'We recommend booking at least 3-6 months in advance for popular treks like EBC and Annapurna. For peak seasons (Oct-Nov and Mar-May), booking 6-12 months ahead ensures availability. Please feel free to contact us before booking — we\'ll be glad to help you with these details.', cat: 'Booking' },
+    45→  { q: 'What is included in the tour price?', a: 'Our tour prices include airport transfers (from Kathmandu airport/bus station), accommodation, meals during the trek, experienced guide and porter services, TIMS and conservation area permits, and emergency evacuation arrangements. International flights, travel insurance, and personal expenses are not included.', cat: 'Booking' },
+    46→  { q: 'What payment methods do you accept?', a: 'The payment is encrypted and transmitted securely with an SSL protocol. We accept Visa, Mastercard, bank transfers, and PayPal. A deposit is required to confirm your booking, with the balance due before departure.', cat: 'Payment' },
+    47→  { q: 'Can I customize my itinerary?', a: 'Yes! Our expertise lies in creating tailored itineraries that cater to your desired experience. Whether it\'s cultural exploration or extreme adventure such as trekking Mount Everest Base Camp, our team can help create a great trip plan according to your requirements.', cat: 'Booking' },
+    48→  { q: 'What permits do I need for trekking?', a: 'Most treks require a Trekkers Information Management System (TIMS) card and a conservation area permit (like ACAP for Annapurna, MCAP for Manaslu). Restricted area treks like Upper Mustang and Upper Dolpo require special permits. We handle all permit arrangements for you.', cat: 'Permits' },
+    49→  { q: 'What is the best time to trek in Nepal?', a: 'Autumn (September to November) and Spring (March to May) are the best times for trekking in Nepal. During Autumn, the weather is warm during the day and cool at night. Spring brings blooming rhododendrons and warmer days. The Annapurna and EBC treks are doable year-round, but these seasons offer the best conditions.', cat: 'Seasons' },
+    50→  { q: 'Is travel insurance mandatory?', a: 'Yes, comprehensive travel insurance covering high-altitude trekking (up to 6,000m), emergency helicopter evacuation, medical treatment, and trip cancellation is mandatory for all our expeditions. We can recommend suitable coverage.', cat: 'Insurance' },
+    51→  { q: 'What about altitude sickness?', a: 'We focus on keeping you safe through proper acclimatization. Our itineraries include acclimatization days built in for safety and comfort. During the trek, stay hydrated, ascend gradually, and follow your guide\'s acclimatization advice. Our guides are trained to recognize and respond to altitude-related issues.', cat: 'Health' },
+    52→  { q: 'Do you arrange transportation from the airport?', a: 'Yes! If you require travel-related services during your stay, such as transportation arrangements from Kathmandu airport or bus station, please feel free to contact us before booking. All necessary arrangements will be made well before your arrival, giving you complete peace of mind.', cat: 'Booking' },
+    53→  { q: 'What gear do I need to bring?', a: 'Essential items include trekking boots, down jacket, sleeping bag, daypack, headlamp, and proper layering. We provide a comprehensive packing list tailored to your specific trek. Rental gear is available in Kathmandu at affordable prices.', cat: 'Gear' },
+    54→];
+    55→
+    56→const TESTIMONIALS = [
+    57→  { name: 'Sarah Chen', trip: 'Everest Base Camp Trek', initials: 'SC', quote: 'The Everest Base Camp Trek is one of those adventures that changes everything. The breathtaking Himalayan views made me forget to breathe, and the Sherpa people became my heroes. Standing at the base of Mount Everest — that Everest — is something you never forget.' },
+    58→  { name: 'Marcus Weber', trip: 'Annapurna Circuit Trek', initials: 'MW', quote: 'The Annapurna Circuit is undoubtedly the world\'s most well-known trek for good reason. Crossing Thorong-La Pass at 5,416m with 360° views of Dhaulagiri, Annapurna, and Nilgiri was the most incredible moment of my life. The team made everything seamless.' },
+    59→  { name: 'Priya Sharma', trip: 'Upper Mustang Trek', initials: 'PS', quote: 'Upper Mustang is a life-changing adventure you won\'t find anywhere else in the world. The walled city of Lo Manthang took my breath away — monasteries, prayer wheels, and traditional mud-brick houses around every corner. Truly the Last Forbidden Kingdom.' },
+    60→  { name: 'James Morrison', trip: 'Manaslu Circuit Trek', initials: 'JM', quote: 'If you want a remote and wild trek far from the crowds, Manaslu is it. Crossing the Larkya La Pass with untouched Tibetan-influenced villages along the way was extraordinary. Our guide\'s expertise and calm presence made all the difference at high altitude.' },
+    61→];
+    62→
+    63→const BLOG_POSTS = [
+    64→  { title: 'Everest Base Camp Trek Guide: Everything You Need to Know', category: 'Trekking Guide', readTime: '12 min', excerpt: 'The complete guide to EBC — from preparation and packing to acclimatization days, the 14-day itinerary, and what it\'s really like standing at the foot of the world\'s tallest mountain.', gradient: 'from-teal-700/50 via-cyan-700/40 to-blue-800/50' },
+    65→  { title: 'Upper Dolpo Trek Cost: Does It Really Cost That Much?', category: 'Destination', readTime: '8 min', excerpt: 'We break down the real costs of trekking to Upper Dolpo — permits, guides, flights, and accommodation. Plus tips on how to plan your budget for Nepal\'s most remote trekking region.', gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+    66→  { title: 'Will the Manaslu Circuit Trek Remain Wild and Quiet in 2026?', category: 'Responsible Travel', readTime: '6 min', excerpt: 'Manaslu is one of Nepal\'s last truly wild circuits. As popularity grows, we explore what makes it special and how we can keep it that way for future generations of trekkers.', gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
+    67→];
+    68→
+    69→const TRUST_ITEMS = [
+    70→  { title: '24/7 Emergency Hotline', desc: '+977-9851-188161', icon: 'phone' },
+    71→  { title: 'Certified Local Guides', desc: 'Tourism experts with deep cultural knowledge', icon: 'shield' },
+    72→  { title: 'Safety Track Record', desc: 'Since 2013, zero major incidents', icon: 'check-circle' },
+    73→  { title: 'SSL Encrypted Payments', desc: 'Secure payment with SSL protocol', icon: 'satellite' },
+    74→  { title: 'Nepal Tourism Board', desc: 'Government registered trekking agency', icon: 'insurance' },
+    75→  { title: 'Industry Certifications', desc: 'TAAN, NMA, Nepal Tourism Board', icon: 'award' },
+    76→];
+    77→
+    78→const PRICING_TIERS = [
+    79→  { name: 'Explorer', price: 850, features: ['Group treks (8-12 people)', 'Teahouse accommodation', 'Licensed trekking guide', 'Basic meals during trek', 'TIMS & ACAP permits', 'Airport transfers', 'Emergency evacuation arrangement'], highlighted: false },
+    80→  { name: 'Adventurer', price: 1350, features: ['Small group treks (4-6 people)', 'Best available lodges', 'Senior mountain guide', 'All meals + snacks', 'All permits & conservation fees', 'Airport transfers & domestic flights', 'Acclimatization days included', 'Emergency evacuation arrangement', 'Pre-trip fitness plan'], highlighted: true },
+    81→  { name: 'Summit', price: 2950, features: ['Private or duo expedition', 'Luxury lodges & premium camps', 'Expert mountaineer guide', 'Gourmet meals & supplements', 'All permits, fees & restricted area permits', 'All flights & transfers', 'GPS + satellite communication', 'Comprehensive insurance', 'Personal porter', 'Post-trip recovery package'], highlighted: false },
+    82→];
+    83→
+    84→const TEAM_MEMBERS = [
+    85→  { name: 'Lama Tamang', role: 'Founder & Managing Director', initials: 'LT', bio: 'Born in Kabhre Palanchok, Lama started as a trekking porter and kitchen assistant before founding Himalayan Exploration Treks in 2013. A member of the indigenous Tamang community, he works with guides who love their country and try to make a difference by working in their villages and mountains.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
+    86→  { name: 'Pushpa Tamang', role: 'Australia Representative', initials: 'PT', bio: 'Based in Campsie, NSW, Pushpa handles international inquiries and bookings for our Australian clients, ensuring seamless coordination across time zones.', gradient: 'from-himalaya-teal/40 to-himalaya-teal/15' },
+    87→  { name: 'Senior Trekking Guide', role: 'Head Guide', initials: 'SG', bio: 'Our lead guides are tourism experts with deep knowledge of local culture and history. They possess a deep understanding of the mountains and ensure every trekker\'s safety and enjoyment.', gradient: 'from-himalaya-blue/40 to-himalaya-blue/15' },
+    88→  { name: 'Operations Team', role: 'Logistics & Support', initials: 'OT', bio: 'Our Kathmandu-based operations team ensures every expedition runs seamlessly — from airport pickups and hotel bookings to permit arrangements and emergency support, 24/7.', gradient: 'from-himalaya-emerald/40 to-himalaya-emerald/15' },
+    89→];
+    90→
+    91→const RESOURCES = [
+    92→  { title: 'Visa Information', desc: 'Complete visa requirements for Nepal, Bhutan, Tibet, and Pakistan. Check by nationality.', cta: 'Check Visa Requirements', icon: 'passport' },
+    93→  { title: 'Travel Insurance', desc: 'Comprehensive coverage for high-altitude treks. Partnered with World Nomads & Allianz.', cta: 'Get Insurance Quote', icon: 'shield' },
+    94→  { title: 'Health & Vaccinations', desc: 'Required and recommended vaccinations, altitude sickness prevention, and health tips.', cta: 'View Health Guide', icon: 'heart' },
+    95→  { title: 'Packing Guide', desc: 'Interactive packing checklists customized for your specific trip and season.', cta: 'Open Packing List', icon: 'backpack' },
+    96→  { title: 'Currency & Budgeting', desc: 'Exchange rates, tipping customs, and daily budget estimates per destination.', cta: 'Currency Guide', icon: 'wallet' },
+    97→  { title: 'Cultural Etiquette', desc: "Local customs, do's and don'ts, and cultural sensitivity guides for each region.", cta: 'Learn More', icon: 'book' },
+    98→];
+    99→
+   100→const GALLERY_ITEMS = [
+   101→  { title: 'Sunrise at Poon Hill', location: 'Nepal', gradient: 'from-orange-600/60 via-amber-600/50 to-yellow-700/60' },
+   102→  { title: 'Tiger\'s Nest Monastery', location: 'Bhutan', gradient: 'from-blue-600/60 via-indigo-600/50 to-violet-700/60' },
+   103→  { title: 'Everest Panorama', location: 'Nepal', gradient: 'from-teal-600/60 via-cyan-600/50 to-emerald-700/60' },
+   104→  { title: 'K2 at Dawn', location: 'Pakistan', gradient: 'from-rose-600/60 via-pink-600/50 to-fuchsia-700/60' },
+   105→  { title: 'Potala Palace', location: 'Tibet', gradient: 'from-red-600/60 via-orange-600/50 to-amber-700/60' },
+   106→  { title: 'Annapurna Range', location: 'Nepal', gradient: 'from-emerald-600/60 via-teal-600/50 to-cyan-700/60' },
+   107→  { title: 'Paro Valley', location: 'Bhutan', gradient: 'from-green-600/60 via-emerald-600/50 to-lime-700/60' },
+   108→  { title: 'Mount Kailash', location: 'China', gradient: 'from-purple-600/60 via-violet-600/50 to-indigo-700/60' },
+   109→];
+   110→
+   111→/* ──────────── HELPERS ──────────── */
+   112→
+   113→function MountainSVG({ className = '', color = 'rgba(255,255,255,0.06)' }: { className?: string; color?: string }) {
+   114→  return (
+   115→    <svg className={className} viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+   116→      <defs>
+   117→        <linearGradient id="mtn-sky" x1="200" y1="0" x2="200" y2="100" gradientUnits="userSpaceOnUse">
+   118→          <stop stopColor="rgba(249,115,22,0.15)" />
+   119→          <stop offset="0.5" stopColor="rgba(236,72,153,0.1)" />
+   120→          <stop offset="1" stopColor="rgba(124,58,237,0.05)" />
+   121→        </linearGradient>
+   122→        <linearGradient id="mtn-fill" x1="200" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+   123→          <stop stopColor={color} />
+   124→          <stop offset="1" stopColor="rgba(0,0,0,0.3)" />
+   125→        </linearGradient>
+   126→      </defs>
+   127→      <rect width="400" height="100" fill="url(#mtn-sky)" />
+   128→      <path d="M0 200L80 80L130 130L200 40L270 120L320 70L400 200Z" fill="url(#mtn-fill)" />
+   129→      <path d="M0 200L60 120L120 150L180 90L250 140L310 100L400 170V200Z" fill={color} opacity="0.5" />
+   130→      <path d="M200 40L230 85L170 85Z" fill="rgba(212,168,83,0.08)" />
+   131→      <circle cx="340" cy="25" r="8" fill="rgba(212,168,83,0.12)" />
+   132→      <circle cx="340" cy="25" r="5" fill="rgba(212,168,83,0.08)" />
+   133→    </svg>
+   134→  );
+   135→}
+   136→
+   137→function StarRating({ count }: { count: number }) {
+   138→  return (
+   139→    <div className="flex gap-0.5">
+   140→      {Array.from({ length: 5 }, (_, i) => (
+   141→        <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 20 20" fill={i < count ? '#d4a853' : 'rgba(255,255,255,0.15)'}>
+   142→          <path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.51.91-5.33L2.27 6.68l5.34-.78L10 1z" />
+   143→        </svg>
+   144→      ))}
+   145→    </div>
+   146→  );
+   147→}
+   148→
+   149→function ResourceIcon({ type }: { type: string }) {
+   150→  const icons: Record<string, JSX.Element> = {
+   151→    passport: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7 18h10"/></svg>,
+   152→    shield: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>,
+   153→    heart: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 21C12 21 3 13.5 3 8.5 3 5.42 5.42 3 8.5 3c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0117.5 3C20.58 3 23 5.42 23 8.5 23 13.5 12 21 12 21z"/></svg>,
+   154→    backpack: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="6" width="14" height="16" rx="2"/><path d="M8 6V4a4 4 0 018 0v2"/><path d="M5 10h14"/></svg>,
+   155→    wallet: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M16 14h2"/></svg>,
+   156→    book: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z"/></svg>,
+   157→  };
+   158→  return icons[type] || icons.book;
+   159→}
+   160→
+   161→function FeatureIcon({ type }: { type: string }) {
+   162→  const icons: Record<string, JSX.Element> = {
+   163→    compass: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" strokeWidth="1.5"><circle cx="12" cy="12" r="10" stroke="#d4a853"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" stroke="#f0d68a"/></svg>,
+   164→    gps: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="8" strokeDasharray="4 4" stroke="#06b6d4"/></svg>,
+   165→    calendar: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke="#3b82f6"/></svg>,
+   166→    chart: <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#2dd4bf"/></svg>,
+   167→  };
+   168→  return icons[type] || icons.chart;
+   169→}
+   170→
+   171→function TrustIcon({ type }: { type: string }) {
+   172→  const icons: Record<string, JSX.Element> = {
+   173→    phone: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
+   174→    shield: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#d4a853" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>,
+   175→    'check-circle': <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>,
+   176→    satellite: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#4a90d9" strokeWidth="1.5"><path d="M12 12l4-4"/><path d="M17.5 6.5a2.12 2.12 0 013 3L17.5 6.5z"/><path d="M2 12l4-4"/><path d="M6 8l4 4"/><circle cx="12" cy="12" r="3"/></svg>,
+   177→    insurance: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
+   178→    award: <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="1.5"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/></svg>,
+   179→  };
+   180→  return icons[type] || icons.award;
+   181→}
+   182→
+   183→/* ──────────── MAIN COMPONENT ──────────── */
+   184→
+   185→export default function HimalayanExplorer() {
+   186→  /* State */
+   187→  const [scrolled, setScrolled] = useState(false);
+   188→  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+   189→  const [chatOpen, setChatOpen] = useState(false);
+   190→  const [chatMessage, setChatMessage] = useState('');
+   191→  const [activeToolTab, setActiveToolTab] = useState<'budget' | 'altitude' | 'packing' | 'difficulty'>('budget');
+   192→  const [faqOpenIndex, setFaqOpenIndex] = useState<number | null>(null);
+   193→  const [faqCategory, setFaqCategory] = useState('All');
+   194→  const [galleryFilter, setGalleryFilter] = useState('All');
+   195→  const [backToTopVisible, setBackToTopVisible] = useState(false);
+   196→  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+   197→  const [heroMouse, setHeroMouse] = useState({ x: 0, y: 0 });
+   198→  const [statsAnimated, setStatsAnimated] = useState(false);
+   199→  const [statsValues, setStatsValues] = useState([0, 0, 0, 0]);
+   200→  const [wishlistCount] = useState(3);
+   201→  const [currency, setCurrency] = useState('USD');
+   202→  const [language, setLanguage] = useState('EN');
+   203→  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+   204→  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+   205→
+   206→  /* Tool states */
+   207→  const [budgetDest, setBudgetDest] = useState('nepal');
+   208→  const [budgetDuration, setBudgetDuration] = useState(10);
+   209→  const [budgetStyle, setBudgetStyle] = useState('mid');
+   210→  const [budgetTravelers, setBudgetTravelers] = useState(2);
+   211→  const [budgetResult, setBudgetResult] = useState<Record<string, number> | null>(null);
+   212→
+   213→  const [altMax, setAltMax] = useState(5364);
+   214→  const [altStart, setAltStart] = useState(2800);
+   215→  const [altDays, setAltDays] = useState(10);
+   216→  const [altResult, setAltResult] = useState<{ risk: string; acclimDays: number; maxDailyGain: number; oxygenPct: number; symptoms: string[] } | null>(null);
+   217→
+   218→  const [packedItems, setPackedItems] = useState<Record<string, boolean>>(() => {
+   219→    if (typeof window === 'undefined') return {};
+   220→    try {
+   221→      const saved = localStorage.getItem('himalaya-packing');
+   222→      if (saved) return JSON.parse(saved);
+   223→    } catch { /* ignore */ }
+   224→    return {};
+   225→  });
+   226→
+   227→  const [diffDistance, setDiffDistance] = useState(65);
+   228→  const [diffAltitude, setDiffAltitude] = useState(5400);
+   229→  const [diffAscent, setDiffAscent] = useState(2500);
+   230→  const [diffTerrain, setDiffTerrain] = useState('rocky');
+   231→  const [diffFitness, setDiffFitness] = useState('intermediate');
+   232→  const [diffResult, setDiffResult] = useState<{ score: number; label: string; time: string; training: string } | null>(null);
+   233→
+   234→  const [newsletterEmail, setNewsletterEmail] = useState('');
+   235→  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+   236→
+   237→  const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', trip: '', message: '' });
+   238→
+   239→  /* Checkout states */
+   240→  const [checkoutOpen, setCheckoutOpen] = useState(false);
+   241→  const [checkoutStep, setCheckoutStep] = useState<'details' | 'payment' | 'confirmation'>('details');
+   242→  const [selectedTour, setSelectedTour] = useState<typeof TOURS[0] | null>(null);
+   243→  const [paymentMethod, setPaymentMethod] = useState<'esewa' | 'bank' | 'arrival'>('esewa');
+   244→  const [bookingForm, setBookingForm] = useState({
+   245→    fullName: '', email: '', phone: '', nationality: '',
+   246→    startDate: '', travelers: 1,
+   247→    emergencyContact: '', emergencyPhone: '',
+   248→    dietaryNeeds: '', medicalConditions: '', specialRequests: '',
+   249→  });
+   250→  const [bookingResult, setBookingResult] = useState<{ bookingRef: string; amount: number } | null>(null);
+   251→  const [isSubmitting, setIsSubmitting] = useState(false);
+   252→  const [agreeTerms, setAgreeTerms] = useState(false);
+   253→  const checkoutRef = useRef<HTMLDivElement>(null);
+   254→
+   255→  const heroRef = useRef<HTMLDivElement>(null);
+   256→  const statsRef = useRef<HTMLDivElement>(null);
+   257→  const chatMessagesRef = useRef<HTMLDivElement>(null);
+   258→
+   259→  /* Countdown timer - 45 days from a fixed epoch */
+   260→  useEffect(() => {
+   261→    const targetDate = new Date('2026-09-15T06:00:00Z');
+   262→    const interval = setInterval(() => {
+   263→      const now = new Date();
+   264→      const diff = targetDate.getTime() - now.getTime();
+   265→      if (diff <= 0) {
+   266→        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+   267→        return;
+   268→      }
+   269→      setCountdown({
+   270→        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+   271→        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+   272→        minutes: Math.floor((diff / (1000 * 60)) % 60),
+   273→        seconds: Math.floor((diff / 1000) % 60),
+   274→      });
+   275→    }, 1000);
+   276→    return () => clearInterval(interval);
+   277→  }, []);
+   278→
+   279→  /* Scroll listener */
+   280→  useEffect(() => {
+   281→    const onScroll = () => {
+   282→      setScrolled(window.scrollY > 50);
+   283→      setBackToTopVisible(window.scrollY > 500);
+   284→    };
+   285→    window.addEventListener('scroll', onScroll, { passive: true });
+   286→    return () => window.removeEventListener('scroll', onScroll);
+   287→  }, []);
+   288→
+   289→  /* IntersectionObserver for reveal animations */
+   290→  useEffect(() => {
+   291→    const observer = new IntersectionObserver(
+   292→      (entries) => {
+   293→        entries.forEach((entry) => {
+   294→          if (entry.isIntersecting) {
+   295→            entry.target.classList.add('visible');
+   296→          }
+   297→        });
+   298→      },
+   299→      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+   300→    );
+   301→    document.querySelectorAll('.reveal, .reveal-scale').forEach((el) => observer.observe(el));
+   302→    return () => observer.disconnect();
+   303→  }, []);
+   304→
+   305→  /* Stats counter animation */
+   306→  useEffect(() => {
+   307→    if (!statsRef.current) return;
+   308→    const observer = new IntersectionObserver(
+   309→      (entries) => {
+   310→        if (entries[0].isIntersecting && !statsAnimated) {
+   311→          setStatsAnimated(true);
+   312→          const targets = [5000, 50, 300, 11];
+   313→          const durations = 2000;
+   314→          const startTime = Date.now();
+   315→          const animate = () => {
+   316→            const elapsed = Date.now() - startTime;
+   317→            const progress = Math.min(elapsed / durations, 1);
+   318→            const eased = 1 - Math.pow(1 - progress, 3);
+   319→            setStatsValues(targets.map((t) => Math.round(t * eased)));
+   320→            if (progress < 1) requestAnimationFrame(animate);
+   321→          };
+   322→          requestAnimationFrame(animate);
+   323→        }
+   324→      },
+   325→      { threshold: 0.3 }
+   326→    );
+   327→    observer.observe(statsRef.current);
+   328→    return () => observer.disconnect();
+   329→  }, [statsAnimated]);
+   330→
+   331→  /* Save packing state */
+   332→  useEffect(() => {
+   333→    try {
+   334→      localStorage.setItem('himalaya-packing', JSON.stringify(packedItems));
+   335→    } catch { /* ignore */ }
+   336→  }, [packedItems]);
+   337→
+   338→  /* Budget calculator */
+   339→  const calculateBudget = useCallback(() => {
+   340→    const destCosts: Record<string, Record<string, number>> = {
+   341→      nepal: { flights: 800, accommodation: 50, food: 30, activities: 40, insurance: 12, visa: 30 },
+   342→      bhutan: { flights: 1200, accommodation: 80, food: 45, activities: 60, insurance: 15, visa: 40 },
+   343→      tibet: { flights: 1000, accommodation: 70, food: 35, activities: 50, insurance: 14, visa: 50 },
+   344→      pakistan: { flights: 900, accommodation: 55, food: 25, activities: 45, insurance: 13, visa: 35 },
+   345→      india: { flights: 700, accommodation: 45, food: 20, activities: 35, insurance: 11, visa: 25 },
+   346→      china: { flights: 1100, accommodation: 75, food: 40, activities: 55, insurance: 14, visa: 60 },
+   347→    };
+   348→    const styleMult: Record<string, number> = { budget: 0.7, mid: 1, luxury: 1.8 };
+   349→    const d = destCosts[budgetDest] || destCosts.nepal;
+   350→    const m = styleMult[budgetStyle] || 1;
+   351→    setBudgetResult({
+   352→      Flights: Math.round(d.flights * budgetTravelers * m),
+   353→      Accommodation: Math.round(d.accommodation * budgetDuration * budgetTravelers * m),
+   354→      Food: Math.round(d.food * budgetDuration * budgetTravelers * m),
+   355→      Activities: Math.round(d.activities * budgetDuration * m),
+   356→      Insurance: Math.round(d.insurance * budgetDuration * budgetTravelers),
+   357→      Visa: Math.round(d.visa * budgetTravelers),
+   358→    });
+   359→  }, [budgetDest, budgetDuration, budgetStyle, budgetTravelers]);
+   360→
+   361→  /* Altitude calculator */
+   362→  const calculateAltitude = useCallback(() => {
+   363→    const gain = altMax - altStart;
+   364→    const acclimDays = altMax > 3500 ? Math.ceil((altMax - 3500) / 500) + 2 : 0;
+   365→    const maxDailyGain = altMax > 3000 ? 500 : 800;
+   366→    const oxygenPct = Math.round((Math.exp(-0.0001217 * altMax)) * 100 * 20.9) / 10;
+   367→    let risk = 'Low';
+   368→    if (altMax > 5500) risk = 'Extreme';
+   369→    else if (altMax > 4500) risk = 'High';
+   370→    else if (altMax > 3500) risk = 'Moderate';
+   371→    const symptoms: string[] = [];
+   372→    if (altMax > 2500) symptoms.push('Headache', 'Nausea');
+   373→    if (altMax > 3500) symptoms.push('Shortness of breath', 'Dizziness');
+   374→    if (altMax > 4500) symptoms.push('Confusion', 'Severe fatigue');
+   375→    if (altMax > 5500) symptoms.push('Cyanosis', 'Loss of coordination');
+   376→    setAltResult({ risk, acclimDays, maxDailyGain, oxygenPct, symptoms });
+   377→  }, [altMax, altStart, altDays]);
+   378→
+   379→  /* Difficulty estimator */
+   380→  const calculateDifficulty = useCallback(() => {
+   381→    let score = 0;
+   382→    score += (diffDistance / 200) * 2.5;
+   383→    score += (diffAltitude / 8849) * 2.5;
+   384→    score += (diffAscent / 5000) * 2;
+   385→    const terrainMult: Record<string, number> = { trail: 0.7, rocky: 1, snow: 1.3, ice: 1.6, mixed: 1.4 };
+   386→    score *= terrainMult[diffTerrain] || 1;
+   387→    const fitnessMult: Record<string, number> = { beginner: 1.5, intermediate: 1.2, advanced: 0.9, elite: 0.7 };
+   388→    score *= fitnessMult[diffFitness] || 1;
+   389→    score = Math.min(10, Math.max(1, Math.round(score * 10) / 10));
+   390→    let label = 'Easy';
+   391→    if (score >= 8) label = 'Strenuous';
+   392→    else if (score >= 6) label = 'Challenging';
+   393→    else if (score >= 3.5) label = 'Moderate';
+   394→    const baseTime = diffDistance / 3;
+   395→    const time = `${Math.round(baseTime * (score / 5))}-${Math.round(baseTime * (score / 5) + 2)} days`;
+   396→    const trainingRecs: Record<string, string> = {
+   397→      Easy: 'Regular walking 3x/week. Basic fitness sufficient.',
+   398→      Moderate: 'Cardio 4x/week, hiking with a pack, stair climbing recommended.',
+   399→      Challenging: 'Intensive cardio 5x/week, strength training, practice hikes at altitude if possible.',
+   400→      Strenuous: 'Elite-level preparation required. Mountaineering experience essential. 6+ months dedicated training.',
+   401→    };
+   402→    setDiffResult({ score, label, time, training: trainingRecs[label] });
+   403→  }, [diffDistance, diffAltitude, diffAscent, diffTerrain, diffFitness]);
+   404→
+   405→  /* Hero mouse move */
+   406→  /* Open checkout for a tour */
+   407→  const openCheckout = useCallback((tour: typeof TOURS[0]) => {
+   408→    setSelectedTour(tour);
+   409→    setCheckoutOpen(true);
+   410→    setCheckoutStep('details');
+   411→    setBookingForm({
+   412→      fullName: '', email: '', phone: '', nationality: '',
+   413→      startDate: '', travelers: 1,
+   414→      emergencyContact: '', emergencyPhone: '',
+   415→      dietaryNeeds: '', medicalConditions: '', specialRequests: '',
+   416→    });
+   417→    setPaymentMethod('esewa');
+   418→    setBookingResult(null);
+   419→    setAgreeTerms(false);
+   420→    document.body.style.overflow = 'hidden';
+   421→  }, []);
+   422→
+   423→  const closeCheckout = useCallback(() => {
+   424→    setCheckoutOpen(false);
+   425→    setSelectedTour(null);
+   426→    setCheckoutStep('details');
+   427→    setBookingResult(null);
+   428→    document.body.style.overflow = '';
+   429→  }, []);
+   430→
+   431→  /* Submit booking */
+   432→  const submitBooking = useCallback(async () => {
+   433→    if (!selectedTour || !agreeTerms) return;
+   434→    setIsSubmitting(true);
+   435→    try {
+   436→      const res = await fetch('/api/bookings', {
+   437→        method: 'POST',
+   438→        headers: { 'Content-Type': 'application/json' },
+   439→        body: JSON.stringify({
+   440→          tourName: selectedTour.title,
+   441→          tourDays: selectedTour.days,
+   442→          tourRegion: selectedTour.region,
+   443→          startDate: bookingForm.startDate,
+   444→          travelers: bookingForm.travelers,
+   445→          fullName: bookingForm.fullName,
+   446→          email: bookingForm.email,
+   447→          phone: bookingForm.phone,
+   448→          nationality: bookingForm.nationality,
+   449→          emergencyContact: bookingForm.emergencyContact,
+   450→          emergencyPhone: bookingForm.emergencyPhone,
+   451→          dietaryNeeds: bookingForm.dietaryNeeds,
+   452→          medicalConditions: bookingForm.medicalConditions,
+   453→          paymentMethod,
+   454→          amount: selectedTour.price * bookingForm.travelers,
+   455→          currency: 'USD',
+   456→          specialRequests: bookingForm.specialRequests,
+   457→        }),
+   458→      });
+   459→      const data = await res.json();
+   460→      if (data.success) {
+   461→        setBookingResult({ bookingRef: data.booking.bookingRef, amount: data.booking.amount });
+   462→        setCheckoutStep('confirmation');
+   463→      } else {
+   464→        alert(data.error || 'Booking failed. Please try again.');
+   465→      }
+   466→    } catch {
+   467→      alert('Network error. Please check your connection and try again.');
+   468→    } finally {
+   469→      setIsSubmitting(false);
+   470→    }
+   471→  }, [selectedTour, bookingForm, paymentMethod, agreeTerms]);
+   472→
+   473→  const handleHeroMouseMove = useCallback((e: React.MouseEvent) => {
+   474→    if (!heroRef.current) return;
+   475→    const rect = heroRef.current.getBoundingClientRect();
+   476→    setHeroMouse({
+   477→      x: ((e.clientX - rect.left) / rect.width - 0.5) * 20,
+   478→      y: ((e.clientY - rect.top) / rect.height - 0.5) * 20,
+   479→    });
+   480→  }, []);
+   481→
+   482→  /* Packing progress */
+   483→  const totalItems = Object.values(PACKING_ITEMS).flat().length;
+   484→  const packedCount = Object.values(PACKING_ITEMS).flat().filter((item) => packedItems[item]).length;
+   485→  const packedPct = totalItems > 0 ? Math.round((packedCount / totalItems) * 100) : 0;
+   486→
+   487→  /* Filtered FAQs */
+   488→  const filteredFaqs = faqCategory === 'All' ? FAQ_DATA : FAQ_DATA.filter((f) => f.cat === faqCategory);
+   489→  /* Filtered gallery */
+   490→  const filteredGallery = galleryFilter === 'All' ? GALLERY_ITEMS : GALLERY_ITEMS.filter((g) => g.location === galleryFilter);
+   491→
+   492→  /* ──────────── RENDER ──────────── */
+   493→  return (
+   494→    <main className="min-h-screen bg-black text-[#f0f4f8] overflow-x-hidden">
+   495→      {/* ═══════════ 1. NAVIGATION ═══════════ */}
+   496→      <nav className={`fixed top-0 left-0 right-0 z-50 nav-blur ${scrolled ? 'nav-scrolled' : 'bg-transparent'}`}>
+   497→        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   498→          <div className="flex items-center justify-between h-16 md:h-18">
+   499→            {/* Logo */}
+   500→            <div className="flex items-center gap-2">
+   501→              <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none">
+   502→                <path d="M16 4L4 28h24L16 4z" fill="#d4a853" opacity="0.8"/>
+   503→                <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
+   504→                <path d="M12 28L18 18L24 28" fill="#a07830" opacity="0.3"/>
+   505→              </svg>
+   506→              <span className="text-lg font-bold tracking-tight">Himalayan <span className="gradient-text">Exploration</span></span>
+   507→            </div>
+   508→
+   509→            {/* Desktop Nav */}
+   510→            <div className="hidden md:flex items-center gap-6">
+   511→              {NAV_LINKS.map((link) => (
+   512→                <a key={link} href={`#${link.toLowerCase()}`} className="text-sm text-white/50 hover:text-himalaya-gold transition-colors">{link}</a>
+   513→              ))}
+   514→            </div>
+   515→
+   516→            {/* Right side */}
+   517→            <div className="hidden md:flex items-center gap-3">
+   518→              {/* Currency */}
+   519→              <div className="relative">
+   520→                <button onClick={() => { setShowCurrencyDropdown(!showCurrencyDropdown); setShowLanguageDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
+   521→                  {currency} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+   522→                </button>
+   523→                {showCurrencyDropdown && (
+   524→                  <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
+   525→                    {['USD','EUR','GBP','INR'].map((c) => (
+   526→                      <button key={c} onClick={() => { setCurrency(c); setShowCurrencyDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${currency === c ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{c}</button>
+   527→                    ))}
+   528→                  </div>
+   529→                )}
+   530→              </div>
+   531→              {/* Language */}
+   532→              <div className="relative">
+   533→                <button onClick={() => { setShowLanguageDropdown(!showLanguageDropdown); setShowCurrencyDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
+   534→                  {language} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+   535→                </button>
+   536→                {showLanguageDropdown && (
+   537→                  <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
+   538→                    {[['EN','English'],['FR','Français'],['DE','Deutsch'],['NE','नेपाली']].map(([code, label]) => (
+   539→                      <button key={code} onClick={() => { setLanguage(code); setShowLanguageDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${language === code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</button>
+   540→                    ))}
+   541→                  </div>
+   542→                )}
+   543→              </div>
+   544→              {/* Wishlist */}
+   545→              <button className="relative p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+   546→                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+   547→                {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-himalaya-gold text-black text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
+   548→              </button>
+   549→              {/* User */}
+   550→              <button className="p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+   551→                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
+   552→              </button>
+   553→              {/* CTA */}
+   554→              <button className="btn-primary text-xs !py-2 !px-4">Book Expedition</button>
+   555→            </div>
+   556→
+   557→            {/* Mobile hamburger */}
+   558→            <button className="md:hidden p-2 text-white/60" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+   559→              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+   560→                {mobileMenuOpen ? <path d="M6 6l12 12M6 18L18 6"/> : <><path d="M4 6h16M4 12h16M4 18h16"/></>}
+   561→              </svg>
+   562→            </button>
+   563→          </div>
+   564→        </div>
+   565→
+   566→        {/* Mobile Menu */}
+   567→        {mobileMenuOpen && (
+   568→          <div className="md:hidden glass-card-strong border-t border-white/5 p-4 space-y-3">
+   569→            {NAV_LINKS.map((link) => (
+   570→              <a key={link} href={`#${link.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-himalaya-gold py-2 transition-colors">{link}</a>
+   571→            ))}
+   572→            <div className="flex gap-2 pt-2 border-t border-white/5">
+   573→              {['USD','EUR','GBP','INR'].map((c) => (
+   574→                <button key={c} onClick={() => setCurrency(c)} className={`text-xs px-3 py-1 rounded ${currency === c ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/40'}`}>{c}</button>
+   575→              ))}
+   576→            </div>
+   577→            <button className="btn-primary w-full text-sm">Book Expedition</button>
+   578→          </div>
+   579→        )}
+   580→      </nav>
+   581→
+   582→      {/* ═══════════ 2. HERO SECTION ═══════════ */}
+   583→      <section ref={heroRef} onMouseMove={handleHeroMouseMove} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+   584→        {/* Background patterns */}
+   585→        <div className="pattern-overlay">
+   586→          {/* Dot grid */}
+   587→          <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
+   588→            <defs><pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="white"/></pattern></defs>
+   589→            <rect width="100%" height="100%" fill="url(#dots)"/>
+   590→          </svg>
+   591→          {/* Geometric mountains */}
+   592→          <svg className="absolute bottom-0 left-0 w-full h-2/3 opacity-[0.05]" viewBox="0 0 1200 600" fill="none">
+   593→            <defs>
+   594→              <linearGradient id="hero-mtn-grad" x1="600" y1="150" x2="600" y2="600" gradientUnits="userSpaceOnUse">
+   595→                <stop stopColor="rgba(124,58,237,0.3)" />
+   596→                <stop offset="0.5" stopColor="rgba(45,212,191,0.2)" />
+   597→                <stop offset="1" stopColor="rgba(212,168,83,0.1)" />
+   598→              </linearGradient>
+   599→            </defs>
+   600→            <path d="M0 600L200 250L350 400L500 150L650 350L800 200L1000 400L1200 300V600Z" fill="url(#hero-mtn-grad)"/>
+   601→          </svg>
+   602→          {/* Colorful aurora gradient orbs */}
+   603→          <div className="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-himalaya-gold/10 via-himalaya-aurora/5 to-transparent rounded-full blur-[120px] animate-aurora" />
+   604→          <div className="absolute top-[30%] right-[5%] w-[400px] h-[400px] bg-gradient-to-br from-himalaya-teal/10 via-himalaya-blue/5 to-transparent rounded-full blur-[100px] animate-aurora" style={{ animationDelay: '3s' }} />
+   605→          <div className="absolute bottom-[10%] left-[30%] w-[450px] h-[450px] bg-gradient-to-br from-himalaya-rose/8 via-himalaya-aurora/4 to-transparent rounded-full blur-[110px] animate-aurora" style={{ animationDelay: '6s' }} />
+   606→          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-himalaya-gold/8 rounded-full blur-[120px] animate-pulse-glow" />
+   607→          <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+   608→          <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-himalaya-blue/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+   609→          <div className="absolute bottom-[20%] right-[15%] w-64 h-64 bg-himalaya-aurora/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
+   610→          {/* Twinkling stars */}
+   611→          {[
+   612→            {x:8,y:12,delay:'0s'},{x:15,y:8,delay:'1.5s'},{x:25,y:15,delay:'0.5s'},{x:35,y:5,delay:'2s'},
+   613→            {x:45,y:18,delay:'1s'},{x:55,y:10,delay:'3s'},{x:65,y:14,delay:'0.8s'},{x:75,y:7,delay:'2.5s'},
+   614→            {x:85,y:16,delay:'1.2s'},{x:92,y:9,delay:'0.3s'},{x:40,y:3,delay:'1.8s'},{x:70,y:20,delay:'2.2s'},
+   615→          ].map((s,i) => (
+   616→            <div key={i} className="absolute w-1 h-1 bg-white rounded-full" style={{left:`${s.x}%`,top:`${s.y}%`,animation:`star-twinkle 3s ease-in-out ${s.delay} infinite`}} />
+   617→          ))}
+   618→        </div>
+   619→
+   620→        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center" style={{ transform: `translate(${heroMouse.x * 0.3}px, ${heroMouse.y * 0.3}px)` }}>
+   621→          <div className="reveal">
+   622→            <span className="category-pill mb-6 inline-flex">🏔️ Adventure Travel Packages That Deliver Amazing Adventures</span>
+   623→          </div>
+   624→          <h1 className="reveal text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6">
+   625→            Discover Nepal&apos;s{' '}
+   626→            <span className="gradient-text">Breathtaking Landscapes</span>
+   627→          </h1>
+   628→          <p className="reveal text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-8">
+   629→            At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
+   630→          </p>
+   631→          <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
+   632→            <a href="#destinations" className="btn-primary text-center">Explore Expeditions</a>
+   633→            <button className="btn-outline flex items-center justify-center gap-2">
+   634→              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
+   635→              Watch Documentary
+   636→            </button>
+   637→          </div>
+   638→          <div className="reveal flex flex-wrap justify-center gap-6 sm:gap-10 text-sm">
+   639→            {[
+   640→              ['8,849m', 'Highest Peak'],
+   641→              ['50+', 'Destinations'],
+   642→              ['300+', 'Tours'],
+   643→              ['Since 2013', 'Experience'],
+   644→            ].map(([val, label]) => (
+   645→              <div key={label} className="text-center">
+   646→                <div className="text-xl font-bold gradient-text">{val}</div>
+   647→                <div className="text-white/30 text-xs mt-0.5">{label}</div>
+   648→              </div>
+   649→            ))}
+   650→          </div>
+   651→        </div>
+   652→
+   653→        {/* Scroll indicator */}
+   654→        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-gentle">
+   655→          <svg className="w-6 h-6 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+   656→        </div>
+   657→      </section>
+   658→
+   659→      {/* ═══════════ 3. SEARCH BAR SECTION ═══════════ */}
+   660→      <section className="relative z-10 -mt-8 px-4">
+   661→        <div className="max-w-5xl mx-auto glass-card-strong p-4 sm:p-6">
+   662→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+   663→            <div>
+   664→              <label className="text-xs text-white/30 mb-1 block">Destination</label>
+   665→              <select className="form-select w-full">
+   666→                <option>All Regions</option>
+   667→                <option>Everest Region</option>
+   668→                <option>Annapurna Region</option>
+   669→                <option>Langtang Region</option>
+   670→                <option>Manaslu Region</option>
+   671→                <option>Mustang Region</option>
+   672→                <option>Dolpo Region</option>
+   673→              </select>
+   674→            </div>
+   675→            <div>
+   676→              <label className="text-xs text-white/30 mb-1 block">Dates</label>
+   677→              <input type="date" className="search-input w-full" />
+   678→            </div>
+   679→            <div>
+   680→              <label className="text-xs text-white/30 mb-1 block">Travelers</label>
+   681→              <select className="form-select w-full">
+   682→                {[1,2,3,4,5,6,7,8,9,'10+'].map((n) => <option key={String(n)}>{n} Traveler{n !== 1 ? 's' : ''}</option>)}
+   683→              </select>
+   684→            </div>
+   685→            <div>
+   686→              <label className="text-xs text-white/30 mb-1 block">Trip Type</label>
+   687→              <select className="form-select w-full">
+   688→                <option>Trekking Holiday</option>
+   689→                <option>Trekking Peak</option>
+   690→                <option>Family Holiday</option>
+   691→                <option>Cultural Holiday</option>
+   692→                <option>Safari Holiday</option>
+   693→              </select>
+   694→            </div>
+   695→            <div className="flex items-end">
+   696→              <button className="btn-primary w-full flex items-center justify-center gap-2">
+   697→                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+   698→                Search
+   699→              </button>
+   700→            </div>
+   701→          </div>
+   702→        </div>
+   703→      </section>
+   704→
+   705→      {/* ═══════════ 4. STATS COUNTER ═══════════ */}
+   706→      <section ref={statsRef} className="py-16 sm:py-20">
+   707→        <div className="max-w-5xl mx-auto px-4">
+   708→          <div className="glass-card-static p-6 sm:p-8">
+   709→            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+   710→              {[
+   711→                [statsValues[0], '+', 'Happy Travelers'],
+   712→                [statsValues[1], '+', 'Destinations'],
+   713→                [statsValues[2], '+', 'Tours'],
+   714→                [statsValues[3], '', 'Years Experience'],
+   715→              ].map(([val, suffix, label], i) => (
+   716→                <div key={label} className="text-center">
+   717→                  <div className="text-2xl sm:text-3xl font-bold gradient-text">{val.toLocaleString()}{suffix}</div>
+   718→                  <div className="text-xs text-white/30 mt-1">{label}</div>
+   719→                </div>
+   720→              ))}
+   721→            </div>
+   722→          </div>
+   723→        </div>
+   724→      </section>
+   725→
+   726→      {/* ═══════════ 5. POPULAR TOURS ═══════════ */}
+   727→      <section id="destinations" className="py-16 sm:py-20">
+   728→        <div className="max-w-7xl mx-auto px-4">
+   729→          <div className="text-center mb-12 reveal">
+   730→            <span className="category-pill pill-rose">⛰️ Trekking Holiday</span>
+   731→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular <span className="gradient-text-sunset">Trekking Expeditions</span></h2>
+   732→            <p className="text-white/40 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
+   733→          </div>
+   734→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   735→            {TOURS.map((tour) => (
+   736→              <div key={tour.title} className="glass-card overflow-hidden reveal-scale">
+   737→                <div className={`relative h-44 bg-gradient-to-br ${tour.gradient} flex items-end p-4`}>
+   738→                  <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
+   739→                  <span className="absolute top-3 right-3 text-sm font-bold text-himalaya-gold bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">${tour.price.toLocaleString()}</span>
+   740→                  <span className="absolute top-3 left-3 text-xs text-white/70 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded">{tour.country}</span>
+   741→                </div>
+   742→                <div className="p-4 sm:p-5">
+   743→                  <h3 className="font-semibold text-base mb-2">{tour.title}</h3>
+   744→                  <p className="text-xs text-white/35 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
+   745→                  <div className="flex items-center gap-3 text-xs text-white/40 mb-3">
+   746→                    <span className="flex items-center gap-1">
+   747→                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+   748→                      {tour.days} Days
+   749→                    </span>
+   750→                    <span className="flex items-center gap-1">
+   751→                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
+   752→                      {tour.altitude}
+   753→                    </span>
+   754→                    <span className="text-white/25">{tour.region}</span>
+   755→                  </div>
+   756→                  <div className="flex items-center justify-between">
+   757→                    <span className={`text-xs px-2 py-0.5 rounded font-medium difficulty-${tour.difficulty}`}>{tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1)}</span>
+   758→                    <StarRating count={tour.rating} />
+   759→                  </div>
+   760→                  <div className="flex items-center gap-2 mt-3">
+   761→                    <button onClick={() => openCheckout(tour)} className="text-xs font-semibold bg-himalaya-gold text-black px-3 py-1.5 rounded-lg hover:bg-himalaya-gold/90 transition-colors">Book Now</button>
+   762→                    <a href="#" className="text-xs text-himalaya-gold hover:text-himalaya-gold/80">View Details →</a>
+   763→                  </div>
+   764→                </div>
+   765→              </div>
+   766→            ))}
+   767→          </div>
+   768→          <div className="text-center mt-10 reveal">
+   769→            <button className="btn-outline">View All Expeditions</button>
+   770→          </div>
+   771→        </div>
+   772→      </section>
+   773→
+   774→      {/* ═══════════ 6. FEATURE GRID ═══════════ */}
+   775→      <section className="py-16 sm:py-20">
+   776→        <div className="max-w-7xl mx-auto px-4">
+   777→          <div className="text-center mb-12 reveal">
+   778→            <span className="category-pill">✨ Why Travel With Us</span>
+   779→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Why Choose <span className="gradient-text">Himalayan Exploration Treks</span></h2>
+   780→          </div>
+   781→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+   782→            {FEATURES.map((feat) => (
+   783→              <div key={feat.title} className="glass-card p-6 text-center reveal-scale">
+   784→                <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-xl bg-himalaya-gold/10">
+   785→                  <FeatureIcon type={feat.icon} />
+   786→                </div>
+   787→                <h3 className="font-semibold mb-2">{feat.title}</h3>
+   788→                <p className="text-xs text-white/40 leading-relaxed">{feat.desc}</p>
+   789→                <a href="#" className="text-xs text-himalaya-gold mt-3 inline-block hover:underline">Learn more →</a>
+   790→              </div>
+   791→            ))}
+   792→          </div>
+   793→        </div>
+   794→      </section>
+   795→
+   796→      {/* ═══════════ 7. PRODUCT SHOWCASE ═══════════ */}
+   797→      <section className="py-16 sm:py-20">
+   798→        <div className="max-w-7xl mx-auto px-4">
+   799→          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+   800→            <div className="reveal">
+   801→              <span className="category-pill">🏔️ Featured Expedition</span>
+   802→              <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">Everest Base Camp Trek</h2>
+   803→              <p className="text-white/40 mb-6 leading-relaxed">If you have ever dreamed of standing at the foot of the world&apos;s tallest mountain, the Everest Base Camp Trek is a seriously epic adventure far beyond easy hiking. Whether you&apos;ve never done a serious hike or you&apos;re already a seasoned mountain climber, this 14-day journey works for everyone — from total beginners to mountain veterans, older adults, and families who want their kids to experience what real adventure looks like.</p>
+   804→              <div className="grid grid-cols-2 gap-3 mb-6">
+   805→                {[
+   806→                  ['⏱ Duration', '14 Days'],
+   807→                  ['🗻 Max Altitude', '5,545m'],
+   808→                  ['⚡ Difficulty', 'Strenuous'],
+   809→                  ['👥 Min Group', '1'],
+   810→                ].map(([label, val]) => (
+   811→                  <div key={label} className="glass-card-static p-3">
+   812→                    <div className="text-[10px] text-white/30">{label}</div>
+   813→                    <div className="text-sm font-semibold mt-0.5">{val}</div>
+   814→                  </div>
+   815→                ))}
+   816→              </div>
+   817→              <div className="flex gap-3">
+   818→                <button className="btn-primary" onClick={() => openCheckout(TOURS[0])}>Book This Trek</button>
+   819→                <button className="btn-outline">View Itinerary</button>
+   820→              </div>
+   821→            </div>
+   822→            <div className="reveal-scale">
+   823→              <div className="tilt-card glass-card-static p-4 relative">
+   824→                <div className="relative h-64 sm:h-80 bg-gradient-to-br from-emerald-700/40 via-teal-700/30 to-cyan-800/40 rounded-lg overflow-hidden flex items-end">
+   825→                  <MountainSVG className="absolute inset-0 w-full h-full opacity-40" />
+   826→                  <MountainSVG className="absolute bottom-0 left-0 w-3/4 h-1/2 opacity-20" color="rgba(212,168,83,0.1)" />
+   827→                  {/* Floating cards */}
+   828→                  <div className="absolute top-4 right-4 glass-card-static p-2 text-xs animate-float">
+   829→                    <span className="text-himalaya-gold">5,364m</span> altitude
+   830→                  </div>
+   831→                  <div className="absolute bottom-4 left-4 glass-card-static p-2 text-xs animate-float-delay-1">
+   832→                    ⭐ 4.9/5 rating
+   833→                  </div>
+   834→                </div>
+   835→              </div>
+   836→            </div>
+   837→          </div>
+   838→        </div>
+   839→      </section>
+   840→
+   841→      {/* ═══════════ 8. DESTINATIONS GRID ═══════════ */}
+   842→      <section className="py-16 sm:py-20 relative section-glow-top">
+   843→        <div className="pattern-overlay">
+   844→          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-br from-himalaya-blue/5 via-himalaya-aurora/3 to-transparent rounded-full blur-[120px]" />
+   845→        </div>
+   846→        <div className="max-w-7xl mx-auto px-4 relative z-10">
+   847→          <div className="text-center mb-12 reveal">
+   848→            <span className="category-pill pill-blue">🌍 Trekking Regions</span>
+   849→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Explore Trekking <span className="gradient-text-cool">Regions</span></h2>
+   850→          </div>
+   851→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   852→            {DESTINATIONS.map((dest) => (
+   853→              <div key={dest.name} className="glass-card overflow-hidden reveal-scale">
+   854→                <div className={`relative h-40 bg-gradient-to-br ${dest.gradient} flex items-end p-4`}>
+   855→                  <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
+   856→                  <div>
+   857→                    <h3 className="font-bold text-lg">{dest.name}</h3>
+   858→                    <p className="text-xs text-white/50">{dest.tagline}</p>
+   859→                  </div>
+   860→                </div>
+   861→                <div className="p-4 flex items-center justify-between">
+   862→                  <div className="text-xs text-white/40">
+   863→                    <span className="text-himalaya-gold font-semibold">{dest.trips}</span> trips · From <span className="text-himalaya-gold font-semibold">${dest.priceFrom.toLocaleString()}</span>
+   864→                  </div>
+   865→                  <div className="flex items-center gap-1 text-xs text-himalaya-gold">
+   866→                    <svg className="w-3 h-3" viewBox="0 0 20 20" fill="#d4a853"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.33L10 13.27l-4.77 2.51.91-5.33L2.27 6.68l5.34-.78L10 1z"/></svg>
+   867→                    {dest.rating}
+   868→                  </div>
+   869→                </div>
+   870→              </div>
+   871→            ))}
+   872→          </div>
+   873→        </div>
+   874→      </section>
+   875→
+   876→      {/* ═══════════ 9. INTERACTIVE TOOLS ═══════════ */}
+   877→      <section className="py-16 sm:py-20">
+   878→        <div className="max-w-7xl mx-auto px-4">
+   879→          <div className="text-center mb-10 reveal">
+   880→            <span className="category-pill pill-teal">🛠️ Tools</span>
+   881→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Plan Your <span className="gradient-text-forest">Adventure</span></h2>
+   882→          </div>
+   883→          {/* Tabs */}
+   884→          <div className="flex flex-wrap justify-center gap-2 mb-8 reveal">
+   885→            {[
+   886→              ['budget', '💰 Budget Calculator'],
+   887→              ['altitude', '🗻 Altitude Calculator'],
+   888→              ['packing', '🎒 Packing Checklist'],
+   889→              ['difficulty', '📊 Trek Difficulty'],
+   890→            ].map(([key, label]) => (
+   891→              <button key={key} onClick={() => setActiveToolTab(key as typeof activeToolTab)} className={`tab-btn ${activeToolTab === key ? 'active' : ''}`}>{label}</button>
+   892→            ))}
+   893→          </div>
+   894→
+   895→          {/* BUDGET CALCULATOR */}
+   896→          {activeToolTab === 'budget' && (
+   897→            <div className="glass-card-static p-6 sm:p-8 reveal">
+   898→              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+   899→                <div className="space-y-4">
+   900→                  <div>
+   901→                    <label className="text-xs text-white/30 mb-1 block">Destination</label>
+   902→                    <select value={budgetDest} onChange={(e) => setBudgetDest(e.target.value)} className="form-select w-full">
+   903→                      <option value="nepal">Nepal</option>
+   904→                      <option value="bhutan">Bhutan</option>
+   905→                      <option value="tibet">Tibet</option>
+   906→                      <option value="pakistan">Pakistan</option>
+   907→                      <option value="india">India</option>
+   908→                      <option value="china">China</option>
+   909→                    </select>
+   910→                  </div>
+   911→                  <div>
+   912→                    <label className="text-xs text-white/30 mb-1 block">Duration: {budgetDuration} days</label>
+   913→                    <input type="range" min="1" max="30" value={budgetDuration} onChange={(e) => setBudgetDuration(Number(e.target.value))} className="w-full" />
+   914→                  </div>
+   915→                  <div>
+   916→                    <label className="text-xs text-white/30 mb-2 block">Travel Style</label>
+   917→                    <div className="flex gap-2">
+   918→                      {[['budget','Budget'],['mid','Mid-range'],['luxury','Luxury']].map(([val, label]) => (
+   919→                        <label key={val} className={`flex-1 text-center text-xs py-2 rounded cursor-pointer border transition-colors ${budgetStyle === val ? 'border-himalaya-gold/40 bg-himalaya-gold/10 text-himalaya-gold' : 'border-white/10 text-white/40 hover:border-white/20'}`}>
+   920→                          <input type="radio" name="style" value={val} checked={budgetStyle === val} onChange={() => setBudgetStyle(val)} className="sr-only" />
+   921→                          {label}
+   922→                        </label>
+   923→                      ))}
+   924→                    </div>
+   925→                  </div>
+   926→                  <div>
+   927→                    <label className="text-xs text-white/30 mb-1 block">Travelers</label>
+   928→                    <select value={budgetTravelers} onChange={(e) => setBudgetTravelers(Number(e.target.value))} className="form-select w-full">
+   929→                      {[1,2,3,4,5,6,7,8,9,10].map((n) => <option key={n} value={n}>{n}</option>)}
+   930→                    </select>
+   931→                  </div>
+   932→                  <button onClick={calculateBudget} className="btn-primary w-full mt-2">Calculate Budget</button>
+   933→                </div>
+   934→                <div>
+   935→                  {budgetResult ? (
+   936→                    <div className="space-y-3">
+   937→                      <h4 className="text-sm font-semibold text-white/60 mb-3">Estimated Breakdown</h4>
+   938→                      {Object.entries(budgetResult).map(([key, val]) => (
+   939→                        <div key={key} className="tool-card flex items-center justify-between !p-3">
+   940→                          <span className="text-xs text-white/40">{key}</span>
+   941→                          <span className="text-sm font-semibold text-himalaya-gold">${val.toLocaleString()}</span>
+   942→                        </div>
+   943→                      ))}
+   944→                      <div className="glass-card-strong p-4 flex items-center justify-between mt-4">
+   945→                        <span className="font-semibold">Estimated Total</span>
+   946→                        <span className="text-lg font-bold gradient-text">${Object.values(budgetResult).reduce((a, b) => a + b, 0).toLocaleString()}</span>
+   947→                      </div>
+   948→                    </div>
+   949→                  ) : (
+   950→                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+   951→                      Configure your trip and click Calculate
+   952→                    </div>
+   953→                  )}
+   954→                </div>
+   955→              </div>
+   956→            </div>
+   957→          )}
+   958→
+   959→          {/* ALTITUDE CALCULATOR */}
+   960→          {activeToolTab === 'altitude' && (
+   961→            <div className="glass-card-static p-6 sm:p-8 reveal">
+   962→              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+   963→                <div className="space-y-4">
+   964→                  <div>
+   965→                    <label className="text-xs text-white/30 mb-1 block">Max Altitude (m)</label>
+   966→                    <input type="number" value={altMax} onChange={(e) => setAltMax(Number(e.target.value))} className="form-input" placeholder="e.g. 5364" />
+   967→                  </div>
+   968→                  <div>
+   969→                    <label className="text-xs text-white/30 mb-1 block">Starting Altitude (m)</label>
+   970→                    <input type="number" value={altStart} onChange={(e) => setAltStart(Number(e.target.value))} className="form-input" placeholder="e.g. 2800" />
+   971→                  </div>
+   972→                  <div>
+   973→                    <label className="text-xs text-white/30 mb-1 block">Trekking Days</label>
+   974→                    <input type="number" value={altDays} onChange={(e) => setAltDays(Number(e.target.value))} className="form-input" placeholder="e.g. 10" />
+   975→                  </div>
+   976→                  <button onClick={calculateAltitude} className="btn-primary w-full mt-2">Analyze Altitude</button>
+   977→                </div>
+   978→                <div>
+   979→                  {altResult ? (
+   980→                    <div className="space-y-4">
+   981→                      <div className="tool-card !p-4">
+   982→                        <div className="text-xs text-white/30 mb-1">Risk Level</div>
+   983→                        <div className={`text-lg font-bold ${altResult.risk === 'Low' ? 'text-green-400' : altResult.risk === 'Moderate' ? 'text-yellow-400' : altResult.risk === 'High' ? 'text-orange-400' : 'text-red-400'}`}>{altResult.risk}</div>
+   984→                      </div>
+   985→                      <div className="grid grid-cols-2 gap-3">
+   986→                        <div className="tool-card !p-3">
+   987→                          <div className="text-xs text-white/30">Acclimatization Days</div>
+   988→                          <div className="text-sm font-semibold mt-0.5">{altResult.acclimDays} days</div>
+   989→                        </div>
+   990→                        <div className="tool-card !p-3">
+   991→                          <div className="text-xs text-white/30">Max Daily Gain</div>
+   992→                          <div className="text-sm font-semibold mt-0.5">{altResult.maxDailyGain}m/day</div>
+   993→                        </div>
+   994→                        <div className="tool-card !p-3">
+   995→                          <div className="text-xs text-white/30">O₂ at Peak</div>
+   996→                          <div className="text-sm font-semibold mt-0.5">{altResult.oxygenPct}%</div>
+   997→                        </div>
+   998→                      </div>
+   999→                      {/* Altitude profile */}
+  1000→                      <div className="tool-card !p-4">
+  1001→                        <div className="text-xs text-white/30 mb-2">Altitude Zone Profile</div>
+  1002→                        <div className="flex gap-1 items-end h-24">
+  1003→                          {[
+  1004→                            { label: 'Safe', h: Math.min(altStart, 3000), color: 'bg-green-500/40' },
+  1005→                            { label: 'Caution', h: Math.min(Math.max(altMax - 3000, 0), 1500), color: 'bg-yellow-500/40' },
+  1006→                            { label: 'Danger', h: Math.min(Math.max(altMax - 4500, 0), 1000), color: 'bg-orange-500/40' },
+  1007→                            { label: 'Extreme', h: Math.max(altMax - 5500, 0), color: 'bg-red-500/40' },
+  1008→                          ].map((zone) => (
+  1009→                            <div key={zone.label} className="flex-1 flex flex-col items-center justify-end h-full">
+  1010→                              <div className={`w-full ${zone.color} rounded-t`} style={{ height: `${Math.max((zone.h / altMax) * 100, zone.h > 0 ? 8 : 0)}%` }} />
+  1011→                              <span className="text-[9px] text-white/30 mt-1">{zone.label}</span>
+  1012→                            </div>
+  1013→                          ))}
+  1014→                        </div>
+  1015→                      </div>
+  1016→                      {altResult.symptoms.length > 0 && (
+  1017→                        <div className="tool-card !p-3">
+  1018→                          <div className="text-xs text-white/30 mb-1">Symptoms to Watch</div>
+  1019→                          <div className="flex flex-wrap gap-1">
+  1020→                            {altResult.symptoms.map((s) => (
+  1021→                              <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-400">{s}</span>
+  1022→                            ))}
+  1023→                          </div>
+  1024→                        </div>
+  1025→                      )}
+  1026→                    </div>
+  1027→                  ) : (
+  1028→                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+  1029→                      Enter altitude details and click Analyze
+  1030→                    </div>
+  1031→                  )}
+  1032→                </div>
+  1033→              </div>
+  1034→            </div>
+  1035→          )}
+  1036→
+  1037→          {/* PACKING CHECKLIST */}
+  1038→          {activeToolTab === 'packing' && (
+  1039→            <div className="glass-card-static p-6 sm:p-8 reveal">
+  1040→              <div className="mb-6">
+  1041→                <div className="flex items-center justify-between mb-2">
+  1042→                  <span className="text-sm text-white/40">Packing Progress</span>
+  1043→                  <span className="text-sm font-semibold gradient-text">{packedPct}%</span>
+  1044→                </div>
+  1045→                <div className="progress-bar">
+  1046→                  <div className="progress-fill" style={{ width: `${packedPct}%` }} />
+  1047→                </div>
+  1048→                <div className="text-xs text-white/20 mt-1">{packedCount} of {totalItems} items packed</div>
+  1049→              </div>
+  1050→              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  1051→                {Object.entries(PACKING_ITEMS).map(([category, items]) => (
+  1052→                  <div key={category} className="tool-card">
+  1053→                    <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+  1054→                      <span className="w-2 h-2 rounded-full bg-himalaya-gold" />
+  1055→                      {category}
+  1056→                    </h4>
+  1057→                    <div className="space-y-2">
+  1058→                      {items.map((item) => (
+  1059→                        <label key={item} className="flex items-center gap-2 cursor-pointer group">
+  1060→                          <input
+  1061→                            type="checkbox"
+  1062→                            className="custom-checkbox"
+  1063→                            checked={!!packedItems[item]}
+  1064→                            onChange={(e) => setPackedItems((prev) => ({ ...prev, [item]: e.target.checked }))}
+  1065→                          />
+  1066→                          <span className={`text-xs transition-colors ${packedItems[item] ? 'text-white/30 line-through' : 'text-white/60 group-hover:text-white/80'}`}>{item}</span>
+  1067→                        </label>
+  1068→                      ))}
+  1069→                    </div>
+  1070→                  </div>
+  1071→                ))}
+  1072→              </div>
+  1073→              <div className="flex gap-3 mt-6">
+  1074→                <button onClick={() => { alert('Checklist downloaded!'); }} className="btn-primary text-sm">Download Checklist</button>
+  1075→                <button onClick={() => { const url = `https://himalayanexplorer.com/packing?items=${Object.keys(packedItems).filter(k => packedItems[k]).join(',')}`; navigator.clipboard?.writeText(url); alert('Link copied!'); }} className="btn-outline text-sm">Share</button>
+  1076→              </div>
+  1077→            </div>
+  1078→          )}
+  1079→
+  1080→          {/* DIFFICULTY ESTIMATOR */}
+  1081→          {activeToolTab === 'difficulty' && (
+  1082→            <div className="glass-card-static p-6 sm:p-8 reveal">
+  1083→              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+  1084→                <div className="space-y-4">
+  1085→                  <div>
+  1086→                    <label className="text-xs text-white/30 mb-1 block">Trek Distance: {diffDistance} km</label>
+  1087→                    <input type="range" min="10" max="200" value={diffDistance} onChange={(e) => setDiffDistance(Number(e.target.value))} className="w-full" />
+  1088→                  </div>
+  1089→                  <div>
+  1090→                    <label className="text-xs text-white/30 mb-1 block">Max Altitude: {diffAltitude.toLocaleString()} m</label>
+  1091→                    <input type="range" min="1000" max="8849" step="100" value={diffAltitude} onChange={(e) => setDiffAltitude(Number(e.target.value))} className="w-full" />
+  1092→                  </div>
+  1093→                  <div>
+  1094→                    <label className="text-xs text-white/30 mb-1 block">Total Ascent: {diffAscent.toLocaleString()} m</label>
+  1095→                    <input type="range" min="500" max="5000" step="100" value={diffAscent} onChange={(e) => setDiffAscent(Number(e.target.value))} className="w-full" />
+  1096→                  </div>
+  1097→                  <div>
+  1098→                    <label className="text-xs text-white/30 mb-1 block">Terrain Type</label>
+  1099→                    <select value={diffTerrain} onChange={(e) => setDiffTerrain(e.target.value)} className="form-select w-full">
+  1100→                      <option value="trail">Trail</option>
+  1101→                      <option value="rocky">Rocky</option>
+  1102→                      <option value="snow">Snow</option>
+  1103→                      <option value="ice">Ice</option>
+  1104→                      <option value="mixed">Mixed</option>
+  1105→                    </select>
+  1106→                  </div>
+  1107→                  <div>
+  1108→                    <label className="text-xs text-white/30 mb-1 block">Fitness Level</label>
+  1109→                    <select value={diffFitness} onChange={(e) => setDiffFitness(e.target.value)} className="form-select w-full">
+  1110→                      <option value="beginner">Beginner</option>
+  1111→                      <option value="intermediate">Intermediate</option>
+  1112→                      <option value="advanced">Advanced</option>
+  1113→                      <option value="elite">Elite</option>
+  1114→                    </select>
+  1115→                  </div>
+  1116→                  <button onClick={calculateDifficulty} className="btn-primary w-full mt-2">Estimate Difficulty</button>
+  1117→                </div>
+  1118→                <div>
+  1119→                  {diffResult ? (
+  1120→                    <div className="space-y-4">
+  1121→                      <div className="tool-card !p-4 text-center">
+  1122→                        <div className="text-xs text-white/30 mb-1">Difficulty Score</div>
+  1123→                        <div className="text-4xl font-bold gradient-text">{diffResult.score}/10</div>
+  1124→                        <div className={`mt-1 text-sm font-semibold difficulty-${diffResult.label.toLowerCase()}`}>{diffResult.label}</div>
+  1125→                      </div>
+  1126→                      {/* Gauge bar */}
+  1127→                      <div className="tool-card !p-4">
+  1128→                        <div className="text-xs text-white/30 mb-2">Difficulty Gauge</div>
+  1129→                        <div className="h-3 bg-white/5 rounded-full overflow-hidden">
+  1130→                          <div
+  1131→                            className={`h-full rounded-full transition-all duration-700 ${diffResult.score <= 3 ? 'bg-green-500' : diffResult.score <= 5 ? 'bg-yellow-500' : diffResult.score <= 7 ? 'bg-orange-500' : 'bg-red-500'}`}
+  1132→                            style={{ width: `${diffResult.score * 10}%` }}
+  1133→                          />
+  1134→                        </div>
+  1135→                        <div className="flex justify-between text-[9px] text-white/20 mt-1">
+  1136→                          <span>Easy</span><span>Moderate</span><span>Challenging</span><span>Strenuous</span>
+  1137→                        </div>
+  1138→                      </div>
+  1139→                      <div className="tool-card !p-3">
+  1140→                        <div className="text-xs text-white/30">Estimated Completion Time</div>
+  1141→                        <div className="text-sm font-semibold mt-0.5">{diffResult.time}</div>
+  1142→                      </div>
+  1143→                      <div className="tool-card !p-3">
+  1144→                        <div className="text-xs text-white/30">Training Recommendations</div>
+  1145→                        <div className="text-sm text-white/60 mt-0.5 leading-relaxed">{diffResult.training}</div>
+  1146→                      </div>
+  1147→                    </div>
+  1148→                  ) : (
+  1149→                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+  1150→                      Enter trek details and click Estimate
+  1151→                    </div>
+  1152→                  )}
+  1153→                </div>
+  1154→              </div>
+  1155→            </div>
+  1156→          )}
+  1157→        </div>
+  1158→      </section>
+  1159→
+  1160→      {/* ═══════════ 10. ABOUT US ═══════════ */}
+  1161→      <section className="py-16 sm:py-20 relative section-glow-top">
+  1162→        <div className="pattern-overlay">
+  1163→          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-gold/5 via-himalaya-emerald/3 to-transparent rounded-full blur-[120px]" />
+  1164→        </div>
+  1165→        <div className="max-w-7xl mx-auto px-4 relative z-10">
+  1166→          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12">
+  1167→            <div className="reveal-scale">
+  1168→              <div className="relative glass-card-static p-4">
+  1169→                <div className="h-64 sm:h-80 bg-gradient-to-br from-emerald-900/30 to-teal-900/30 rounded-lg overflow-hidden relative">
+  1170→                  <MountainSVG className="absolute bottom-0 left-0 w-full h-2/3 opacity-30" />
+  1171→                  {/* People silhouettes */}
+  1172→                  <svg className="absolute bottom-8 left-1/2 -translate-x-1/2 w-32 h-16 opacity-40" viewBox="0 0 128 64">
+  1173→                    <path d="M20 40 L24 20 L28 40 M24 20 L24 12 M50 40 L54 18 L58 40 M54 18 L54 10 M80 40 L84 22 L88 40 M84 22 L84 14 M108 40 L112 16 L116 40 M112 16 L112 8" stroke="#d4a853" strokeWidth="2" fill="none"/>
+  1174→                    <circle cx="24" cy="8" r="3" fill="#d4a853" opacity="0.6"/>
+  1175→                    <circle cx="54" cy="6" r="3" fill="#d4a853" opacity="0.6"/>
+  1176→                    <circle cx="84" cy="10" r="3" fill="#d4a853" opacity="0.6"/>
+  1177→                    <circle cx="112" cy="4" r="3" fill="#d4a853" opacity="0.6"/>
+  1178→                  </svg>
+  1179→                </div>
+  1180→                {/* Floating stats */}
+  1181→                <div className="absolute top-6 right-6 glass-card-static p-2 text-xs animate-float">
+  1182→                  <span className="text-himalaya-gold font-bold">5,000+</span> happy travelers
+  1183→                </div>
+  1184→              </div>
+  1185→            </div>
+  1186→            <div className="reveal">
+  1187→              <span className="category-pill">🏔️ Our Story</span>
+  1188→              <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">About Himalayan Exploration Treks</h2>
+  1189→              <p className="text-white/40 leading-relaxed mb-4">We&apos;re a small company based in Kathmandu, which provides adventure travel packages that deliver amazing adventures. Founded in 2013, Himalayan Exploration Treks was born from a deep passion for travel and an earnest desire to deliver unforgettable experiences to all our clients.</p>
+  1190→              <p className="text-white/40 leading-relaxed mb-4">I am from the hill district of Kabhre Palanchok, a half-day road trip from Kathmandu. As a member of the Tamang family, one of the indigenous hill groups of Nepal, born to work in the mountains, I started my career as a trekking porter and kitchen assistant before founding this agency in 2013.</p>
+  1191→              <p className="text-white/40 leading-relaxed mb-6">Your trip with our team means a lot to us. It&apos;s not just another trekking trip — it contributes to a group of local staff who care about their country, places, and fellow people. You are in good hands with us and will surely get a happy and lasting holiday!</p>
+  1192→              <div className="flex gap-4 text-sm">
+  1193→                <div className="glass-card-static p-3 flex-1 text-center">
+  1194→                  <div className="text-himalaya-gold font-bold text-lg">2013</div>
+  1195→                  <div className="text-white/30 text-xs">Founded</div>
+  1196→                </div>
+  1197→                <div className="glass-card-static p-3 flex-1 text-center">
+  1198→                  <div className="text-himalaya-gold font-bold text-lg">6</div>
+  1199→                  <div className="text-white/30 text-xs">Trekking Regions</div>
+  1200→                </div>
+  1201→                <div className="glass-card-static p-3 flex-1 text-center">
+  1202→                  <div className="text-himalaya-gold font-bold text-lg">0</div>
+  1203→                  <div className="text-white/30 text-xs">Major Incidents</div>
+  1204→                </div>
+  1205→              </div>
+  1206→            </div>
+  1207→          </div>
+  1208→
+  1209→          {/* Core Values */}
+  1210→          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12 reveal">
+  1211→            {[
+  1212→              { title: 'Adventure', icon: '🏔️', desc: 'Pushing boundaries while respecting the mountains' },
+  1213→              { title: 'Sustainability', icon: '🌱', desc: 'Minimizing impact, maximizing positive contribution' },
+  1214→              { title: 'Safety', icon: '🛡️', desc: 'Every decision prioritized around your wellbeing' },
+  1215→              { title: 'Authenticity', icon: '🙏', desc: 'Genuine cultural experiences with local communities' },
+  1216→            ].map((v) => (
+  1217→              <div key={v.title} className="glass-card p-4 text-center">
+  1218→                <div className="text-2xl mb-2">{v.icon}</div>
+  1219→                <h4 className="font-semibold text-sm mb-1">{v.title}</h4>
+  1220→                <p className="text-[10px] text-white/30">{v.desc}</p>
+  1221→              </div>
+  1222→            ))}
+  1223→          </div>
+  1224→
+  1225→          {/* Team */}
+  1226→          <div className="reveal">
+  1227→            <h3 className="text-xl font-bold text-center mb-6">Meet Our Team</h3>
+  1228→            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  1229→              {TEAM_MEMBERS.map((member) => (
+  1230→                <div key={member.name} className="glass-card p-4 text-center">
+  1231→                  <div className={`w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center text-lg font-bold text-himalaya-gold`}>
+  1232→                    {member.initials}
+  1233→                  </div>
+  1234→                  <h4 className="font-semibold text-sm">{member.name}</h4>
+  1235→                  <div className="text-xs text-himalaya-gold mb-2">{member.role}</div>
+  1236→                  <p className="text-[10px] text-white/30 leading-relaxed">{member.bio}</p>
+  1237→                </div>
+  1238→              ))}
+  1239→            </div>
+  1240→          </div>
+  1241→        </div>
+  1242→      </section>
+  1243→
+  1244→      {/* ═══════════ 11. TRAVEL GUIDES / RESOURCES ═══════════ */}
+  1245→      <section className="py-16 sm:py-20">
+  1246→        <div className="max-w-7xl mx-auto px-4">
+  1247→          <div className="text-center mb-12 reveal">
+  1248→            <span className="category-pill">📖 Resources</span>
+  1249→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Travel Guides & Resources</h2>
+  1250→          </div>
+  1251→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  1252→            {RESOURCES.map((res) => (
+  1253→              <div key={res.title} className="glass-card p-6 reveal-scale">
+  1254→                <div className="w-10 h-10 rounded-lg bg-himalaya-gold/10 flex items-center justify-center text-himalaya-gold mb-4">
+  1255→                  <ResourceIcon type={res.icon} />
+  1256→                </div>
+  1257→                <h3 className="font-semibold mb-2">{res.title}</h3>
+  1258→                <p className="text-xs text-white/40 leading-relaxed mb-4">{res.desc}</p>
+  1259→                <button className="btn-ghost text-xs">{res.cta}</button>
+  1260→              </div>
+  1261→            ))}
+  1262→          </div>
+  1263→        </div>
+  1264→      </section>
+  1265→
+  1266→      {/* ═══════════ 12. TRUST & SAFETY ═══════════ */}
+  1267→      <section className="py-16 sm:py-20">
+  1268→        <div className="max-w-7xl mx-auto px-4">
+  1269→          <div className="text-center mb-12 reveal">
+  1270→            <span className="category-pill">🛡️ Safety</span>
+  1271→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Your Safety, Our Priority</h2>
+  1272→          </div>
+  1273→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+  1274→            {TRUST_ITEMS.map((item) => (
+  1275→              <div key={item.title} className="glass-card p-5 flex gap-4 items-start reveal-scale">
+  1276→                <div className="text-himalaya-gold flex-shrink-0"><TrustIcon type={item.icon} /></div>
+  1277→                <div>
+  1278→                  <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
+  1279→                  <p className="text-xs text-white/40">{item.desc}</p>
+  1280→                </div>
+  1281→              </div>
+  1282→            ))}
+  1283→          </div>
+  1284→          {/* Emergency contacts */}
+  1285→          <div className="glass-card-static p-6 mb-8 reveal">
+  1286→            <h4 className="font-semibold mb-4">Emergency Contacts</h4>
+  1287→            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+  1288→              {[
+  1289→                ['Police', '100'],
+  1290→                ['Ambulance', '102'],
+  1291→                ['Fire', '101'],
+  1292→                ['Emergency Line', '+977-1-911-HELP'],
+  1293→                ['US Embassy', '+977-1-423-4120'],
+  1294→                ['UK Embassy', '+977-1-441-0583'],
+  1295→              ].map(([label, num]) => (
+  1296→                <div key={label} className="text-center">
+  1297→                  <div className="text-xs text-white/30">{label}</div>
+  1298→                  <div className="text-sm font-semibold text-himalaya-gold">{num}</div>
+  1299→                </div>
+  1300→              ))}
+  1301→            </div>
+  1302→          </div>
+  1303→          {/* Partners */}
+  1304→          <div className="reveal">
+  1305→            <div className="text-center text-xs text-white/20 mb-3">Trusted Partners & Certifications</div>
+  1306→            <div className="flex flex-wrap justify-center gap-2">
+  1307→              {['ATTA', 'GSTC', 'Nepal Tourism Board', 'World Nomads', 'Allianz', 'SafetyWing'].map((p) => (
+  1308→                <span key={p} className="glass-card-static px-4 py-1.5 text-xs text-white/40">{p}</span>
+  1309→              ))}
+  1310→            </div>
+  1311→          </div>
+  1312→        </div>
+  1313→      </section>
+  1314→
+  1315→      {/* ═══════════ 13. GALLERY ═══════════ */}
+  1316→      <section className="py-16 sm:py-20">
+  1317→        <div className="max-w-7xl mx-auto px-4">
+  1318→          <div className="text-center mb-8 reveal">
+  1319→            <span className="category-pill pill-rose">📸 Gallery</span>
+  1320→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Captured <span className="gradient-text-sunset">Moments</span></h2>
+  1321→          </div>
+  1322→          {/* Filter */}
+  1323→          <div className="flex flex-wrap justify-center gap-2 mb-8 reveal">
+  1324→            {['All', 'Nepal', 'Bhutan', 'Tibet', 'Mustang'].map((f) => (
+  1325→              <button key={f} onClick={() => setGalleryFilter(f)} className={`tab-btn ${galleryFilter === f ? 'active' : ''}`}>{f}</button>
+  1326→            ))}
+  1327→          </div>
+  1328→          <div className="gallery-grid reveal">
+  1329→            {filteredGallery.map((item, i) => (
+  1330→              <div key={item.title + i} className="gallery-item">
+  1331→                <div className={`w-full h-full bg-gradient-to-br ${item.gradient} relative`}>
+  1332→                  <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
+  1333→                  {/* Hover overlay */}
+  1334→                  <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-end p-3 group cursor-pointer">
+  1335→                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+  1336→                      <div className="text-sm font-semibold">{item.title}</div>
+  1337→                      <div className="text-xs text-white/50">{item.location}</div>
+  1338→                    </div>
+  1339→                  </div>
+  1340→                </div>
+  1341→              </div>
+  1342→            ))}
+  1343→          </div>
+  1344→          <div className="text-center mt-8 reveal">
+  1345→            <button className="btn-outline">View Full Gallery</button>
+  1346→          </div>
+  1347→        </div>
+  1348→      </section>
+  1349→
+  1350→      {/* ═══════════ 14. TESTIMONIALS ═══════════ */}
+  1351→      <section className="py-16 sm:py-20">
+  1352→        <div className="max-w-7xl mx-auto px-4">
+  1353→          <div className="text-center mb-12 reveal">
+  1354→            <span className="category-pill">💬 Reviews</span>
+  1355→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Voices from the <span className="gradient-text">Trail</span></h2>
+  1356→            <div className="mt-3 flex items-center justify-center gap-2">
+  1357→              <StarRating count={5} />
+  1358→              <span className="text-sm font-semibold">4.9/5</span>
+  1359→              <span className="text-xs text-white/30">based on 2,500+ verified reviews</span>
+  1360→            </div>
+  1361→          </div>
+  1362→          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+  1363→            {TESTIMONIALS.map((t) => (
+  1364→              <div key={t.name} className="glass-card p-6 reveal-scale">
+  1365→                <StarRating count={5} />
+  1366→                <p className="text-sm text-white/60 leading-relaxed mt-3 mb-4">&ldquo;{t.quote}&rdquo;</p>
+  1367→                <div className="flex items-center gap-3">
+  1368→                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-himalaya-gold/30 to-himalaya-gold/10 flex items-center justify-center text-sm font-bold text-himalaya-gold">{t.initials}</div>
+  1369→                  <div>
+  1370→                    <div className="text-sm font-semibold">{t.name}</div>
+  1371→                    <div className="text-xs text-white/30">{t.trip}</div>
+  1372→                  </div>
+  1373→                </div>
+  1374→              </div>
+  1375→            ))}
+  1376→          </div>
+  1377→        </div>
+  1378→      </section>
+  1379→
+  1380→      {/* ═══════════ 15. BLOG / STORIES ═══════════ */}
+  1381→      <section className="py-16 sm:py-20">
+  1382→        <div className="max-w-7xl mx-auto px-4">
+  1383→          <div className="text-center mb-12 reveal">
+  1384→            <span className="category-pill pill-aurora">📝 Blog</span>
+  1385→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Stories & <span className="gradient-text-aurora">Insights</span></h2>
+  1386→          </div>
+  1387→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  1388→            {BLOG_POSTS.map((post) => (
+  1389→              <article key={post.title} className="glass-card overflow-hidden reveal-scale">
+  1390→                <div className={`h-40 bg-gradient-to-br ${post.gradient} relative`}>
+  1391→                  <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
+  1392→                  <span className="absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded bg-black/40 text-white/70">{post.category}</span>
+  1393→                </div>
+  1394→                <div className="p-4 sm:p-5">
+  1395→                  <h3 className="font-semibold text-sm mb-2">{post.title}</h3>
+  1396→                  <p className="text-xs text-white/40 leading-relaxed mb-3">{post.excerpt}</p>
+  1397→                  <div className="flex items-center justify-between">
+  1398→                    <span className="text-[10px] text-white/20">{post.readTime} read</span>
+  1399→                    <a href="#" className="text-xs text-himalaya-gold hover:underline">Read More →</a>
+  1400→                  </div>
+  1401→                </div>
+  1402→              </article>
+  1403→            ))}
+  1404→          </div>
+  1405→          <div className="text-center mt-8 reveal">
+  1406→            <button className="btn-outline">View All Stories</button>
+  1407→          </div>
+  1408→        </div>
+  1409→      </section>
+  1410→
+  1411→      {/* ═══════════ 16. FAQ ═══════════ */}
+  1412→      <section className="py-16 sm:py-20">
+  1413→        <div className="max-w-3xl mx-auto px-4">
+  1414→          <div className="text-center mb-10 reveal">
+  1415→            <h2 className="text-3xl sm:text-4xl font-bold">Frequently Asked <span className="gradient-text-cool">Questions</span></h2>
+  1416→          </div>
+  1417→          {/* Category filter */}
+  1418→          <div className="flex flex-wrap justify-center gap-2 mb-6 reveal">
+  1419→            {['All', 'Booking', 'Payment', 'Cancellation', 'Insurance', 'Health', 'Gear'].map((cat) => (
+  1420→              <button key={cat} onClick={() => { setFaqCategory(cat); setFaqOpenIndex(null); }} className={`tab-btn ${faqCategory === cat ? 'active' : ''}`}>{cat}</button>
+  1421→            ))}
+  1422→          </div>
+  1423→          <div className="space-y-2 reveal">
+  1424→            {filteredFaqs.map((faq, i) => (
+  1425→              <div key={i} className={`faq-item ${faqOpenIndex === i ? 'open' : ''}`}>
+  1426→                <button onClick={() => setFaqOpenIndex(faqOpenIndex === i ? null : i)} className="w-full flex items-center justify-between p-4 text-left">
+  1427→                  <span className="text-sm font-medium pr-4">{faq.q}</span>
+  1428→                  <svg className="faq-chevron w-4 h-4 flex-shrink-0 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+  1429→                </button>
+  1430→                <div className="faq-answer">
+  1431→                  <div className="px-4 pb-4 text-sm text-white/40 leading-relaxed">{faq.a}</div>
+  1432→                </div>
+  1433→              </div>
+  1434→            ))}
+  1435→          </div>
+  1436→          <div className="text-center mt-6 reveal">
+  1437→            <a href="#contact" className="text-sm text-himalaya-gold hover:underline">Still have questions? Contact us →</a>
+  1438→          </div>
+  1439→        </div>
+  1440→      </section>
+  1441→
+  1442→      {/* ═══════════ 17. PRICING ═══════════ */}
+  1443→      <section className="py-16 sm:py-20">
+  1444→        <div className="max-w-7xl mx-auto px-4">
+  1445→          <div className="text-center mb-12 reveal">
+  1446→            <span className="category-pill">💎 Pricing</span>
+  1447→            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Choose Your <span className="gradient-text">Adventure</span></h2>
+  1448→          </div>
+  1449→          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+  1450→            {PRICING_TIERS.map((tier) => (
+  1451→              <div key={tier.name} className={`glass-card p-6 relative ${tier.highlighted ? 'border-himalaya-gold/40 !bg-gradient-to-b from-himalaya-gold/[0.06] to-transparent shadow-[0_0_60px_rgba(212,168,83,0.12)]' : ''} reveal-scale`}>
+  1452→                {tier.highlighted && <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] bg-himalaya-gold text-black font-bold px-3 py-0.5 rounded-full">Most Popular</span>}
+  1453→                <h3 className="font-bold text-lg mb-1">{tier.name}</h3>
+  1454→                <div className="flex items-baseline gap-1 mb-4">
+  1455→                  <span className="text-3xl font-bold gradient-text">${tier.price.toLocaleString()}</span>
+  1456→                  <span className="text-xs text-white/30">/person</span>
+  1457→                </div>
+  1458→                <ul className="space-y-2 mb-6">
+  1459→                  {tier.features.map((f) => (
+  1460→                    <li key={f} className="flex items-start gap-2 text-xs text-white/50">
+  1461→                      <svg className="w-4 h-4 text-himalaya-gold flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
+  1462→                      {f}
+  1463→                    </li>
+  1464→                  ))}
+  1465→                </ul>
+  1466→                <button className={tier.highlighted ? 'btn-primary w-full' : 'btn-outline w-full'}>Get Started</button>
+  1467→              </div>
+  1468→            ))}
+  1469→          </div>
+  1470→        </div>
+  1471→      </section>
+  1472→
+  1473→      {/* ═══════════ 18. NEWSLETTER ═══════════ */}
+  1474→      <section className="py-16 sm:py-20 relative section-glow-top">
+  1475→        <div className="pattern-overlay">
+  1476→          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-aurora/8 via-himalaya-rose/5 to-himalaya-orange/3 rounded-full blur-[120px] animate-aurora" />
+  1477→        </div>
+  1478→        <div className="max-w-3xl mx-auto px-4 relative z-10 reveal">
+  1479→          <div className="glass-card-strong p-8 sm:p-10 relative overflow-hidden">
+  1480→            {/* Gradient orbs */}
+  1481→            <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-himalaya-gold/15 to-himalaya-rose/10 rounded-full blur-[80px]" />
+  1482→            <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-gradient-to-br from-himalaya-aurora/10 to-himalaya-teal/10 rounded-full blur-[60px]" />
+  1483→            <div className="relative z-10 text-center">
+  1484→              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Stay Inspired</h2>
+  1485→              <p className="text-white/40 text-sm mb-1">Get exclusive deals, travel tips, and early access to new expeditions.</p>
+  1486→              <p className="text-xs text-himalaya-gold mb-6">Join 15,000+ subscribers. Get 10% off your first booking.</p>
+  1487→              {newsletterSubmitted ? (
+  1488→                <div className="text-himalaya-gold text-sm font-semibold">✓ Welcome aboard! Check your inbox for your 10% discount code.</div>
+  1489→              ) : (
+  1490→                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+  1491→                  <input
+  1492→                    type="email"
+  1493→                    value={newsletterEmail}
+  1494→                    onChange={(e) => setNewsletterEmail(e.target.value)}
+  1495→                    placeholder="Enter your email"
+  1496→                    className="form-input flex-1"
+  1497→                  />
+  1498→                  <button onClick={() => { if (newsletterEmail.includes('@')) setNewsletterSubmitted(true); }} className="btn-primary whitespace-nowrap">Subscribe</button>
+  1499→                </div>
+  1500→              )}
+  1501→              <p className="text-[10px] text-white/20 mt-3">No spam. Unsubscribe anytime.</p>
+  1502→            </div>
+  1503→          </div>
+  1504→        </div>
+  1505→      </section>
+  1506→
+  1507→      {/* ═══════════ 19. CONTACT ═══════════ */}
+  1508→      <section id="contact" className="py-16 sm:py-20 relative section-glow-top">
+  1509→        <div className="pattern-overlay">
+  1510→          <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-himalaya-sky/5 via-himalaya-teal/3 to-transparent rounded-full blur-[120px]" />
+  1511→        </div>
+  1512→        <div className="max-w-7xl mx-auto px-4 relative z-10">
+  1513→          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+  1514→            {/* Form */}
+  1515→            <div className="reveal">
+  1516→              <h2 className="text-2xl sm:text-3xl font-bold mb-6">We&apos;d Love to Hear from You</h2>
+  1517→              <form onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll get back to you soon.'); }} className="space-y-4">
+  1518→                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  1519→                  <div>
+  1520→                    <label className="text-xs text-white/30 mb-1 block">Name</label>
+  1521→                    <input type="text" value={contactForm.name} onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))} className="form-input" placeholder="Your name" />
+  1522→                  </div>
+  1523→                  <div>
+  1524→                    <label className="text-xs text-white/30 mb-1 block">Email</label>
+  1525→                    <input type="email" value={contactForm.email} onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))} className="form-input" placeholder="you@example.com" />
+  1526→                  </div>
+  1527→                </div>
+  1528→                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  1529→                  <div>
+  1530→                    <label className="text-xs text-white/30 mb-1 block">Phone</label>
+  1531→                    <input type="tel" value={contactForm.phone} onChange={(e) => setContactForm((p) => ({ ...p, phone: e.target.value }))} className="form-input" placeholder="+1 (555) 000-0000" />
+  1532→                  </div>
+  1533→                  <div>
+  1534→                    <label className="text-xs text-white/30 mb-1 block">Trip Interest</label>
+  1535→                    <select value={contactForm.trip} onChange={(e) => setContactForm((p) => ({ ...p, trip: e.target.value }))} className="form-select w-full">
+  1536→                      <option value="">Select a trip</option>
+  1537→                      <option>Everest Base Camp</option>
+  1538→                      <option>Annapurna Circuit</option>
+  1539→                      <option>Bhutan Dragon Trail</option>
+  1540→                      <option>K2 Base Camp</option>
+  1541→                      <option>Langtang Valley</option>
+  1542→                      <option>Upper Mustang</option>
+  1543→                      <option>Other</option>
+  1544→                    </select>
+  1545→                  </div>
+  1546→                </div>
+  1547→                <div>
+  1548→                  <label className="text-xs text-white/30 mb-1 block">Message</label>
+  1549→                  <textarea value={contactForm.message} onChange={(e) => setContactForm((p) => ({ ...p, message: e.target.value }))} className="form-input" rows={4} placeholder="Tell us about your dream expedition..." />
+  1550→                </div>
+  1551→                <button type="submit" className="btn-primary w-full sm:w-auto">Send Message</button>
+  1552→              </form>
+  1553→            </div>
+  1554→            {/* Contact details */}
+  1555→            <div className="reveal">
+  1556→              <div className="space-y-4 mb-6">
+  1557→                {[
+  1558→                  ['📧 Email', 'lama@himalayanexploration.com'],
+  1559→                  ['📞 Nepal Office', '+977-1-4388-913'],
+  1560→                  ['🚨 Emergency', '+977-9851-188161'],
+  1561→                  ['💬 WhatsApp', '+977-9841-023371'],
+  1562→                  ['📍 Nepal Address', '21231 Khusibu-17, Kathmandu'],
+  1563→                  ['🕐 Business Hours', '09:00 - 18:00 (Sun-Fri)'],
+  1564→                ].map(([label, val]) => (
+  1565→                  <div key={label} className="flex items-center gap-3">
+  1566→                    <span className="text-sm">{label}</span>
+  1567→                    <span className="text-sm text-white/50">{val}</span>
+  1568→                  </div>
+  1569→                ))}
+  1570→              </div>
+  1571→              {/* Social icons */}
+  1572→              <div className="flex gap-3 mb-6">
+  1573→                {['Facebook','X','Instagram','YouTube'].map((s) => (
+  1574→                  <button key={s} className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/40 hover:text-himalaya-gold hover:border-himalaya-gold/30 transition-colors text-xs">{s.charAt(0)}</button>
+  1575→                ))}
+  1576→              </div>
+  1577→              {/* Australia Office */}
+  1578→              <div className="glass-card-static p-3 mb-4">
+  1579→                <h4 className="text-xs font-semibold text-himalaya-gold mb-2">Australia Office</h4>
+  1580→                <div className="space-y-1 text-xs text-white/40">
+  1581→                  <p>5th Avenue, Campsie, NSW 2194</p>
+  1582→                  <p>+61 412 543 886</p>
+  1583→                  <p>pushpa@himalayanexploration.com</p>
+  1584→                </div>
+  1585→              </div>
+  1586→              {/* Map placeholder */}
+  1587→              <div className="glass-card-static p-4 h-48 relative overflow-hidden">
+  1588→                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 to-teal-900/20 flex items-center justify-center">
+  1589→                  <svg className="w-16 h-16 text-himalaya-gold/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+  1590→                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+  1591→                    <circle cx="12" cy="9" r="2.5"/>
+  1592→                  </svg>
+  1593→                  <span className="absolute bottom-3 text-xs text-white/30">Kathmandu, Nepal</span>
+  1594→                </div>
+  1595→              </div>
+  1596→            </div>
+  1597→          </div>
+  1598→        </div>
+  1599→      </section>
+  1600→
+  1601→      {/* ═══════════ 20. COUNTDOWN ═══════════ */}
+  1602→      <section className="py-16 sm:py-20">
+  1603→        <div className="max-w-3xl mx-auto px-4 reveal">
+  1604→          <div className="glass-card-strong p-8 text-center">
+  1605→            <span className="category-pill pill-aurora">⏰ Next Departure</span>
+  1606→            <h2 className="text-2xl font-bold mt-4 mb-2">Everest Base Camp — Spring 2026</h2>
+  1607→            <p className="text-sm text-white/30 mb-6">Limited spots remaining for our most popular expedition</p>
+  1608→            <div className="flex justify-center gap-3 mb-6">
+  1609→              {[
+  1610→                ['Days', countdown.days],
+  1611→                ['Hours', countdown.hours],
+  1612→                ['Min', countdown.minutes],
+  1613→                ['Sec', countdown.seconds],
+  1614→              ].map(([label, val]) => (
+  1615→                <div key={label} className="countdown-digit">
+  1616→                  <div className="text-2xl font-bold gradient-text">{String(val).padStart(2, '0')}</div>
+  1617→                  <div className="text-[10px] text-white/30 mt-0.5">{label}</div>
+  1618→                </div>
+  1619→              ))}
+  1620→            </div>
+  1621→            <button className="btn-primary" onClick={() => openCheckout(TOURS[0])}>Reserve Your Spot</button>
+  1622→          </div>
+  1623→        </div>
+  1624→      </section>
+  1625→
+  1626→      {/* ═══════════ 21. CTA ═══════════ */}
+  1627→      <section className="py-16 sm:py-20 relative overflow-hidden">
+  1628→        {/* Background */}
+  1629→        <div className="absolute inset-0 pointer-events-none">
+  1630→          <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-himalaya-gold/5 rounded-full blur-[100px]" />
+  1631→          <svg className="absolute bottom-0 right-0 w-1/2 h-1/2 opacity-[0.03]" viewBox="0 0 400 400"><polygon points="0,400 200,100 400,400" fill="white"/></svg>
+  1632→        </div>
+  1633→        <div className="relative z-10 max-w-3xl mx-auto px-4 text-center reveal">
+  1634→          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach <span className="gradient-text-aurora">New Heights</span>?</h2>
+  1635→          <p className="text-white/40 mb-8 max-w-lg mx-auto">Your trip with our team means a lot to us. Whether it&apos;s cultural exploration or extreme adventure such as trekking to Everest Base Camp, we can help create a great trip plan according to your requirements.</p>
+  1636→          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+  1637→            <button className="btn-primary" onClick={() => openCheckout(TOURS[0])}>Start Your Journey</button>
+  1638→            <button className="btn-outline">Talk to an Expert</button>
+  1639→          </div>
+  1640→        </div>
+  1641→      </section>
+  1642→
+  1643→      {/* ═══════════ 22. FOOTER ═══════════ */}
+  1644→      <footer className="border-t border-white/5 pt-12 pb-6">
+  1645→        <div className="max-w-7xl mx-auto px-4">
+  1646→          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
+  1647→            {/* Brand */}
+  1648→            <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+  1649→              <div className="flex items-center gap-2 mb-3">
+  1650→                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none">
+  1651→                  <path d="M16 4L4 28h24L16 4z" fill="#d4a853" opacity="0.8"/>
+  1652→                  <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
+  1653→                </svg>
+  1654→                <span className="font-bold">Himalayan Exploration</span>
+  1655→              </div>
+  1656→              <p className="text-xs text-white/30 leading-relaxed mb-4">Himalayan Exploration Treks — A small company based in Kathmandu providing adventure travel packages since 2013.</p>
+  1657→              <div className="flex gap-2">
+  1658→                {['F','X','In','YT'].map((s) => (
+  1659→                  <button key={s} className="w-8 h-8 rounded bg-white/5 text-white/30 hover:text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors text-xs flex items-center justify-center">{s}</button>
+  1660→                ))}
+  1661→              </div>
+  1662→            </div>
+  1663→            {/* Expeditions */}
+  1664→            <div>
+  1665→              <h4 className="text-sm font-semibold mb-3">Trekking Regions</h4>
+  1666→              <ul className="space-y-1.5">
+  1667→                {['Everest Region','Annapurna Region','Langtang Region','Manaslu Region','Mustang Region','Dolpo Region'].map((l) => (
+  1668→                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+  1669→                ))}
+  1670→              </ul>
+  1671→            </div>
+  1672→            {/* Company */}
+  1673→            <div>
+  1674→              <h4 className="text-sm font-semibold mb-3">Company</h4>
+  1675→              <ul className="space-y-1.5">
+  1676→                {['About Us','Our Team','Blog','Contact','Terms & Conditions','Privacy Policy'].map((l) => (
+  1677→                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+  1678→                ))}
+  1679→              </ul>
+  1680→            </div>
+  1681→            {/* Support */}
+  1682→            <div>
+  1683→              <h4 className="text-sm font-semibold mb-3">Support</h4>
+  1684→              <ul className="space-y-1.5">
+  1685→                {['Safety','Travel Insurance','Visa Guide','Packing Lists','FAQ','Cookies'].map((l) => (
+  1686→                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+  1687→                ))}
+  1688→              </ul>
+  1689→            </div>
+  1690→            {/* Legal */}
+  1691→            <div>
+  1692→              <h4 className="text-sm font-semibold mb-3">Legal</h4>
+  1693→              <ul className="space-y-1.5">
+  1694→                {['Terms & Conditions','Privacy Policy','Cookies','Responsible Travel'].map((l) => (
+  1695→                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+  1696→                ))}
+  1697→              </ul>
+  1698→            </div>
+  1699→          </div>
+  1700→          {/* Payment methods */}
+  1701→          <div className="border-t border-white/5 pt-6 mb-6">
+  1702→            <div className="text-center text-xs text-white/20 mb-3">Pay Safely With Us — The payment is encrypted and transmitted securely with an SSL protocol</div>
+  1703→            <div className="flex flex-wrap justify-center gap-2">
+  1704→              {['Visa','Mastercard','PayPal','Apple Pay','Google Pay'].map((m) => (
+  1705→                <span key={m} className="glass-card-static px-3 py-1 text-[10px] text-white/30">{m}</span>
+  1706→              ))}
+  1707→            </div>
+  1708→          </div>
+  1709→          {/* Bottom bar */}
+  1710→          <div className="border-t border-white/5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+  1711→            <p className="text-[10px] text-white/20">© 2013 - {new Date().getFullYear()} Himalayan Exploration Travel. All Rights Reserved.</p>
+  1712→            <div className="flex gap-4">
+  1713→              {['Privacy','Terms','Cookies'].map((l) => (
+  1714→                <a key={l} href="#" className="text-[10px] text-white/20 hover:text-white/40 transition-colors">{l}</a>
+  1715→              ))}
+  1716→            </div>
+  1717→          </div>
+  1718→        </div>
+  1719→      </footer>
+  1720→
+  1721→      {/* ═══════════ 23. BACK TO TOP ═══════════ */}
+  1722→      <button
+  1723→        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+  1724→        className={`back-to-top ${backToTopVisible ? 'visible' : ''}`}
+  1725→        aria-label="Back to top"
+  1726→      >
+  1727→        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  1728→      </button>
+  1729→
+  1730→      {/* ═══════════ 24. LIVE CHAT WIDGET ═══════════ */}
+  1731→      <div className="chat-widget">
+  1732→        {/* Chat panel */}
+  1733→        {chatOpen && (
+  1734→          <div className="chat-panel">
+  1735→            {/* Header */}
+  1736→            <div className="flex items-center justify-between p-4 border-b border-white/5">
+  1737→              <div className="flex items-center gap-2">
+  1738→                <div className="w-2 h-2 rounded-full bg-green-400" />
+  1739→                <span className="text-sm font-semibold">Himalayan Exploration Support</span>
+  1740→              </div>
+  1741→              <button onClick={() => setChatOpen(false)} className="text-white/30 hover:text-white transition-colors">
+  1742→                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  1743→              </button>
+  1744→            </div>
+  1745→            {/* Messages */}
+  1746→            <div ref={chatMessagesRef} className="p-4 h-64 overflow-y-auto space-y-3">
+  1747→              <div className="flex gap-2">
+  1748→                <div className="w-7 h-7 rounded-full bg-himalaya-gold/20 flex items-center justify-center flex-shrink-0">
+  1749→                  <svg className="w-3.5 h-3.5 text-himalaya-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/></svg>
+  1750→                </div>
+  1751→                <div className="glass-card-static !rounded-bl-sm p-3 max-w-[240px]">
+  1752→                  <p className="text-xs text-white/60 leading-relaxed">Namaste! 🙏 How can we help you plan your Himalayan adventure?</p>
+  1753→                </div>
+  1754→              </div>
+  1755→            </div>
+  1756→            {/* Quick replies */}
+  1757→            <div className="px-4 pb-2 flex flex-wrap gap-1.5">
+  1758→              {['Trip Info', 'Pricing', 'Visa Help', 'Insurance'].map((qr) => (
+  1759→                <button key={qr} onClick={() => setChatMessage(qr)} className="text-[10px] px-2.5 py-1 rounded-full border border-himalaya-gold/20 text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors">{qr}</button>
+  1760→              ))}
+  1761→            </div>
+  1762→            {/* Input */}
+  1763→            <div className="p-3 border-t border-white/5 flex gap-2">
+  1764→              <input
+  1765→                type="text"
+  1766→                value={chatMessage}
+  1767→                onChange={(e) => setChatMessage(e.target.value)}
+  1768→                placeholder="Type a message..."
+  1769→                className="form-input !py-2 !text-xs flex-1"
+  1770→                onKeyDown={(e) => { if (e.key === 'Enter') setChatMessage(''); }}
+  1771→              />
+  1772→              <button onClick={() => setChatMessage('')} className="w-8 h-8 rounded-lg bg-himalaya-gold flex items-center justify-center flex-shrink-0">
+  1773→                <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+  1774→              </button>
+  1775→            </div>
+  1776→          </div>
+  1777→        )}
+  1778→        {/* Chat bubble */}
+  1779→        <div className={`chat-bubble ${!chatOpen ? 'animate-chat-pulse' : ''}`} onClick={() => setChatOpen(!chatOpen)}>
+  1780→          {chatOpen ? (
+  1781→            <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  1782→          ) : (
+  1783→            <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  1784→          )}
+  1785→        </div>
+  1786→      </div>
+  1787→
+  1788→      {/* ═══════════ 25. CHECKOUT OVERLAY ═══════════ */}
+  1789→      {checkoutOpen && selectedTour && (
+  1790→        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" ref={checkoutRef}>
+  1791→          {/* Backdrop */}
+  1792→          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={closeCheckout} />
+  1793→
+  1794→          {/* Modal */}
+  1795→          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-card-strong rounded-2xl">
+  1796→            {/* Close button */}
+  1797→            <button onClick={closeCheckout} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/20 transition-colors">
+  1798→              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  1799→            </button>
+  1800→
+  1801→            {/* Header */}
+  1802→            <div className="p-6 pb-0">
+  1803→              <div className="flex items-center gap-3 mb-4">
+  1804→                <div className="w-10 h-10 rounded-xl bg-himalaya-gold/20 flex items-center justify-center">
+  1805→                  <svg className="w-5 h-5 text-himalaya-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
+  1806→                </div>
+  1807→                <div>
+  1808→                  <h2 className="text-lg font-bold">Book Your Trek</h2>
+  1809→                  <p className="text-xs text-white/40">Complete your booking in 3 easy steps</p>
+  1810→                </div>
+  1811→              </div>
+  1812→
+  1813→              {/* Progress Steps */}
+  1814→              <div className="flex items-center gap-2 mb-6">
+  1815→                {[
+  1816→                  { key: 'details', label: '1. Traveler Details', num: 1 },
+  1817→                  { key: 'payment', label: '2. Payment Method', num: 2 },
+  1818→                  { key: 'confirmation', label: '3. Confirmation', num: 3 },
+  1819→                ].map((step, i) => (
+  1820→                  <div key={step.key} className="flex items-center gap-2 flex-1">
+  1821→                    <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+  1822→                      checkoutStep === step.key
+  1823→                        ? 'bg-himalaya-gold/20 text-himalaya-gold border border-himalaya-gold/30'
+  1824→                        : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1)
+  1825→                          ? 'bg-himalaya-emerald/10 text-himalaya-emerald border border-himalaya-emerald/20'
+  1826→                          : 'bg-white/5 text-white/30 border border-white/5'
+  1827→                    }`}>
+  1828→                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold" style={{
+  1829→                        backgroundColor: checkoutStep === step.key ? '#d4a853' : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '#10b981' : 'rgba(255,255,255,0.1)',
+  1830→                        color: checkoutStep === step.key ? '#000' : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '#000' : 'rgba(255,255,255,0.3)',
+  1831→                      }}>
+  1832→                        {(checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '✓' : step.num}
+  1833→                      </span>
+  1834→                      <span className="hidden sm:inline">{step.label}</span>
+  1835→                    </div>
+  1836→                    {i < 2 && <div className="w-4 h-px bg-white/10 flex-shrink-0" />}
+  1837→                  </div>
+  1838→                ))}
+  1839→              </div>
+  1840→            </div>
+  1841→
+  1842→            {/* Tour Summary Bar */}
+  1843→            <div className="mx-6 mb-4 glass-card-static p-4 rounded-xl">
+  1844→              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+  1845→                <div className="flex items-center gap-3">
+  1846→                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${selectedTour.gradient} flex items-center justify-center flex-shrink-0`}>
+  1847→                    <svg className="w-6 h-6 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
+  1848→                  </div>
+  1849→                  <div>
+  1850→                    <h3 className="font-semibold text-sm">{selectedTour.title}</h3>
+  1851→                    <div className="flex items-center gap-2 text-xs text-white/40">
+  1852→                      <span>{selectedTour.days} Days</span>
+  1853→                      <span>·</span>
+  1854→                      <span>{selectedTour.altitude}</span>
+  1855→                      <span>·</span>
+  1856→                      <span>{selectedTour.region}</span>
+  1857→                    </div>
+  1858→                  </div>
+  1859→                </div>
+  1860→                <div className="text-right sm:text-right">
+  1861→                  <div className="text-lg font-bold text-himalaya-gold">${selectedTour.price.toLocaleString()}</div>
+  1862→                  <div className="text-[10px] text-white/30">per person</div>
+  1863→                </div>
+  1864→              </div>
+  1865→            </div>
+  1866→
+  1867→            <div className="px-6 pb-6">
+  1868→              {/* ──── STEP 1: TRAVELER DETAILS ──── */}
+  1869→              {checkoutStep === 'details' && (
+  1870→                <div className="space-y-4">
+  1871→                  <h3 className="text-sm font-semibold text-white/70 mb-2">Traveler Information</h3>
+  1872→                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  1873→                    <div>
+  1874→                      <label className="text-xs text-white/30 mb-1 block">Full Name *</label>
+  1875→                      <input type="text" value={bookingForm.fullName} onChange={(e) => setBookingForm(p => ({ ...p, fullName: e.target.value }))} className="form-input w-full" placeholder="Your full name" />
+  1876→                    </div>
+  1877→                    <div>
+  1878→                      <label className="text-xs text-white/30 mb-1 block">Email Address *</label>
+  1879→                      <input type="email" value={bookingForm.email} onChange={(e) => setBookingForm(p => ({ ...p, email: e.target.value }))} className="form-input w-full" placeholder="you@example.com" />
+  1880→                    </div>
+  1881→                    <div>
+  1882→                      <label className="text-xs text-white/30 mb-1 block">Phone Number *</label>
+  1883→                      <input type="tel" value={bookingForm.phone} onChange={(e) => setBookingForm(p => ({ ...p, phone: e.target.value }))} className="form-input w-full" placeholder="+977 98XXXXXXXX" />
+  1884→                    </div>
+  1885→                    <div>
+  1886→                      <label className="text-xs text-white/30 mb-1 block">Nationality *</label>
+  1887→                      <input type="text" value={bookingForm.nationality} onChange={(e) => setBookingForm(p => ({ ...p, nationality: e.target.value }))} className="form-input w-full" placeholder="e.g., Nepali, American" />
+  1888→                    </div>
+  1889→                    <div>
+  1890→                      <label className="text-xs text-white/30 mb-1 block">Preferred Start Date *</label>
+  1891→                      <input type="date" value={bookingForm.startDate} onChange={(e) => setBookingForm(p => ({ ...p, startDate: e.target.value }))} className="form-input w-full" min={new Date().toISOString().split('T')[0]} />
+  1892→                    </div>
+  1893→                    <div>
+  1894→                      <label className="text-xs text-white/30 mb-1 block">Number of Travelers *</label>
+  1895→                      <select value={bookingForm.travelers} onChange={(e) => setBookingForm(p => ({ ...p, travelers: Number(e.target.value) }))} className="form-select w-full">
+  1896→                        {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n} Traveler{n > 1 ? 's' : ''}</option>)}
+  1897→                      </select>
+  1898→                    </div>
+  1899→                  </div>
+  1900→
+  1901→                  <h3 className="text-sm font-semibold text-white/70 mt-4 mb-2">Emergency & Health</h3>
+  1902→                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  1903→                    <div>
+  1904→                      <label className="text-xs text-white/30 mb-1 block">Emergency Contact Name</label>
+  1905→                      <input type="text" value={bookingForm.emergencyContact} onChange={(e) => setBookingForm(p => ({ ...p, emergencyContact: e.target.value }))} className="form-input w-full" placeholder="Contact person name" />
+  1906→                    </div>
+  1907→                    <div>
+  1908→                      <label className="text-xs text-white/30 mb-1 block">Emergency Contact Phone</label>
+  1909→                      <input type="tel" value={bookingForm.emergencyPhone} onChange={(e) => setBookingForm(p => ({ ...p, emergencyPhone: e.target.value }))} className="form-input w-full" placeholder="+1 555 000 0000" />
+  1910→                    </div>
+  1911→                    <div>
+  1912→                      <label className="text-xs text-white/30 mb-1 block">Dietary Requirements</label>
+  1913→                      <input type="text" value={bookingForm.dietaryNeeds} onChange={(e) => setBookingForm(p => ({ ...p, dietaryNeeds: e.target.value }))} className="form-input w-full" placeholder="Vegetarian, vegan, allergies..." />
+  1914→                    </div>
+  1915→                    <div>
+  1916→                      <label className="text-xs text-white/30 mb-1 block">Medical Conditions</label>
+  1917→                      <input type="text" value={bookingForm.medicalConditions} onChange={(e) => setBookingForm(p => ({ ...p, medicalConditions: e.target.value }))} className="form-input w-full" placeholder="Any relevant medical conditions" />
+  1918→                    </div>
+  1919→                  </div>
+  1920→
+  1921→                  <div>
+  1922→                    <label className="text-xs text-white/30 mb-1 block">Special Requests</label>
+  1923→                    <textarea value={bookingForm.specialRequests} onChange={(e) => setBookingForm(p => ({ ...p, specialRequests: e.target.value }))} className="form-input w-full" rows={2} placeholder="Anything else you'd like us to know..." />
+  1924→                  </div>
+  1925→
+  1926→                  <div className="flex justify-end pt-2">
+  1927→                    <button
+  1928→                      onClick={() => {
+  1929→                        if (!bookingForm.fullName || !bookingForm.email || !bookingForm.phone || !bookingForm.nationality || !bookingForm.startDate) {
+  1930→                          alert('Please fill in all required fields.');
+  1931→                          return;
+  1932→                        }
+  1933→                        setCheckoutStep('payment');
+  1934→                      }}
+  1935→                      className="btn-primary"
+  1936→                    >
+  1937→                      Continue to Payment →
+  1938→                    </button>
+  1939→                  </div>
+  1940→                </div>
+  1941→              )}
+  1942→
+  1943→              {/* ──── STEP 2: PAYMENT METHOD ──── */}
+  1944→              {checkoutStep === 'payment' && (
+  1945→                <div className="space-y-4">
+  1946→                  <h3 className="text-sm font-semibold text-white/70 mb-3">Choose Payment Method</h3>
+  1947→
+  1948→                  {/* eSewa */}
+  1949→                  <div
+  1950→                    onClick={() => setPaymentMethod('esewa')}
+  1951→                    className={`relative p-4 rounded-xl cursor-pointer transition-all border ${
+  1952→                      paymentMethod === 'esewa'
+  1953→                        ? 'bg-[#60BB46]/10 border-[#60BB46]/40 ring-1 ring-[#60BB46]/30'
+  1954→                        : 'bg-white/3 border-white/8 hover:bg-white/5'
+  1955→                    }`}
+  1956→                  >
+  1957→                    <div className="flex items-start gap-3">
+  1958→                      <div className="w-10 h-10 rounded-lg bg-[#60BB46]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+  1959→                        <span className="text-[#60BB46] font-bold text-xs">eS</span>
+  1960→                      </div>
+  1961→                      <div className="flex-1">
+  1962→                        <div className="flex items-center justify-between">
+  1963→                          <h4 className="font-semibold text-sm">eSewa</h4>
+  1964→                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+  1965→                            paymentMethod === 'esewa' ? 'border-[#60BB46]' : 'border-white/20'
+  1966→                          }`}>
+  1967→                            {paymentMethod === 'esewa' && <div className="w-2 h-2 rounded-full bg-[#60BB46]" />}
+  1968→                          </div>
+  1969→                        </div>
+  1970→                        <p className="text-xs text-white/40 mt-1">Nepal&apos;s most popular digital wallet. Pay instantly using your eSewa account. Secure and fast payment with real-time confirmation.</p>
+  1971→                        {paymentMethod === 'esewa' && (
+  1972→                          <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
+  1973→                            <p className="text-xs text-white/50">After clicking &quot;Pay Now&quot;, you&apos;ll be redirected to eSewa&apos;s secure payment page to complete your transaction.</p>
+  1974→                            <div className="flex items-center gap-2 text-[10px] text-white/30">
+  1975→                              <span className="px-1.5 py-0.5 bg-[#60BB46]/10 text-[#60BB46] rounded">Verified Merchant</span>
+  1976→                              <span>SSL Encrypted</span>
+  1977→                              <span>Instant Confirmation</span>
+  1978→                            </div>
+  1979→                          </div>
+  1980→                        )}
+  1981→                      </div>
+  1982→                    </div>
+  1983→                  </div>
+  1984→
+  1985→                  {/* Bank Transfer */}
+  1986→                  <div
+  1987→                    onClick={() => setPaymentMethod('bank')}
+  1988→                    className={`relative p-4 rounded-xl cursor-pointer transition-all border ${
+  1989→                      paymentMethod === 'bank'
+  1990→                        ? 'bg-himalaya-blue/10 border-himalaya-blue/40 ring-1 ring-himalaya-blue/30'
+  1991→                        : 'bg-white/3 border-white/8 hover:bg-white/5'
+  1992→                    }`}
+  1993→                  >
+  1994→                    <div className="flex items-start gap-3">
+  1995→                      <div className="w-10 h-10 rounded-lg bg-himalaya-blue/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+  1996→                        <svg className="w-5 h-5 text-himalaya-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  1997→                          <rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/>
+  1998→                        </svg>
+  1999→                      </div>
+  2000→                      <div className="flex-1">
+
+[showing lines 1-2000 of 2247; use offset=2001 with limit to continue reading]

@@ -127,3 +127,36 @@ Stage Summary:
 - Website significantly more beautiful and colorful with aurora effects, sunset gradients, and vibrant multi-color palette
 - No console errors, fully responsive
 - Color palette expanded from single gold accent to 8+ colors (gold, teal, blue, emerald, rose, aurora, sunset, ocean)
+---
+Task ID: checkout-process
+Agent: main
+Task: Create checkout process with eSewa, Bank Transfer, and Pay on Arrival payment options
+
+Work Log:
+- Analyzed existing codebase structure (page.tsx, globals.css, layout.tsx, Prisma schema)
+- Added Booking model to Prisma schema with full booking fields (payment method, status, eSewa txn ID, etc.)
+- Pushed schema to database successfully
+- Created /api/bookings route (POST for creating bookings, GET for retrieval)
+- Created /api/esewa route (POST for payment verification, GET for payment config)
+- Added checkout state management (checkoutOpen, checkoutStep, selectedTour, paymentMethod, bookingForm, etc.)
+- Added openCheckout(), closeCheckout(), submitBooking() handler functions
+- Updated tour cards with "Book Now" buttons that trigger checkout
+- Updated Featured Expedition "Book This Trek" and CTA buttons to open checkout
+- Built full 3-step checkout overlay modal:
+  - Step 1: Traveler Details (name, email, phone, nationality, date, travelers, emergency contacts, dietary, medical)
+  - Step 2: Payment Method (eSewa, Bank Transfer, Pay on Arrival with detailed info cards)
+  - Step 3: Confirmation (booking reference, details, payment-specific instructions)
+- Fixed backdrop click bug (only close on direct backdrop click, not child elements)
+- Fixed default start date (30 days from now)
+- Verified build succeeds with zero errors
+- Verified lint passes with zero warnings
+- Verified with Agent Browser - checkout flow works correctly
+
+Stage Summary:
+- Full checkout process with 3 payment options implemented
+- eSewa: Green branded UI with payment link instructions
+- Bank Transfer: Blue branded UI with Nepal Investment Mega Bank details
+- Pay on Arrival: Orange branded UI with 30% deposit info
+- API routes for booking creation and eSewa payment verification
+- Database schema with Booking model
+- All buttons on the site now open the checkout flow
