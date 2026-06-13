@@ -4,31 +4,31 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 /* ──────────── DATA ──────────── */
 
-const NAV_LINKS = ['Destinations', 'Experiences', 'Pricing', 'Stories', 'Guides'];
+const NAV_LINKS = ['Experiences', 'Trekking', 'About', 'Stories', 'Contact'];
 
 const TOURS = [
-  { title: 'Everest Base Camp Trek', days: 16, difficulty: 'moderate' as const, price: 4299, country: 'Nepal', altitude: '5,364m', rating: 5, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
-  { title: 'Annapurna Circuit', days: 18, difficulty: 'challenging' as const, price: 3199, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
-  { title: 'Bhutan Dragon Trail', days: 12, difficulty: 'moderate' as const, price: 5499, country: 'Bhutan', altitude: '4,200m', rating: 5, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
-  { title: 'K2 Base Camp Trek', days: 20, difficulty: 'strenuous' as const, price: 4899, country: 'Pakistan', altitude: '5,150m', rating: 5, gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50' },
-  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 2199, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
-  { title: 'Upper Mustang Trek', days: 14, difficulty: 'moderate' as const, price: 3599, country: 'Nepal', altitude: '4,230m', rating: 5, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
+  { title: 'Everest Base Camp Trek', days: 14, difficulty: 'strenuous' as const, price: 1299, country: 'Nepal', altitude: '5,545m', rating: 5, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50', desc: 'Join the adventure of a lifetime with the Everest Base Camp Trek. Trek through Sagarmatha National Park, experience genuine Sherpa hospitality, and stand at the foot of the world\'s tallest mountain.', region: 'Everest Region' },
+  { title: 'Annapurna Circuit Trek', days: 21, difficulty: 'strenuous' as const, price: 1150, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50', desc: 'The world\'s most well-known trek through beautiful landscapes, Thorong-La Pass, and Muktinath\'s holiest pilgrimage site. Cross the highest pass at 5,416m with breathtaking mountain scenery.', region: 'Annapurna Region' },
+  { title: 'Upper Mustang Trek', days: 18, difficulty: 'moderate' as const, price: 1890, country: 'Nepal', altitude: '3,800m', rating: 5, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50', desc: 'A life-changing adventure to the Last Forbidden Kingdom, closed until 1992. Explore dramatic landscapes, ancient monasteries, sky caves, and the walled city of Lo Manthang.', region: 'Mustang Region' },
+  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 850, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50', desc: 'A beautiful valley trek north of Kathmandu, offering stunning glacier views, Tamang culture, and diverse wildlife including red pandas. Perfect for beginners seeking Himalayan beauty.', region: 'Langtang Region' },
+  { title: 'Manaslu Circuit Trek', days: 17, difficulty: 'challenging' as const, price: 1350, country: 'Nepal', altitude: '5,106m', rating: 5, gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50', desc: 'A remote and wild circuit around the 8th highest mountain. Cross the Larkya La Pass, experience untouched Tibetan-influenced villages, and trek through pristine valleys far from the crowds.', region: 'Manaslu Region' },
+  { title: 'Upper Dolpo Trek', days: 22, difficulty: 'strenuous' as const, price: 2950, country: 'Nepal', altitude: '5,360m', rating: 5, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50', desc: 'One of Nepal\'s most remote and restricted trekking regions. Explore the mystical Phoksundo Lake, ancient Bon monasteries, and a landscape that remains untouched by modern civilization.', region: 'Dolpo Region' },
 ];
 
 const DESTINATIONS = [
-  { name: 'Nepal', tagline: 'Himalayan Kingdom', trips: 45, priceFrom: 1999, rating: 4.9, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
-  { name: 'Bhutan', tagline: 'Land of the Thunder Dragon', trips: 12, priceFrom: 3499, rating: 4.8, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
-  { name: 'Tibet', tagline: 'Roof of the World', trips: 8, priceFrom: 2999, rating: 4.7, gradient: 'from-amber-700/50 via-orange-700/40 to-red-800/50' },
-  { name: 'Pakistan', tagline: 'K2 & Karakoram', trips: 6, priceFrom: 3199, rating: 4.9, gradient: 'from-rose-700/50 via-pink-700/40 to-fuchsia-800/50' },
-  { name: 'India', tagline: 'Ladakh & Sikkim', trips: 10, priceFrom: 2499, rating: 4.6, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
-  { name: 'China', tagline: 'Mount Kailash', trips: 4, priceFrom: 3999, rating: 4.7, gradient: 'from-purple-700/50 via-violet-700/40 to-fuchsia-800/50' },
+  { name: 'Everest Region', tagline: 'Land of Sherpas & Sagarmatha', trips: 18, priceFrom: 1299, rating: 4.9, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
+  { name: 'Annapurna Region', tagline: 'World\'s Most Popular Trek', trips: 15, priceFrom: 850, rating: 4.8, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+  { name: 'Langtang Region', tagline: 'Valley of Glaciers', trips: 8, priceFrom: 850, rating: 4.7, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
+  { name: 'Manaslu Region', tagline: 'Wild & Untouched Circuit', trips: 6, priceFrom: 1350, rating: 4.9, gradient: 'from-rose-700/50 via-pink-700/40 to-fuchsia-800/50' },
+  { name: 'Mustang Region', tagline: 'Last Forbidden Kingdom', trips: 5, priceFrom: 1890, rating: 4.8, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50' },
+  { name: 'Dolpo Region', tagline: 'Hidden Himalayan Paradise', trips: 4, priceFrom: 2950, rating: 4.9, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
 ];
 
 const FEATURES = [
-  { title: 'Expert Guided Treks', desc: 'Led by certified mountaineers with 15+ years of Himalayan experience and WFR certification.', icon: 'compass' },
-  { title: 'GPS Live Tracking', desc: 'Real-time location sharing with family and emergency monitoring on every expedition.', icon: 'gps' },
-  { title: 'Smart Itineraries', desc: 'AI-optimized schedules with acclimatization days built in for safety and comfort.', icon: 'calendar' },
-  { title: 'Altitude Analytics', desc: 'Personalized altitude adaptation plans with real-time health monitoring during treks.', icon: 'chart' },
+  { title: 'Expert Local Guides', desc: 'Our team comprises experts in tourism and destinations, knowledgeable local guides who possess a deep understanding of the local culture and history.', icon: 'compass' },
+  { title: 'Your Safety First', desc: 'We place the utmost importance on your safety and enjoyment, going above and beyond to ensure your trip is seamless and unforgettable.', icon: 'gps' },
+  { title: 'Tailored Itineraries', desc: 'Our expertise lies in creating tailored itineraries that cater to your desired experience. Cultural exploration or extreme adventure — we create the perfect trip plan.', icon: 'calendar' },
+  { title: 'Dedicated Support', desc: 'When you travel with us, a dedicated local staff is always available to cater to your every need. From airport pickup to the final farewell, we\'re with you.', icon: 'chart' },
 ];
 
 const PACKING_ITEMS: Record<string, string[]> = {
@@ -41,51 +41,51 @@ const PACKING_ITEMS: Record<string, string[]> = {
 };
 
 const FAQ_DATA = [
-  { q: 'How far in advance should I book?', a: 'We recommend booking at least 3-6 months in advance for popular treks like EBC and Annapurna. For peak seasons (Oct-Nov and Mar-May), booking 6-12 months ahead ensures availability. Last-minute bookings may be possible but subject to availability.', cat: 'Booking' },
-  { q: 'What is included in the tour price?', a: 'Our tour prices include airport transfers, accommodation, meals during the trek, experienced guide and porter services, permits and entry fees, and emergency evacuation arrangements. International flights, travel insurance, and personal expenses are not included.', cat: 'Booking' },
-  { q: 'What payment methods do you accept?', a: 'We accept Visa, Mastercard, PayPal, bank transfers, and Apple Pay. A 30% deposit is required to confirm your booking, with the balance due 30 days before departure.', cat: 'Payment' },
-  { q: 'Can I pay in installments?', a: 'Yes! We offer flexible payment plans. You can split the total cost into 3 monthly installments with no additional fees. A 30% deposit is still required upfront to secure your spot.', cat: 'Payment' },
-  { q: 'What is your cancellation policy?', a: 'Cancellations 60+ days before departure receive a full refund minus a $200 admin fee. 30-59 days: 50% refund. Under 30 days: no refund. We strongly recommend travel insurance to cover cancellation costs.', cat: 'Cancellation' },
-  { q: 'Do you offer refunds?', a: 'Refunds are processed according to our cancellation policy. In cases of trip cancellation by Himalayan Explorer due to weather or safety concerns, you receive a full refund or the option to reschedule at no extra cost.', cat: 'Cancellation' },
-  { q: 'Is travel insurance mandatory?', a: 'Yes, comprehensive travel insurance covering high-altitude trekking (up to 6,000m), emergency evacuation, and trip cancellation is mandatory for all our expeditions. We can help you find suitable coverage.', cat: 'Insurance' },
-  { q: 'What does the insurance cover?', a: 'Our recommended insurance covers emergency helicopter evacuation, medical treatment, trip cancellation, lost baggage, and repatriation. High-altitude coverage up to 6,000m is included in our partner plans.', cat: 'Insurance' },
-  { q: 'How do I prepare for altitude?', a: 'Start cardiovascular training 3-4 months before your trek. Focus on hiking, running, and stair climbing. We provide a detailed fitness plan upon booking. During the trek, stay hydrated, ascend gradually, and follow your guide\'s acclimatization advice.', cat: 'Health' },
-  { q: 'What gear do I need to bring?', a: 'Essential items include trekking boots, down jacket, sleeping bag, daypack, headlamp, and proper layering. We provide a comprehensive packing list tailored to your specific trek. Rental gear is available in Kathmandu.', cat: 'Gear' },
+  { q: 'How far in advance should I book?', a: 'We recommend booking at least 3-6 months in advance for popular treks like EBC and Annapurna. For peak seasons (Oct-Nov and Mar-May), booking 6-12 months ahead ensures availability. Please feel free to contact us before booking — we\'ll be glad to help you with these details.', cat: 'Booking' },
+  { q: 'What is included in the tour price?', a: 'Our tour prices include airport transfers (from Kathmandu airport/bus station), accommodation, meals during the trek, experienced guide and porter services, TIMS and conservation area permits, and emergency evacuation arrangements. International flights, travel insurance, and personal expenses are not included.', cat: 'Booking' },
+  { q: 'What payment methods do you accept?', a: 'The payment is encrypted and transmitted securely with an SSL protocol. We accept Visa, Mastercard, bank transfers, and PayPal. A deposit is required to confirm your booking, with the balance due before departure.', cat: 'Payment' },
+  { q: 'Can I customize my itinerary?', a: 'Yes! Our expertise lies in creating tailored itineraries that cater to your desired experience. Whether it\'s cultural exploration or extreme adventure such as trekking Mount Everest Base Camp, our team can help create a great trip plan according to your requirements.', cat: 'Booking' },
+  { q: 'What permits do I need for trekking?', a: 'Most treks require a Trekkers Information Management System (TIMS) card and a conservation area permit (like ACAP for Annapurna, MCAP for Manaslu). Restricted area treks like Upper Mustang and Upper Dolpo require special permits. We handle all permit arrangements for you.', cat: 'Permits' },
+  { q: 'What is the best time to trek in Nepal?', a: 'Autumn (September to November) and Spring (March to May) are the best times for trekking in Nepal. During Autumn, the weather is warm during the day and cool at night. Spring brings blooming rhododendrons and warmer days. The Annapurna and EBC treks are doable year-round, but these seasons offer the best conditions.', cat: 'Seasons' },
+  { q: 'Is travel insurance mandatory?', a: 'Yes, comprehensive travel insurance covering high-altitude trekking (up to 6,000m), emergency helicopter evacuation, medical treatment, and trip cancellation is mandatory for all our expeditions. We can recommend suitable coverage.', cat: 'Insurance' },
+  { q: 'What about altitude sickness?', a: 'We focus on keeping you safe through proper acclimatization. Our itineraries include acclimatization days built in for safety and comfort. During the trek, stay hydrated, ascend gradually, and follow your guide\'s acclimatization advice. Our guides are trained to recognize and respond to altitude-related issues.', cat: 'Health' },
+  { q: 'Do you arrange transportation from the airport?', a: 'Yes! If you require travel-related services during your stay, such as transportation arrangements from Kathmandu airport or bus station, please feel free to contact us before booking. All necessary arrangements will be made well before your arrival, giving you complete peace of mind.', cat: 'Booking' },
+  { q: 'What gear do I need to bring?', a: 'Essential items include trekking boots, down jacket, sleeping bag, daypack, headlamp, and proper layering. We provide a comprehensive packing list tailored to your specific trek. Rental gear is available in Kathmandu at affordable prices.', cat: 'Gear' },
 ];
 
 const TESTIMONIALS = [
-  { name: 'Sarah Chen', trip: 'EBC 2024', initials: 'SC', quote: 'The EBC expedition changed my life. The guides were incredibly knowledgeable and supportive, and the scenery was beyond anything I could have imagined. Every detail was perfectly managed.' },
-  { name: 'Marcus Weber', trip: 'Annapurna Circuit', initials: 'MW', quote: 'From the moment I landed in Kathmandu, everything was seamless. The team\'s attention to acclimatization and safety gave me complete peace of mind while pushing my limits.' },
-  { name: 'Priya Sharma', trip: 'Dragon Trail', initials: 'PS', quote: 'Bhutan was beyond anything I imagined. The cultural immersion combined with stunning Himalayan views made this the most enriching travel experience of my life.' },
-  { name: 'James Morrison', trip: 'K2 Base Camp', initials: 'JM', quote: 'The most challenging and rewarding experience of my life. Our guide Tenzing was extraordinary — his expertise and calm presence made all the difference at high altitude.' },
+  { name: 'Sarah Chen', trip: 'Everest Base Camp Trek', initials: 'SC', quote: 'The Everest Base Camp Trek is one of those adventures that changes everything. The breathtaking Himalayan views made me forget to breathe, and the Sherpa people became my heroes. Standing at the base of Mount Everest — that Everest — is something you never forget.' },
+  { name: 'Marcus Weber', trip: 'Annapurna Circuit Trek', initials: 'MW', quote: 'The Annapurna Circuit is undoubtedly the world\'s most well-known trek for good reason. Crossing Thorong-La Pass at 5,416m with 360° views of Dhaulagiri, Annapurna, and Nilgiri was the most incredible moment of my life. The team made everything seamless.' },
+  { name: 'Priya Sharma', trip: 'Upper Mustang Trek', initials: 'PS', quote: 'Upper Mustang is a life-changing adventure you won\'t find anywhere else in the world. The walled city of Lo Manthang took my breath away — monasteries, prayer wheels, and traditional mud-brick houses around every corner. Truly the Last Forbidden Kingdom.' },
+  { name: 'James Morrison', trip: 'Manaslu Circuit Trek', initials: 'JM', quote: 'If you want a remote and wild trek far from the crowds, Manaslu is it. Crossing the Larkya La Pass with untouched Tibetan-influenced villages along the way was extraordinary. Our guide\'s expertise and calm presence made all the difference at high altitude.' },
 ];
 
 const BLOG_POSTS = [
-  { title: 'Preparing for High Altitude: A Complete Guide', category: 'Trekking Tips', readTime: '8 min', excerpt: 'Essential advice for acclimatization and fitness preparation before your Himalayan adventure...', gradient: 'from-teal-700/50 via-cyan-700/40 to-blue-800/50' },
-  { title: 'Hidden Gems of the Annapurna Region', category: 'Destination', readTime: '6 min', excerpt: 'Beyond the popular circuit lie untouched valleys and ancient monasteries waiting to be explored...', gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
-  { title: 'Sustainable Travel in the Himalayas', category: 'Responsible Travel', readTime: '5 min', excerpt: 'How we minimize our impact while maximizing the positive contribution to local communities...', gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
+  { title: 'Everest Base Camp Trek Guide: Everything You Need to Know', category: 'Trekking Guide', readTime: '12 min', excerpt: 'The complete guide to EBC — from preparation and packing to acclimatization days, the 14-day itinerary, and what it\'s really like standing at the foot of the world\'s tallest mountain.', gradient: 'from-teal-700/50 via-cyan-700/40 to-blue-800/50' },
+  { title: 'Upper Dolpo Trek Cost: Does It Really Cost That Much?', category: 'Destination', readTime: '8 min', excerpt: 'We break down the real costs of trekking to Upper Dolpo — permits, guides, flights, and accommodation. Plus tips on how to plan your budget for Nepal\'s most remote trekking region.', gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
+  { title: 'Will the Manaslu Circuit Trek Remain Wild and Quiet in 2026?', category: 'Responsible Travel', readTime: '6 min', excerpt: 'Manaslu is one of Nepal\'s last truly wild circuits. As popularity grows, we explore what makes it special and how we can keep it that way for future generations of trekkers.', gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50' },
 ];
 
 const TRUST_ITEMS = [
-  { title: '24/7 Emergency Hotline', desc: '+977-1-XXXX-XXXX', icon: 'phone' },
-  { title: 'Certified Guides', desc: 'WFR, CPR/AED, Mountain Leader', icon: 'shield' },
-  { title: 'Safety Track Record', desc: '11 years, 5000+ treks, zero major incidents', icon: 'check-circle' },
-  { title: 'Satellite Communication', desc: 'GPS tracking on all remote treks', icon: 'satellite' },
-  { title: 'Travel Insurance Partners', desc: 'World Nomads, Allianz, SafetyWing', icon: 'insurance' },
-  { title: 'Industry Certifications', desc: 'ATTA, GSTC, Nepal Tourism Board', icon: 'award' },
+  { title: '24/7 Emergency Hotline', desc: '+977-9851-188161', icon: 'phone' },
+  { title: 'Certified Local Guides', desc: 'Tourism experts with deep cultural knowledge', icon: 'shield' },
+  { title: 'Safety Track Record', desc: 'Since 2013, zero major incidents', icon: 'check-circle' },
+  { title: 'SSL Encrypted Payments', desc: 'Secure payment with SSL protocol', icon: 'satellite' },
+  { title: 'Nepal Tourism Board', desc: 'Government registered trekking agency', icon: 'insurance' },
+  { title: 'Industry Certifications', desc: 'TAAN, NMA, Nepal Tourism Board', icon: 'award' },
 ];
 
 const PRICING_TIERS = [
-  { name: 'Explorer', price: 2499, features: ['Group treks (8-12 people)', 'Teahouse accommodation', 'Licensed trekking guide', 'Basic meals during trek', 'Permits & entry fees', 'Airport transfers', 'Emergency evacuation coverage'], highlighted: false },
-  { name: 'Adventurer', price: 4999, features: ['Small group treks (4-6 people)', 'Best available lodges', 'Senior mountain guide', 'All meals + snacks', 'All permits & fees', 'Airport transfers & domestic flights', 'GPS tracking device', 'Emergency evacuation coverage', 'Pre-trip fitness plan'], highlighted: true },
-  { name: 'Summit', price: 8999, features: ['Private or duo expedition', 'Luxury lodges & premium camps', 'Expert mountaineer guide', 'Gourmet meals & supplements', 'All permits, fees & visas', 'All flights & transfers', 'GPS + satellite communication', 'Comprehensive insurance', 'Personal porter', 'Post-trip recovery package'], highlighted: false },
+  { name: 'Explorer', price: 850, features: ['Group treks (8-12 people)', 'Teahouse accommodation', 'Licensed trekking guide', 'Basic meals during trek', 'TIMS & ACAP permits', 'Airport transfers', 'Emergency evacuation arrangement'], highlighted: false },
+  { name: 'Adventurer', price: 1350, features: ['Small group treks (4-6 people)', 'Best available lodges', 'Senior mountain guide', 'All meals + snacks', 'All permits & conservation fees', 'Airport transfers & domestic flights', 'Acclimatization days included', 'Emergency evacuation arrangement', 'Pre-trip fitness plan'], highlighted: true },
+  { name: 'Summit', price: 2950, features: ['Private or duo expedition', 'Luxury lodges & premium camps', 'Expert mountaineer guide', 'Gourmet meals & supplements', 'All permits, fees & restricted area permits', 'All flights & transfers', 'GPS + satellite communication', 'Comprehensive insurance', 'Personal porter', 'Post-trip recovery package'], highlighted: false },
 ];
 
 const TEAM_MEMBERS = [
-  { name: 'Tenzing Dorje', role: 'Founder & CEO', initials: 'TD', bio: 'Born in the Everest region, Tenzing has summited Everest 3 times and led over 200 expeditions across the Himalayas.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
-  { name: 'Lakpa Sherpa', role: 'Head Guide', initials: 'LS', bio: 'IFMGA-certified guide with 18 years of experience. Specializes in technical climbs and high-altitude rescue.', gradient: 'from-himalaya-teal/40 to-himalaya-teal/15' },
-  { name: 'Anita Rai', role: 'Operations Director', initials: 'AR', bio: 'MBA from Kathmandu University. Ensures every expedition runs seamlessly with meticulous attention to logistics.', gradient: 'from-himalaya-blue/40 to-himalaya-blue/15' },
-  { name: 'Dawa Yangjin', role: 'Sustainability Lead', initials: 'DY', bio: 'Environmental scientist dedicated to making Himalayan tourism sustainable and beneficial for local communities.', gradient: 'from-himalaya-emerald/40 to-himalaya-emerald/15' },
+  { name: 'Lama Tamang', role: 'Founder & Managing Director', initials: 'LT', bio: 'Born in Kabhre Palanchok, Lama started as a trekking porter and kitchen assistant before founding Himalayan Exploration Treks in 2013. A member of the indigenous Tamang community, he works with guides who love their country and try to make a difference by working in their villages and mountains.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
+  { name: 'Pushpa Tamang', role: 'Australia Representative', initials: 'PT', bio: 'Based in Campsie, NSW, Pushpa handles international inquiries and bookings for our Australian clients, ensuring seamless coordination across time zones.', gradient: 'from-himalaya-teal/40 to-himalaya-teal/15' },
+  { name: 'Senior Trekking Guide', role: 'Head Guide', initials: 'SG', bio: 'Our lead guides are tourism experts with deep knowledge of local culture and history. They possess a deep understanding of the mountains and ensure every trekker\'s safety and enjoyment.', gradient: 'from-himalaya-blue/40 to-himalaya-blue/15' },
+  { name: 'Operations Team', role: 'Logistics & Support', initials: 'OT', bio: 'Our Kathmandu-based operations team ensures every expedition runs seamlessly — from airport pickups and hotel bookings to permit arrangements and emergency support, 24/7.', gradient: 'from-himalaya-emerald/40 to-himalaya-emerald/15' },
 ];
 
 const RESOURCES = [
@@ -420,7 +420,7 @@ export default function HimalayanExplorer() {
                 <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
                 <path d="M12 28L18 18L24 28" fill="#a07830" opacity="0.3"/>
               </svg>
-              <span className="text-lg font-bold tracking-tight">Himalayan <span className="gradient-text">Explorer</span></span>
+              <span className="text-lg font-bold tracking-tight">Himalayan <span className="gradient-text">Exploration</span></span>
             </div>
 
             {/* Desktop Nav */}
@@ -536,14 +536,14 @@ export default function HimalayanExplorer() {
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 text-center" style={{ transform: `translate(${heroMouse.x * 0.3}px, ${heroMouse.y * 0.3}px)` }}>
           <div className="reveal">
-            <span className="category-pill mb-6 inline-flex">🏔️ Premium Himalayan Expeditions</span>
+            <span className="category-pill mb-6 inline-flex">🏔️ Adventure Travel Packages That Deliver Amazing Adventures</span>
           </div>
           <h1 className="reveal text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6">
-            Discover the{' '}
-            <span className="gradient-text">Roof of the World</span>
+            Discover Nepal&apos;s{' '}
+            <span className="gradient-text">Breathtaking Landscapes</span>
           </h1>
           <p className="reveal text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-8">
-            Curated expeditions through the world&apos;s highest peaks. From Everest Base Camp to hidden Himalayan valleys, embark on journeys that transform.
+            At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
           </p>
           <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <a href="#destinations" className="btn-primary text-center">Explore Expeditions</a>
@@ -555,9 +555,9 @@ export default function HimalayanExplorer() {
           <div className="reveal flex flex-wrap justify-center gap-6 sm:gap-10 text-sm">
             {[
               ['8,849m', 'Highest Peak'],
-              ['150+', 'Expeditions'],
-              ['12', 'Countries'],
-              ['98%', 'Satisfaction'],
+              ['50+', 'Destinations'],
+              ['300+', 'Tours'],
+              ['Since 2013', 'Experience'],
             ].map(([val, label]) => (
               <div key={label} className="text-center">
                 <div className="text-xl font-bold gradient-text">{val}</div>
@@ -580,12 +580,13 @@ export default function HimalayanExplorer() {
             <div>
               <label className="text-xs text-white/30 mb-1 block">Destination</label>
               <select className="form-select w-full">
-                <option>All Destinations</option>
-                <option>Nepal</option>
-                <option>Bhutan</option>
-                <option>Tibet</option>
-                <option>Pakistan</option>
-                <option>India</option>
+                <option>All Regions</option>
+                <option>Everest Region</option>
+                <option>Annapurna Region</option>
+                <option>Langtang Region</option>
+                <option>Manaslu Region</option>
+                <option>Mustang Region</option>
+                <option>Dolpo Region</option>
               </select>
             </div>
             <div>
@@ -601,11 +602,11 @@ export default function HimalayanExplorer() {
             <div>
               <label className="text-xs text-white/30 mb-1 block">Trip Type</label>
               <select className="form-select w-full">
-                <option>Trekking</option>
-                <option>Cultural</option>
-                <option>Adventure</option>
-                <option>Luxury</option>
-                <option>Family</option>
+                <option>Trekking Holiday</option>
+                <option>Trekking Peak</option>
+                <option>Family Holiday</option>
+                <option>Cultural Holiday</option>
+                <option>Safari Holiday</option>
               </select>
             </div>
             <div className="flex items-end">
@@ -643,9 +644,9 @@ export default function HimalayanExplorer() {
       <section id="destinations" className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill pill-rose">⛰️ Popular Expeditions</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular <span className="gradient-text-sunset">Expeditions</span></h2>
-            <p className="text-white/40 mt-2 max-w-lg mx-auto">Handpicked treks through the most spectacular landscapes on Earth</p>
+            <span className="category-pill pill-rose">⛰️ Trekking Holiday</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular <span className="gradient-text-sunset">Trekking Expeditions</span></h2>
+            <p className="text-white/40 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TOURS.map((tour) => (
@@ -657,6 +658,7 @@ export default function HimalayanExplorer() {
                 </div>
                 <div className="p-4 sm:p-5">
                   <h3 className="font-semibold text-base mb-2">{tour.title}</h3>
+                  <p className="text-xs text-white/35 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
                   <div className="flex items-center gap-3 text-xs text-white/40 mb-3">
                     <span className="flex items-center gap-1">
                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -666,12 +668,13 @@ export default function HimalayanExplorer() {
                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
                       {tour.altitude}
                     </span>
+                    <span className="text-white/25">{tour.region}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className={`text-xs px-2 py-0.5 rounded font-medium difficulty-${tour.difficulty}`}>{tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1)}</span>
                     <StarRating count={tour.rating} />
                   </div>
-                  <a href="#" className="text-xs text-himalaya-gold hover:text-himalaya-gold/80 mt-3 inline-block opacity-0 group-hover:opacity-100 transition-opacity">View Details →</a>
+                  <a href="#" className="text-xs text-himalaya-gold hover:text-himalaya-gold/80 mt-3 inline-block">View Details →</a>
                 </div>
               </div>
             ))}
@@ -686,8 +689,8 @@ export default function HimalayanExplorer() {
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill">✨ Why Us</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Why Choose <span className="gradient-text">Himalayan Explorer</span></h2>
+            <span className="category-pill">✨ Why Travel With Us</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Why Choose <span className="gradient-text">Himalayan Exploration Treks</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((feat) => (
@@ -711,13 +714,13 @@ export default function HimalayanExplorer() {
             <div className="reveal">
               <span className="category-pill">🏔️ Featured Expedition</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">Everest Base Camp Trek</h2>
-              <p className="text-white/40 mb-6 leading-relaxed">Journey to the foot of the world&apos;s highest peak through Sherpa villages, ancient monasteries, and breathtaking Himalayan landscapes. This iconic trek is a bucket-list experience for every adventurer.</p>
+              <p className="text-white/40 mb-6 leading-relaxed">If you have ever dreamed of standing at the foot of the world&apos;s tallest mountain, the Everest Base Camp Trek is a seriously epic adventure far beyond easy hiking. Whether you&apos;ve never done a serious hike or you&apos;re already a seasoned mountain climber, this 14-day journey works for everyone — from total beginners to mountain veterans, older adults, and families who want their kids to experience what real adventure looks like.</p>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {[
-                  ['⏱ Duration', '16 Days'],
-                  ['🗻 Altitude', '5,364m'],
-                  ['⚡ Difficulty', 'Moderate'],
-                  ['👥 Group Size', '4-8'],
+                  ['⏱ Duration', '14 Days'],
+                  ['🗻 Max Altitude', '5,545m'],
+                  ['⚡ Difficulty', 'Strenuous'],
+                  ['👥 Min Group', '1'],
                 ].map(([label, val]) => (
                   <div key={label} className="glass-card-static p-3">
                     <div className="text-[10px] text-white/30">{label}</div>
@@ -756,8 +759,8 @@ export default function HimalayanExplorer() {
         </div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill pill-blue">🌍 Destinations</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Explore Destinations</h2>
+            <span className="category-pill pill-blue">🌍 Trekking Regions</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Explore Trekking <span className="gradient-text-cool">Regions</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {DESTINATIONS.map((dest) => (
@@ -1096,17 +1099,18 @@ export default function HimalayanExplorer() {
             </div>
             <div className="reveal">
               <span className="category-pill">🏔️ Our Story</span>
-              <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">About Himalayan Explorer</h2>
-              <p className="text-white/40 leading-relaxed mb-4">Founded in Kathmandu in 2015, Himalayan Explorer was born from a passion for the mountains and a desire to share the transformative power of Himalayan expeditions with the world.</p>
-              <p className="text-white/40 leading-relaxed mb-6">Our team of experienced mountaineers, local experts, and travel enthusiasts work together to create journeys that are safe, sustainable, and unforgettable.</p>
+              <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">About Himalayan Exploration Treks</h2>
+              <p className="text-white/40 leading-relaxed mb-4">We&apos;re a small company based in Kathmandu, which provides adventure travel packages that deliver amazing adventures. Founded in 2013, Himalayan Exploration Treks was born from a deep passion for travel and an earnest desire to deliver unforgettable experiences to all our clients.</p>
+              <p className="text-white/40 leading-relaxed mb-4">I am from the hill district of Kabhre Palanchok, a half-day road trip from Kathmandu. As a member of the Tamang family, one of the indigenous hill groups of Nepal, born to work in the mountains, I started my career as a trekking porter and kitchen assistant before founding this agency in 2013.</p>
+              <p className="text-white/40 leading-relaxed mb-6">Your trip with our team means a lot to us. It&apos;s not just another trekking trip — it contributes to a group of local staff who care about their country, places, and fellow people. You are in good hands with us and will surely get a happy and lasting holiday!</p>
               <div className="flex gap-4 text-sm">
                 <div className="glass-card-static p-3 flex-1 text-center">
-                  <div className="text-himalaya-gold font-bold text-lg">11</div>
-                  <div className="text-white/30 text-xs">Years</div>
+                  <div className="text-himalaya-gold font-bold text-lg">2013</div>
+                  <div className="text-white/30 text-xs">Founded</div>
                 </div>
                 <div className="glass-card-static p-3 flex-1 text-center">
-                  <div className="text-himalaya-gold font-bold text-lg">50+</div>
-                  <div className="text-white/30 text-xs">Destinations</div>
+                  <div className="text-himalaya-gold font-bold text-lg">6</div>
+                  <div className="text-white/30 text-xs">Trekking Regions</div>
                 </div>
                 <div className="glass-card-static p-3 flex-1 text-center">
                   <div className="text-himalaya-gold font-bold text-lg">0</div>
@@ -1231,7 +1235,7 @@ export default function HimalayanExplorer() {
           </div>
           {/* Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 reveal">
-            {['All', 'Nepal', 'Bhutan', 'Tibet', 'Pakistan'].map((f) => (
+            {['All', 'Nepal', 'Bhutan', 'Tibet', 'Mustang'].map((f) => (
               <button key={f} onClick={() => setGalleryFilter(f)} className={`tab-btn ${galleryFilter === f ? 'active' : ''}`}>{f}</button>
             ))}
           </div>
@@ -1423,7 +1427,7 @@ export default function HimalayanExplorer() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Form */}
             <div className="reveal">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-6">Get in Touch</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6">We&apos;d Love to Hear from You</h2>
               <form onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll get back to you soon.'); }} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -1465,12 +1469,12 @@ export default function HimalayanExplorer() {
             <div className="reveal">
               <div className="space-y-4 mb-6">
                 {[
-                  ['📧 Email', 'info@himalayanexplorer.com'],
-                  ['📞 Phone', '+977-1-4567-890'],
-                  ['🚨 Emergency', '+977-1-911-HELP'],
-                  ['💬 WhatsApp', '+977-98XX-XXXXX'],
-                  ['📍 Address', 'Thamel, Kathmandu, Nepal'],
-                  ['🕐 Business Hours', 'Sun-Fri 9AM-6PM NPT'],
+                  ['📧 Email', 'lama@himalayanexploration.com'],
+                  ['📞 Nepal Office', '+977-1-4388-913'],
+                  ['🚨 Emergency', '+977-9851-188161'],
+                  ['💬 WhatsApp', '+977-9841-023371'],
+                  ['📍 Nepal Address', '21231 Khusibu-17, Kathmandu'],
+                  ['🕐 Business Hours', '09:00 - 18:00 (Sun-Fri)'],
                 ].map(([label, val]) => (
                   <div key={label} className="flex items-center gap-3">
                     <span className="text-sm">{label}</span>
@@ -1483,6 +1487,15 @@ export default function HimalayanExplorer() {
                 {['Facebook','X','Instagram','YouTube'].map((s) => (
                   <button key={s} className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/40 hover:text-himalaya-gold hover:border-himalaya-gold/30 transition-colors text-xs">{s.charAt(0)}</button>
                 ))}
+              </div>
+              {/* Australia Office */}
+              <div className="glass-card-static p-3 mb-4">
+                <h4 className="text-xs font-semibold text-himalaya-gold mb-2">Australia Office</h4>
+                <div className="space-y-1 text-xs text-white/40">
+                  <p>5th Avenue, Campsie, NSW 2194</p>
+                  <p>+61 412 543 886</p>
+                  <p>pushpa@himalayanexploration.com</p>
+                </div>
               </div>
               {/* Map placeholder */}
               <div className="glass-card-static p-4 h-48 relative overflow-hidden">
@@ -1533,7 +1546,7 @@ export default function HimalayanExplorer() {
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center reveal">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach <span className="gradient-text-aurora">New Heights</span>?</h2>
-          <p className="text-white/40 mb-8 max-w-lg mx-auto">Your Himalayan adventure awaits. Let us craft an unforgettable journey tailored to your dreams, fitness level, and sense of wonder.</p>
+          <p className="text-white/40 mb-8 max-w-lg mx-auto">Your trip with our team means a lot to us. Whether it&apos;s cultural exploration or extreme adventure such as trekking to Everest Base Camp, we can help create a great trip plan according to your requirements.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="btn-primary">Start Your Journey</button>
             <button className="btn-outline">Talk to an Expert</button>
@@ -1552,9 +1565,9 @@ export default function HimalayanExplorer() {
                   <path d="M16 4L4 28h24L16 4z" fill="#d4a853" opacity="0.8"/>
                   <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
                 </svg>
-                <span className="font-bold">Himalayan Explorer</span>
+                <span className="font-bold">Himalayan Exploration</span>
               </div>
-              <p className="text-xs text-white/30 leading-relaxed mb-4">Curated expeditions through the world&apos;s highest peaks since 2015.</p>
+              <p className="text-xs text-white/30 leading-relaxed mb-4">Himalayan Exploration Treks — A small company based in Kathmandu providing adventure travel packages since 2013.</p>
               <div className="flex gap-2">
                 {['F','X','In','YT'].map((s) => (
                   <button key={s} className="w-8 h-8 rounded bg-white/5 text-white/30 hover:text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors text-xs flex items-center justify-center">{s}</button>
@@ -1563,9 +1576,9 @@ export default function HimalayanExplorer() {
             </div>
             {/* Expeditions */}
             <div>
-              <h4 className="text-sm font-semibold mb-3">Expeditions</h4>
+              <h4 className="text-sm font-semibold mb-3">Trekking Regions</h4>
               <ul className="space-y-1.5">
-                {['EBC Trek','Annapurna Circuit','K2 Base Camp','Bhutan Trail','Langtang Valley','Upper Mustang'].map((l) => (
+                {['Everest Region','Annapurna Region','Langtang Region','Manaslu Region','Mustang Region','Dolpo Region'].map((l) => (
                   <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
@@ -1574,7 +1587,7 @@ export default function HimalayanExplorer() {
             <div>
               <h4 className="text-sm font-semibold mb-3">Company</h4>
               <ul className="space-y-1.5">
-                {['About Us','Our Team','Careers','Press','Blog','Contact'].map((l) => (
+                {['About Us','Our Team','Blog','Contact','Terms & Conditions','Privacy Policy'].map((l) => (
                   <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
@@ -1583,7 +1596,7 @@ export default function HimalayanExplorer() {
             <div>
               <h4 className="text-sm font-semibold mb-3">Support</h4>
               <ul className="space-y-1.5">
-                {['Help Center','Safety','Travel Insurance','Visa Guide','Packing Lists','FAQ'].map((l) => (
+                {['Safety','Travel Insurance','Visa Guide','Packing Lists','FAQ','Cookies'].map((l) => (
                   <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
@@ -1592,7 +1605,7 @@ export default function HimalayanExplorer() {
             <div>
               <h4 className="text-sm font-semibold mb-3">Legal</h4>
               <ul className="space-y-1.5">
-                {['Terms & Conditions','Privacy Policy','Cancellation Policy','Refund Policy','Cookie Policy','Responsible Travel'].map((l) => (
+                {['Terms & Conditions','Privacy Policy','Cookies','Responsible Travel'].map((l) => (
                   <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
@@ -1600,7 +1613,7 @@ export default function HimalayanExplorer() {
           </div>
           {/* Payment methods */}
           <div className="border-t border-white/5 pt-6 mb-6">
-            <div className="text-center text-xs text-white/20 mb-3">Accepted Payment Methods</div>
+            <div className="text-center text-xs text-white/20 mb-3">Pay Safely With Us — The payment is encrypted and transmitted securely with an SSL protocol</div>
             <div className="flex flex-wrap justify-center gap-2">
               {['Visa','Mastercard','PayPal','Apple Pay','Google Pay'].map((m) => (
                 <span key={m} className="glass-card-static px-3 py-1 text-[10px] text-white/30">{m}</span>
@@ -1609,7 +1622,7 @@ export default function HimalayanExplorer() {
           </div>
           {/* Bottom bar */}
           <div className="border-t border-white/5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-[10px] text-white/20">© {new Date().getFullYear()} Himalayan Explorer. All rights reserved.</p>
+            <p className="text-[10px] text-white/20">© 2013 - {new Date().getFullYear()} Himalayan Exploration Travel. All Rights Reserved.</p>
             <div className="flex gap-4">
               {['Privacy','Terms','Cookies'].map((l) => (
                 <a key={l} href="#" className="text-[10px] text-white/20 hover:text-white/40 transition-colors">{l}</a>
@@ -1637,7 +1650,7 @@ export default function HimalayanExplorer() {
             <div className="flex items-center justify-between p-4 border-b border-white/5">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-400" />
-                <span className="text-sm font-semibold">Himalayan Explorer Support</span>
+                <span className="text-sm font-semibold">Himalayan Exploration Support</span>
               </div>
               <button onClick={() => setChatOpen(false)} className="text-white/30 hover:text-white transition-colors">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>

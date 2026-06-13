@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Himalayan Explorer | Premium Travel & Tours",
+  title: "Himalayan Exploration Treks | Adventure Travel Packages Nepal",
   description:
-    "Discover the majesty of the Himalayas with curated expeditions, luxury treks, and unforgettable adventures across Nepal, Bhutan, and Tibet.",
+    "Himalayan Exploration Treks — A small company based in Kathmandu providing adventure travel packages that deliver amazing adventures. Trekking Everest Base Camp, Annapurna Circuit, Upper Mustang, Langtang, Manaslu & Dolpo regions since 2013.",
   icons: {
     icon: "/logo.svg",
   },
