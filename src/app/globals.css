@@ -95,9 +95,13 @@
   z-index: -2;
   pointer-events: none;
   background-color: #000000; /* fallback color while loading */
+  /* Boost the video so it pops through the overlay */
+  filter: brightness(1.1) contrast(1.05) saturate(1.18);
 }
 
-/* Dark gradient overlay above the video, below content - keeps text readable */
+/* Dark gradient overlay above the video, below content.
+   Lighter than before so the video is clearly visible (was 0.55-0.88, now 0.15-0.55).
+   A subtle backdrop blur adds cinematic softness without darkening. */
 .video-bg-overlay {
   position: fixed;
   top: 0;
@@ -109,27 +113,14 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.75) 60%, rgba(0, 0, 0, 0.88) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.78) 100%);
-  /* Subtle color tint to harmonize with the Himalayan theme */
+    radial-gradient(ellipse at top, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.30) 60%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.50) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   mix-blend-mode: normal;
 }
 
-/* Subtle color wash layered on top of the overlay for cinematic depth */
-.video-bg-tint {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  width: 100dvw;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(at 20% 30%, rgba(212, 168, 83, 0.06) 0px, transparent 50%),
-    radial-gradient(at 80% 70%, rgba(124, 58, 237, 0.06) 0px, transparent 50%);
-}
+/* Color tint removed - keep video pure and vibrant */
 
 /* Respect users who request reduced motion: hide the video, show poster only */
 @media (prefers-reduced-motion: reduce) {
@@ -160,33 +151,33 @@
 
 /* ========== Glass Cards ========== */
 .glass-card {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(8, 8, 12, 0.55);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(8, 8, 12, 0.65);
   border-color: rgba(255, 255, 255, 0.15);
   transform: translateY(-6px);
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 168, 83, 0.08);
 }
 
 .glass-card-static {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(8, 8, 12, 0.55);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
 }
 
 .glass-card-strong {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: rgba(8, 8, 12, 0.7);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
 }
@@ -291,7 +282,7 @@
 }
 
 .nav-scrolled {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.55);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }

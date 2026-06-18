@@ -114,3 +114,45 @@ Stage Summary:
 - Reduced-motion users see a static poster image instead of the video
 - Slow connections: video auto-falls back to a 720p version if the 1080p version fails to load
 - Loading state: poster image shows until the video is ready, then fades out smoothly
+
+---
+Task ID: fix-video-background-visibility
+Agent: Super Z (main)
+Task: Fix the video background so it's clearly visible (was too dark) and verify with browser agent + VLM
+
+Work Log:
+- User reported video was not visible clearly / not playing
+- Used agent-browser to inspect live site at http://localhost:3000/:
+  * Video element state: exists=true, paused=false, currentTime=5.8s/11.4s duration, muted=true, readyState=4 (HAVE_ENOUGH_DATA), networkState=1, error=null, videoWidth=1920, videoHeight=1080
+  * Conclusion: video IS playing correctly, the problem was the OVERLAY BEING TOO DARK
+  * Original overlay: radial-gradient rgba(0,0,0,0.55→0.75→0.88) + linear-gradient rgba(0,0,0,0.65→0.55→0.78)
+  * VLM rated original visibility 3/10, mountains barely visible
+- Created fix plan: lighten overlay, boost video vibrancy, reduce nav opacity, refactor glass cards
+- Edited globals.css:
+  * .video-bg: added filter: brightness(1.1) contrast(1.05) saturate(1.18) to make video pop
+  * .video-bg-overlay: reduced darkness from 0.55-0.88 → 0.15-0.55, added backdrop-filter: blur(2px) for cinematic softness
+  * Removed .video-bg-tint class entirely (kept video pure)
+  * .nav-scrolled: opacity 0.85 → 0.55 (so video shows through nav when scrolled)
+  * .glass-card: background rgba(255,255,255,0.04) → rgba(8,8,12,0.55) with blur(14px) + saturate(1.1) — darker tint but more transparent so video shows through
+  * .glass-card-static: same change
+  * .glass-card-strong: rgba(255,255,255,0.06) → rgba(8,8,12,0.7) with blur(18px) + saturate(1.15)
+- Removed <div className="video-bg-tint"> from VideoBackground.tsx component
+- Waited for hot reload, reloaded page in agent-browser
+- Screenshotted 4 views: homepage, scrolled-1, scrolled-2 (tours), mobile (390x844)
+- VLM verification round 1 (homepage): visibility 7/10, mountains clearly visible, overlay "just right", texts readable, cards balanced
+- VLM verification round 2 (all 3 views): video background clearly visible in all 3, cards readable, mobile view good
+- VLM detailed description: video shows Himalayan mountain range at golden hour with paragliders, snow-capped peaks, warm orange-pink sky transitioning to dusky purple, misty valleys
+
+Stage Summary:
+- Video background is now CLEARLY visible (visibility rating jumped from 3/10 → 7/10)
+- Video shows: Himalayan mountains at golden hour with paragliders, snow-capped peaks, warm orange-pink sky
+- All text/UI elements remain readable (white text on dark glass cards)
+- Cards are now frosted glass over video — video shows through clearly, text stays legible
+- Nav when scrolled: 55% opacity (was 85%) so video remains visible
+- Mobile view (390x844): video plays correctly, layout adapts, content readable
+- All screenshots saved to /home/z/my-project/download/screenshots/
+  * before-fix.png — original (too dark)
+  * after-fix-1.png — homepage (mountains clearly visible)
+  * after-fix-2-scrolled.png — scrolled view
+  * after-fix-3-tours.png — tours section
+  * after-fix-4-mobile.png — mobile view

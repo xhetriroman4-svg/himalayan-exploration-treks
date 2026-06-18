@@ -105,9 +105,6 @@ export default function VideoBackground() {
 
       {/* Dark gradient overlay above the video for readability */}
       <div className="video-bg-overlay" aria-hidden />
-
-      {/* Subtle color tint to harmonize with the Himalayan theme */}
-      <div className="video-bg-tint" aria-hidden />
     </>
   );
 }
