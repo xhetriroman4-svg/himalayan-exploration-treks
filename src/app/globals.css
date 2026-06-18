@@ -122,6 +122,78 @@
 
 /* Color tint removed - keep video pure and vibrant */
 
+/* Visible "Tap to play" button — appears only if autoplay is blocked */
+.video-play-button {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 14px;
+  background: linear-gradient(135deg, rgba(212, 168, 83, 0.95), rgba(249, 115, 22, 0.95));
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(212, 168, 83, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: video-play-button-pulse 2s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.video-play-button:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 12px 32px rgba(212, 168, 83, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.video-play-button .play-icon {
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.video-play-button .play-text {
+  white-space: nowrap;
+}
+
+@keyframes video-play-button-pulse {
+  0%, 100% {
+    box-shadow:
+      0 8px 24px rgba(212, 168, 83, 0.4),
+      0 0 0 0 rgba(212, 168, 83, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+  50% {
+    box-shadow:
+      0 8px 24px rgba(212, 168, 83, 0.5),
+      0 0 0 12px rgba(212, 168, 83, 0),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  }
+}
+
+@media (max-width: 640px) {
+  .video-play-button {
+    top: 72px;
+    right: 12px;
+    padding: 8px 14px 8px 10px;
+    font-size: 11px;
+  }
+  .video-play-button .play-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
 /* Respect users who request reduced motion: hide the video, show poster only */
 @media (prefers-reduced-motion: reduce) {
   .video-bg {
