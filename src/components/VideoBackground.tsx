@@ -49,6 +49,7 @@ export default function VideoBackground() {
   const [iframeVisible, setIframeVisible] = useState(true);
   const [videoVisible, setVideoVisible] = useState(false);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -57,6 +58,54 @@ export default function VideoBackground() {
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
   }, []);
+
+  // Show prominent "Tap to play video" button whenever the video is paused
+  // for more than 1.5 seconds. This handles:
+  //  - Brave browser (blocks ALL autoplay on initial load)
+  //  - Browsers that pause background videos
+  //  - Any other case where the video gets paused
+  // The button is BIG and centered so users can't miss it.
+  useEffect(() => {
+    if (reducedMotion) return;
+    const v = videoRef.current;
+    if (!v) return;
+
+    let pausedSince: number | null = null;
+
+    const checkInterval = setInterval(() => {
+      if (v.paused && !v.ended) {
+        if (pausedSince === null) pausedSince = Date.now();
+        // If paused for more than 1.5s, show the button
+        if (Date.now() - pausedSince > 1500) {
+          setShowPlayButton(true);
+        }
+      } else {
+        pausedSince = null;
+        setShowPlayButton(false);
+      }
+    }, 250);
+
+    return () => clearInterval(checkInterval);
+  }, [reducedMotion]);
+
+  // Handler for the prominent play button — always works because it's a user gesture
+  const handlePlayButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.volume = 0;
+    v.play().then(() => {
+      setVideoVisible(true);
+      setPosterVisible(false);
+      setIframeVisible(false);
+      setShowPlayButton(false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error('[VideoBackground] prominent button play failed:', err);
+    });
+  };
 
   // Direct <video> autoplay logic — 12-layer strategy from before
   useEffect(() => {
@@ -235,6 +284,27 @@ export default function VideoBackground() {
 
       {/* Dark gradient overlay above the video for readability */}
       <div className="video-bg-overlay" aria-hidden />
+
+      {/* PROMINENT "Tap to play video" button — shows whenever video has been paused
+          for more than 1.5 seconds. Essential for Brave browser which blocks ALL autoplay.
+          The button is large and centered so users can't miss it.
+          Click is a guaranteed user gesture — video will play. */}
+      {showPlayButton && !reducedMotion && (
+        <button
+          type="button"
+          onClick={handlePlayButtonClick}
+          className="video-play-prominent"
+          aria-label="Play background video"
+        >
+          <span className="video-play-prominent-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <span className="video-play-prominent-text">Tap to Play Video</span>
+          <span className="video-play-prominent-hint">Click once to enable the background video</span>
+        </button>
+      )}
     </>
   );
 }

@@ -166,6 +166,115 @@
 
 /* Color tint removed - keep video pure and vibrant */
 
+/* PROMINENT centered "Tap to Play Video" button — shown when autoplay is blocked
+   (e.g., in Brave browser). Large and centered so users can't miss it. */
+.video-play-prominent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 40px;
+  background: linear-gradient(135deg, rgba(212, 168, 83, 0.95), rgba(249, 115, 22, 0.95));
+  color: #000;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 24px;
+  cursor: pointer;
+  box-shadow:
+    0 20px 60px rgba(212, 168, 83, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 80px rgba(212, 168, 83, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: video-play-prominent-pulse 2s ease-in-out infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  font-family: var(--font-display);
+}
+
+.video-play-prominent:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow:
+    0 28px 80px rgba(212, 168, 83, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+    0 0 120px rgba(212, 168, 83, 0.6);
+}
+
+.video-play-prominent-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.video-play-prominent-icon svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  margin-left: 4px; /* visual centering of triangle */
+}
+
+.video-play-prominent-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #000;
+}
+
+.video-play-prominent-hint {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+  font-family: var(--font-inter);
+}
+
+@keyframes video-play-prominent-pulse {
+  0%, 100% {
+    box-shadow:
+      0 20px 60px rgba(212, 168, 83, 0.5),
+      0 0 0 0 rgba(212, 168, 83, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+      0 0 80px rgba(212, 168, 83, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 20px 60px rgba(212, 168, 83, 0.6),
+      0 0 0 20px rgba(212, 168, 83, 0),
+      0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+      0 0 100px rgba(212, 168, 83, 0.5);
+  }
+}
+
+@media (max-width: 640px) {
+  .video-play-prominent {
+    padding: 20px 28px;
+    gap: 10px;
+    border-radius: 20px;
+  }
+  .video-play-prominent-icon {
+    width: 52px;
+    height: 52px;
+  }
+  .video-play-prominent-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+  .video-play-prominent-text {
+    font-size: 16px;
+  }
+  .video-play-prominent-hint {
+    font-size: 11px;
+  }
+}
+
 /* Visible "Tap to play" button — appears only if autoplay is blocked */
 .video-play-button {
   position: fixed;

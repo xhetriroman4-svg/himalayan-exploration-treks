@@ -629,128 +629,19 @@ export default function HimalayanExplorer() {
       </nav>
 
       {/* ═══════════ 2. HERO SECTION ═══════════ */}
-      <section ref={heroRef} onMouseMove={handleHeroMouseMove} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* ENHANCEMENT: Cinematic gradient mesh background (drifting) */}
-        <div className="mesh-bg" aria-hidden />
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        {/* CLEAN: No decorative 3D elements, no particles, no sparkles, no mountains, no orbs.
+            Just the video background (mounted globally in layout.tsx) showing through. */}
 
-        {/* Background patterns */}
-        <div className="pattern-overlay">
-          {/* Dot grid */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
-            <defs><pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="white"/></pattern></defs>
-            <rect width="100%" height="100%" fill="url(#dots)"/>
-          </svg>
-          {/* Geometric mountains */}
-          <svg className="absolute bottom-0 left-0 w-full h-2/3 opacity-[0.05]" viewBox="0 0 1200 600" fill="none">
-            <defs>
-              <linearGradient id="hero-mtn-grad" x1="600" y1="150" x2="600" y2="600" gradientUnits="userSpaceOnUse">
-                <stop stopColor="rgba(124,58,237,0.3)" />
-                <stop offset="0.5" stopColor="rgba(45,212,191,0.2)" />
-                <stop offset="1" stopColor="rgba(212,168,83,0.1)" />
-              </linearGradient>
-            </defs>
-            <path d="M0 600L200 250L350 400L500 150L650 350L800 200L1000 400L1200 300V600Z" fill="url(#hero-mtn-grad)"/>
-          </svg>
-          {/* Colorful aurora gradient orbs */}
-          <div className="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-himalaya-gold/10 via-himalaya-aurora/5 to-transparent rounded-full blur-[120px] animate-aurora" />
-          <div className="absolute top-[30%] right-[5%] w-[400px] h-[400px] bg-gradient-to-br from-himalaya-teal/10 via-himalaya-blue/5 to-transparent rounded-full blur-[100px] animate-aurora" style={{ animationDelay: '3s' }} />
-          <div className="absolute bottom-[10%] left-[30%] w-[450px] h-[450px] bg-gradient-to-br from-himalaya-rose/8 via-himalaya-aurora/4 to-transparent rounded-full blur-[110px] animate-aurora" style={{ animationDelay: '6s' }} />
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-himalaya-gold/8 rounded-full blur-[120px] animate-pulse-glow" />
-          <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-himalaya-blue/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
-          <div className="absolute bottom-[20%] right-[15%] w-64 h-64 bg-himalaya-aurora/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
-
-          {/* ENHANCEMENT: 3D Parallax Mountain Layers (back/mid/front) */}
-          <svg className="mountain-layer mountain-layer-back" style={{ height: '60%', transform: `translateX(${heroMouse.x * 0.3}px)` }} viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none" aria-hidden>
-            <defs>
-              <linearGradient id="mtn-back" x1="720" y1="50" x2="720" y2="400" gradientUnits="userSpaceOnUse">
-                <stop stopColor="rgba(124, 58, 237, 0.5)" />
-                <stop offset="1" stopColor="rgba(74, 144, 217, 0.2)" />
-              </linearGradient>
-            </defs>
-            <path d="M0 400L150 200L300 320L450 120L620 280L780 80L950 240L1100 140L1280 280L1440 180V400Z" fill="url(#mtn-back)" />
-          </svg>
-          <svg className="mountain-layer mountain-layer-mid" style={{ height: '50%', transform: `translateX(${heroMouse.x * 0.6}px)` }} viewBox="0 0 1440 350" fill="none" preserveAspectRatio="none" aria-hidden>
-            <defs>
-              <linearGradient id="mtn-mid" x1="720" y1="80" x2="720" y2="350" gradientUnits="userSpaceOnUse">
-                <stop stopColor="rgba(45, 212, 191, 0.55)" />
-                <stop offset="1" stopColor="rgba(16, 185, 129, 0.2)" />
-              </linearGradient>
-            </defs>
-            <path d="M0 350L200 180L380 280L560 100L720 220L900 60L1080 200L1260 120L1440 250V350Z" fill="url(#mtn-mid)" />
-          </svg>
-          <svg className="mountain-layer mountain-layer-front" style={{ height: '40%', transform: `translateX(${heroMouse.x * 1.0}px)` }} viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none" aria-hidden>
-            <defs>
-              <linearGradient id="mtn-front" x1="720" y1="80" x2="720" y2="280" gradientUnits="userSpaceOnUse">
-                <stop stopColor="rgba(212, 168, 83, 0.75)" />
-                <stop offset="0.6" stopColor="rgba(249, 115, 22, 0.45)" />
-                <stop offset="1" stopColor="rgba(236, 72, 153, 0.15)" />
-              </linearGradient>
-            </defs>
-            <path d="M0 280L180 140L360 220L520 80L700 180L880 50L1080 170L1260 90L1440 200V280Z" fill="url(#mtn-front)" />
-            {/* Snowy peaks accent */}
-            <path d="M520 80L540 110L500 110Z M700 180L730 210L670 210Z M880 50L905 85L855 85Z" fill="rgba(255,255,255,0.4)" />
-          </svg>
-
-          {/* ENHANCEMENT: Floating Particles Constellation */}
-          {[
-            { x: 10, y: 80, delay: '0s', drift: '40px', color: '' },
-            { x: 18, y: 90, delay: '1.5s', drift: '-30px', color: 'p-teal' },
-            { x: 25, y: 70, delay: '0.8s', drift: '60px', color: '' },
-            { x: 32, y: 85, delay: '3s', drift: '-50px', color: 'p-aurora' },
-            { x: 40, y: 75, delay: '2.2s', drift: '30px', color: 'p-blue' },
-            { x: 48, y: 88, delay: '1s', drift: '-40px', color: '' },
-            { x: 55, y: 78, delay: '4s', drift: '50px', color: 'p-rose' },
-            { x: 62, y: 92, delay: '2.5s', drift: '-30px', color: 'p-teal' },
-            { x: 70, y: 72, delay: '1.2s', drift: '40px', color: '' },
-            { x: 78, y: 86, delay: '3.5s', drift: '-60px', color: 'p-aurora' },
-            { x: 85, y: 76, delay: '0.5s', drift: '50px', color: 'p-orange' },
-            { x: 92, y: 82, delay: '2.8s', drift: '-20px', color: 'p-blue' },
-          ].map((p, i) => (
-            <div
-              key={i}
-              className={`particle ${p.color}`}
-              style={{
-                left: `${p.x}%`,
-                top: `${p.y}%`,
-                animationDelay: p.delay,
-                ['--drift' as string]: p.drift,
-              }}
-            />
-          ))}
-
-          {/* ENHANCEMENT: Sparkles */}
-          {[
-            { x: 15, y: 20, delay: '0s' },
-            { x: 35, y: 12, delay: '1s' },
-            { x: 55, y: 18, delay: '0.5s' },
-            { x: 75, y: 10, delay: '1.5s' },
-            { x: 88, y: 22, delay: '0.8s' },
-            { x: 22, y: 30, delay: '2s' },
-            { x: 68, y: 28, delay: '1.3s' },
-          ].map((s, i) => (
-            <div key={`spark-${i}`} className="sparkle" style={{ left: `${s.x}%`, top: `${s.y}%`, animationDelay: s.delay }} />
-          ))}
-
-          {/* Twinkling stars */}
-          {[
-            {x:8,y:12,delay:'0s'},{x:15,y:8,delay:'1.5s'},{x:25,y:15,delay:'0.5s'},{x:35,y:5,delay:'2s'},
-            {x:45,y:18,delay:'1s'},{x:55,y:10,delay:'3s'},{x:65,y:14,delay:'0.8s'},{x:75,y:7,delay:'2.5s'},
-            {x:85,y:16,delay:'1.2s'},{x:92,y:9,delay:'0.3s'},{x:40,y:3,delay:'1.8s'},{x:70,y:20,delay:'2.2s'},
-          ].map((s,i) => (
-            <div key={i} className="absolute w-1 h-1 bg-white rounded-full" style={{left:`${s.x}%`,top:`${s.y}%`,animation:`star-twinkle 3s ease-in-out ${s.delay} infinite`}} />
-          ))}
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center" style={{ transform: `translate(${heroMouse.x * 0.3}px, ${heroMouse.y * 0.3}px)` }}>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
           <div className="reveal">
             <span className="category-pill mb-6 inline-flex"><span className="glow-dot mr-2" />Adventure Travel Packages That Deliver Amazing Adventures</span>
           </div>
-          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-3d-depth text-readable-strong">
+          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-readable-strong">
             Discover Nepal&apos;s{' '}
             <span className="gradient-text-shimmer">Breathtaking Landscapes</span>
           </h1>
-          <p className="reveal text-readable text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-8">
+          <p className="reveal text-readable text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-8">
             At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
           </p>
           <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -768,8 +659,8 @@ export default function HimalayanExplorer() {
               ['Since 2013', 'Experience'],
             ].map(([val, label]) => (
               <div key={label} className="text-center">
-                <div className="text-xl font-bold gradient-text-shimmer font-display">{val}</div>
-                <div className="text-white/30 text-xs mt-0.5">{label}</div>
+                <div className="text-readable-strong text-xl font-bold gradient-text-shimmer font-display">{val}</div>
+                <div className="text-readable text-white/60 text-xs mt-0.5">{label}</div>
               </div>
             ))}
           </div>
@@ -777,7 +668,7 @@ export default function HimalayanExplorer() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-gentle">
-          <svg className="w-6 h-6 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          <svg className="w-6 h-6 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         </div>
       </section>
 
