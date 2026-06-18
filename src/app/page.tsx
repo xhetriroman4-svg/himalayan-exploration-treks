@@ -185,6 +185,10 @@ function TrustIcon({ type }: { type: string }) {
 export default function HimalayanExplorer() {
   /* State */
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
+  const [ringPos, setRingPos] = useState({ x: -100, y: -100 });
+  const [cursorHovering, setCursorHovering] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -281,9 +285,43 @@ export default function HimalayanExplorer() {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
       setBackToTopVisible(window.scrollY > 500);
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalScroll > 0 ? (window.scrollY / totalScroll) * 100 : 0;
+      setScrollProgress(progress);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  /* Custom cursor follower (spring-lagged ring) */
+  useEffect(() => {
+    let raf = 0;
+    const dotTarget = { x: 0, y: 0 };
+    const ringTarget = { x: 0, y: 0 };
+    const onMove = (e: MouseEvent) => {
+      dotTarget.x = e.clientX;
+      dotTarget.y = e.clientY;
+      ringTarget.x = e.clientX;
+      ringTarget.y = e.clientY;
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      const target = e.target as HTMLElement;
+      const isInteractive = !!target.closest('a, button, [role="button"], input, select, textarea, .cursor-target');
+      setCursorHovering(isInteractive);
+    };
+    const tick = () => {
+      setRingPos((prev) => ({
+        x: prev.x + (ringTarget.x - prev.x) * 0.18,
+        y: prev.y + (ringTarget.y - prev.y) * 0.18,
+      }));
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    window.addEventListener('mousemove', onMove);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   /* IntersectionObserver for reveal animations */
@@ -492,6 +530,17 @@ export default function HimalayanExplorer() {
   /* ──────────── RENDER ──────────── */
   return (
     <main className="min-h-screen bg-black text-[#f0f4f8] overflow-x-hidden">
+      {/* ═══════════ ENHANCEMENT: Scroll Progress Bar (rainbow) ═══════════ */}
+      <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden />
+
+      {/* ═══════════ ENHANCEMENT: Custom Magnetic Cursor ═══════════ */}
+      <div className="cursor-dot" style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }} aria-hidden />
+      <div
+        className={`cursor-ring ${cursorHovering ? 'hover-active' : ''}`}
+        style={{ left: `${ringPos.x}px`, top: `${ringPos.y}px` }}
+        aria-hidden
+      />
+
       {/* ═══════════ 1. NAVIGATION ═══════════ */}
       <nav className={`fixed top-0 left-0 right-0 z-50 nav-blur ${scrolled ? 'nav-scrolled' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -509,7 +558,7 @@ export default function HimalayanExplorer() {
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6">
               {NAV_LINKS.map((link) => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="text-sm text-white/50 hover:text-himalaya-gold transition-colors">{link}</a>
+                <a key={link} href={`#${link.toLowerCase()}`} className="nav-link-rainbow text-sm text-white/50 hover:text-white transition-colors">{link}</a>
               ))}
             </div>
 
@@ -551,7 +600,7 @@ export default function HimalayanExplorer() {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
               </button>
               {/* CTA */}
-              <button className="btn-primary text-xs !py-2 !px-4">Book Expedition</button>
+              <button className="btn-primary btn-neon-glow text-xs !py-2 !px-4">Book Expedition</button>
             </div>
 
             {/* Mobile hamburger */}
@@ -581,6 +630,9 @@ export default function HimalayanExplorer() {
 
       {/* ═══════════ 2. HERO SECTION ═══════════ */}
       <section ref={heroRef} onMouseMove={handleHeroMouseMove} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        {/* ENHANCEMENT: Cinematic gradient mesh background (drifting) */}
+        <div className="mesh-bg" aria-hidden />
+
         {/* Background patterns */}
         <div className="pattern-overlay">
           {/* Dot grid */}
@@ -607,6 +659,79 @@ export default function HimalayanExplorer() {
           <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-himalaya-teal/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
           <div className="absolute top-1/2 right-1/3 w-72 h-72 bg-himalaya-blue/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
           <div className="absolute bottom-[20%] right-[15%] w-64 h-64 bg-himalaya-aurora/6 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
+
+          {/* ENHANCEMENT: 3D Parallax Mountain Layers (back/mid/front) */}
+          <svg className="mountain-layer mountain-layer-back" style={{ height: '60%', transform: `translateX(${heroMouse.x * 0.3}px)` }} viewBox="0 0 1440 400" fill="none" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <linearGradient id="mtn-back" x1="720" y1="50" x2="720" y2="400" gradientUnits="userSpaceOnUse">
+                <stop stopColor="rgba(124, 58, 237, 0.5)" />
+                <stop offset="1" stopColor="rgba(74, 144, 217, 0.2)" />
+              </linearGradient>
+            </defs>
+            <path d="M0 400L150 200L300 320L450 120L620 280L780 80L950 240L1100 140L1280 280L1440 180V400Z" fill="url(#mtn-back)" />
+          </svg>
+          <svg className="mountain-layer mountain-layer-mid" style={{ height: '50%', transform: `translateX(${heroMouse.x * 0.6}px)` }} viewBox="0 0 1440 350" fill="none" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <linearGradient id="mtn-mid" x1="720" y1="80" x2="720" y2="350" gradientUnits="userSpaceOnUse">
+                <stop stopColor="rgba(45, 212, 191, 0.55)" />
+                <stop offset="1" stopColor="rgba(16, 185, 129, 0.2)" />
+              </linearGradient>
+            </defs>
+            <path d="M0 350L200 180L380 280L560 100L720 220L900 60L1080 200L1260 120L1440 250V350Z" fill="url(#mtn-mid)" />
+          </svg>
+          <svg className="mountain-layer mountain-layer-front" style={{ height: '40%', transform: `translateX(${heroMouse.x * 1.0}px)` }} viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <linearGradient id="mtn-front" x1="720" y1="80" x2="720" y2="280" gradientUnits="userSpaceOnUse">
+                <stop stopColor="rgba(212, 168, 83, 0.75)" />
+                <stop offset="0.6" stopColor="rgba(249, 115, 22, 0.45)" />
+                <stop offset="1" stopColor="rgba(236, 72, 153, 0.15)" />
+              </linearGradient>
+            </defs>
+            <path d="M0 280L180 140L360 220L520 80L700 180L880 50L1080 170L1260 90L1440 200V280Z" fill="url(#mtn-front)" />
+            {/* Snowy peaks accent */}
+            <path d="M520 80L540 110L500 110Z M700 180L730 210L670 210Z M880 50L905 85L855 85Z" fill="rgba(255,255,255,0.4)" />
+          </svg>
+
+          {/* ENHANCEMENT: Floating Particles Constellation */}
+          {[
+            { x: 10, y: 80, delay: '0s', drift: '40px', color: '' },
+            { x: 18, y: 90, delay: '1.5s', drift: '-30px', color: 'p-teal' },
+            { x: 25, y: 70, delay: '0.8s', drift: '60px', color: '' },
+            { x: 32, y: 85, delay: '3s', drift: '-50px', color: 'p-aurora' },
+            { x: 40, y: 75, delay: '2.2s', drift: '30px', color: 'p-blue' },
+            { x: 48, y: 88, delay: '1s', drift: '-40px', color: '' },
+            { x: 55, y: 78, delay: '4s', drift: '50px', color: 'p-rose' },
+            { x: 62, y: 92, delay: '2.5s', drift: '-30px', color: 'p-teal' },
+            { x: 70, y: 72, delay: '1.2s', drift: '40px', color: '' },
+            { x: 78, y: 86, delay: '3.5s', drift: '-60px', color: 'p-aurora' },
+            { x: 85, y: 76, delay: '0.5s', drift: '50px', color: 'p-orange' },
+            { x: 92, y: 82, delay: '2.8s', drift: '-20px', color: 'p-blue' },
+          ].map((p, i) => (
+            <div
+              key={i}
+              className={`particle ${p.color}`}
+              style={{
+                left: `${p.x}%`,
+                top: `${p.y}%`,
+                animationDelay: p.delay,
+                ['--drift' as string]: p.drift,
+              }}
+            />
+          ))}
+
+          {/* ENHANCEMENT: Sparkles */}
+          {[
+            { x: 15, y: 20, delay: '0s' },
+            { x: 35, y: 12, delay: '1s' },
+            { x: 55, y: 18, delay: '0.5s' },
+            { x: 75, y: 10, delay: '1.5s' },
+            { x: 88, y: 22, delay: '0.8s' },
+            { x: 22, y: 30, delay: '2s' },
+            { x: 68, y: 28, delay: '1.3s' },
+          ].map((s, i) => (
+            <div key={`spark-${i}`} className="sparkle" style={{ left: `${s.x}%`, top: `${s.y}%`, animationDelay: s.delay }} />
+          ))}
+
           {/* Twinkling stars */}
           {[
             {x:8,y:12,delay:'0s'},{x:15,y:8,delay:'1.5s'},{x:25,y:15,delay:'0.5s'},{x:35,y:5,delay:'2s'},
@@ -619,18 +744,18 @@ export default function HimalayanExplorer() {
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 text-center" style={{ transform: `translate(${heroMouse.x * 0.3}px, ${heroMouse.y * 0.3}px)` }}>
           <div className="reveal">
-            <span className="category-pill mb-6 inline-flex">🏔️ Adventure Travel Packages That Deliver Amazing Adventures</span>
+            <span className="category-pill mb-6 inline-flex"><span className="glow-dot mr-2" />Adventure Travel Packages That Deliver Amazing Adventures</span>
           </div>
-          <h1 className="reveal text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6">
+          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-3d-depth">
             Discover Nepal&apos;s{' '}
-            <span className="gradient-text">Breathtaking Landscapes</span>
+            <span className="gradient-text-shimmer">Breathtaking Landscapes</span>
           </h1>
           <p className="reveal text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-8">
             At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
           </p>
           <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="#destinations" className="btn-primary text-center">Explore Expeditions</a>
-            <button className="btn-outline flex items-center justify-center gap-2">
+            <a href="#destinations" className="btn-primary btn-neon-glow text-center">Explore Expeditions</a>
+            <button className="btn-outline btn-neon-glow flex items-center justify-center gap-2">
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
               Watch Documentary
             </button>
@@ -643,7 +768,7 @@ export default function HimalayanExplorer() {
               ['Since 2013', 'Experience'],
             ].map(([val, label]) => (
               <div key={label} className="text-center">
-                <div className="text-xl font-bold gradient-text">{val}</div>
+                <div className="text-xl font-bold gradient-text-shimmer font-display">{val}</div>
                 <div className="text-white/30 text-xs mt-0.5">{label}</div>
               </div>
             ))}
@@ -693,7 +818,7 @@ export default function HimalayanExplorer() {
               </select>
             </div>
             <div className="flex items-end">
-              <button className="btn-primary w-full flex items-center justify-center gap-2">
+              <button className="btn-primary btn-neon-glow w-full flex items-center justify-center gap-2">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 Search
               </button>
@@ -702,10 +827,55 @@ export default function HimalayanExplorer() {
         </div>
       </section>
 
+      {/* ═══════════ ENHANCEMENT: Animated Marquee Strip ═══════════ */}
+      <section className="py-8 sm:py-10 border-y border-white/5 bg-gradient-to-r from-himalaya-aurora/5 via-transparent to-himalaya-teal/5">
+        <div className="marquee">
+          <div className="marquee-track">
+            {[
+              'Everest Region', 'Annapurna Circuit', 'Upper Mustang', 'Langtang Valley',
+              'Manaslu Circuit', 'Upper Dolpo', 'Kanchenjunga', 'Mera Peak',
+              'Island Peak', 'Lobuche East', 'Gokyo Lakes', 'Helambu Trek',
+              'Everest Region', 'Annapurna Circuit', 'Upper Mustang', 'Langtang Valley',
+              'Manaslu Circuit', 'Upper Dolpo', 'Kanchenjunga', 'Mera Peak',
+              'Island Peak', 'Lobuche East', 'Gokyo Lakes', 'Helambu Trek',
+            ].map((name, i) => (
+              <span key={i} className="marquee-item">
+                <span className="marquee-star" />
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ ENHANCEMENT: Animated Wave Divider ═══════════ */}
+      <div className="wave-divider" aria-hidden>
+        <svg className="wave-1" viewBox="0 0 2880 60" preserveAspectRatio="none">
+          <path d="M0,30 C360,55 720,5 1440,30 C2160,55 2520,5 2880,30 L2880,60 L0,60 Z" fill="url(#wave-grad-1)" />
+          <defs>
+            <linearGradient id="wave-grad-1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(212,168,83,0.4)" />
+              <stop offset="50%" stopColor="rgba(45,212,191,0.4)" />
+              <stop offset="100%" stopColor="rgba(124,58,237,0.4)" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <svg className="wave-2" viewBox="0 0 2880 60" preserveAspectRatio="none">
+          <path d="M0,30 C480,5 960,55 1440,30 C1920,5 2400,55 2880,30 L2880,60 L0,60 Z" fill="url(#wave-grad-2)" />
+          <defs>
+            <linearGradient id="wave-grad-2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(74,144,217,0.4)" />
+              <stop offset="50%" stopColor="rgba(236,72,153,0.4)" />
+              <stop offset="100%" stopColor="rgba(249,115,22,0.4)" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
       {/* ═══════════ 4. STATS COUNTER ═══════════ */}
-      <section ref={statsRef} className="py-16 sm:py-20">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="glass-card-static p-6 sm:p-8">
+      <section ref={statsRef} className="py-16 sm:py-20 section-aurora-wash">
+        <div className="max-w-5xl mx-auto px-4 relative z-10">
+          <div className="glass-card-static gradient-border-cycling p-6 sm:p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
                 [statsValues[0], '+', 'Happy Travelers'],
@@ -713,8 +883,8 @@ export default function HimalayanExplorer() {
                 [statsValues[2], '+', 'Tours'],
                 [statsValues[3], '', 'Years Experience'],
               ].map(([val, suffix, label], i) => (
-                <div key={label} className="text-center">
-                  <div className="text-2xl sm:text-3xl font-bold gradient-text">{val.toLocaleString()}{suffix}</div>
+                <div key={label as string} className="text-center">
+                  <div className="text-2xl sm:text-3xl font-bold gradient-text-shimmer font-display">{(val as number).toLocaleString()}{suffix}</div>
                   <div className="text-xs text-white/30 mt-1">{label}</div>
                 </div>
               ))}
@@ -724,16 +894,16 @@ export default function HimalayanExplorer() {
       </section>
 
       {/* ═══════════ 5. POPULAR TOURS ═══════════ */}
-      <section id="destinations" className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <section id="destinations" className="py-16 sm:py-20 section-aurora-wash">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill pill-rose">⛰️ Trekking Holiday</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4">Popular <span className="gradient-text-sunset">Trekking Expeditions</span></h2>
+            <span className="category-pill pill-rose"><span className="glow-dot mr-2" />Trekking Holiday</span>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold mt-4 text-3d-depth">Popular <span className="gradient-text-shimmer">Trekking Expeditions</span></h2>
             <p className="text-white/40 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TOURS.map((tour) => (
-              <div key={tour.title} className="glass-card overflow-hidden reveal-scale">
+              <div key={tour.title} className="glass-card holo-card overflow-hidden reveal-scale">
                 <div className={`relative h-44 bg-gradient-to-br ${tour.gradient} flex items-end p-4`}>
                   <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
                   <span className="absolute top-3 right-3 text-sm font-bold text-himalaya-gold bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">${tour.price.toLocaleString()}</span>
