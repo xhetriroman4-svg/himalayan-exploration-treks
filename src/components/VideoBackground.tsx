@@ -50,6 +50,7 @@ export default function VideoBackground() {
   const [videoVisible, setVideoVisible] = useState(false);
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [showPlayButton, setShowPlayButton] = useState(false);
+  const [isVideoPaused, setIsVideoPaused] = useState(true);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -59,12 +60,8 @@ export default function VideoBackground() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  // Show prominent "Tap to play video" button whenever the video is paused
-  // for more than 1.5 seconds. This handles:
-  //  - Brave browser (blocks ALL autoplay on initial load)
-  //  - Browsers that pause background videos
-  //  - Any other case where the video gets paused
-  // The button is BIG and centered so users can't miss it.
+  // Track video play/pause state + show prominent button after 800ms of being paused.
+  // 800ms (down from 1500ms) so users see the button faster if autoplay fails.
   useEffect(() => {
     if (reducedMotion) return;
     const v = videoRef.current;
@@ -73,17 +70,19 @@ export default function VideoBackground() {
     let pausedSince: number | null = null;
 
     const checkInterval = setInterval(() => {
-      if (v.paused && !v.ended) {
+      const paused = v.paused && !v.ended;
+      setIsVideoPaused(paused);
+      if (paused) {
         if (pausedSince === null) pausedSince = Date.now();
-        // If paused for more than 1.5s, show the button
-        if (Date.now() - pausedSince > 1500) {
+        // If paused for more than 800ms, show the prominent button
+        if (Date.now() - pausedSince > 800) {
           setShowPlayButton(true);
         }
       } else {
         pausedSince = null;
         setShowPlayButton(false);
       }
-    }, 250);
+    }, 200);
 
     return () => clearInterval(checkInterval);
   }, [reducedMotion]);
@@ -101,10 +100,37 @@ export default function VideoBackground() {
       setPosterVisible(false);
       setIframeVisible(false);
       setShowPlayButton(false);
+      setIsVideoPaused(false);
     }).catch((err) => {
       // eslint-disable-next-line no-console
       console.error('[VideoBackground] prominent button play failed:', err);
     });
+  };
+
+  // Handler for the small persistent control button (bottom-right corner)
+  // Allows user to manually play/pause at any time
+  const handleControlButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.muted = true;
+      v.volume = 0;
+      v.play().then(() => {
+        setVideoVisible(true);
+        setPosterVisible(false);
+        setIframeVisible(false);
+        setShowPlayButton(false);
+        setIsVideoPaused(false);
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('[VideoBackground] control button play failed:', err);
+      });
+    } else {
+      v.pause();
+      setIsVideoPaused(true);
+    }
   };
 
   // Direct <video> autoplay logic — 12-layer strategy from before
@@ -286,7 +312,7 @@ export default function VideoBackground() {
       <div className="video-bg-overlay" aria-hidden />
 
       {/* PROMINENT "Tap to play video" button — shows whenever video has been paused
-          for more than 1.5 seconds. Essential for Brave browser which blocks ALL autoplay.
+          for more than 800ms. Essential for Brave/Chrome browsers which block autoplay.
           The button is large and centered so users can't miss it.
           Click is a guaranteed user gesture — video will play. */}
       {showPlayButton && !reducedMotion && (
@@ -303,6 +329,36 @@ export default function VideoBackground() {
           </span>
           <span className="video-play-prominent-text">Tap to Play Video</span>
           <span className="video-play-prominent-hint">Click once to enable the background video</span>
+        </button>
+      )}
+
+      {/* SMALL PERSISTENT CONTROL BUTTON — always visible in bottom-right corner.
+          Shows current video state (playing/paused) and lets users manually control.
+          This is the user's GUARANTEED way to start the video in any browser. */}
+      {!reducedMotion && (
+        <button
+          type="button"
+          onClick={handleControlButtonClick}
+          className={`video-control-pill ${isVideoPaused ? 'video-control-paused' : 'video-control-playing'}`}
+          aria-label={isVideoPaused ? 'Play background video' : 'Pause background video'}
+          title={isVideoPaused ? 'Background video is paused. Click to play.' : 'Background video is playing. Click to pause.'}
+        >
+          <span className="video-control-icon">
+            {isVideoPaused ? (
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <rect x="6" y="5" width="4" height="14" rx="1" />
+                <rect x="14" y="5" width="4" height="14" rx="1" />
+              </svg>
+            )}
+          </span>
+          <span className="video-control-text">
+            {isVideoPaused ? 'Play Video' : 'Video Live'}
+          </span>
+          <span className="video-control-dot" />
         </button>
       )}
     </>
