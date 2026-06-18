@@ -72,10 +72,90 @@
     @apply border-border outline-ring/50;
   }
   body {
-    background: #000000;
+    /* Transparent so the fixed video background shows through */
+    background: transparent;
     color: #f0f4f8;
     overflow-x: hidden;
+    position: relative;
   }
+}
+
+/* ========== Full-Site Video Background ========== */
+/* The video element itself - fixed, fills viewport, behind everything */
+.video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* dynamic viewport height - handles mobile address bar */
+  width: 100dvw;
+  object-fit: cover; /* scales to fill while preserving aspect ratio */
+  object-position: center;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #000000; /* fallback color while loading */
+}
+
+/* Dark gradient overlay above the video, below content - keeps text readable */
+.video-bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  width: 100dvw;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.75) 60%, rgba(0, 0, 0, 0.88) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.78) 100%);
+  /* Subtle color tint to harmonize with the Himalayan theme */
+  mix-blend-mode: normal;
+}
+
+/* Subtle color wash layered on top of the overlay for cinematic depth */
+.video-bg-tint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  width: 100dvw;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(at 20% 30%, rgba(212, 168, 83, 0.06) 0px, transparent 50%),
+    radial-gradient(at 80% 70%, rgba(124, 58, 237, 0.06) 0px, transparent 50%);
+}
+
+/* Respect users who request reduced motion: hide the video, show poster only */
+@media (prefers-reduced-motion: reduce) {
+  .video-bg {
+    display: none;
+  }
+  .video-bg-poster {
+    display: block !important;
+  }
+}
+
+/* Poster fallback image (shown while video loads or if reduced-motion) */
+.video-bg-poster {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  width: 100dvw;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #000000;
+  display: none; /* hidden by default, shown only when video is hidden */
 }
 
 /* ========== Glass Cards ========== */

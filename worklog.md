@@ -76,3 +76,41 @@ Stage Summary:
   - Display font (Space Grotesk) for editorial hierarchy
 - All changes are additive — no existing functionality broken
 - Dev server is live and serving the updated site at the preview URL
+
+---
+Task ID: video-background-fullsite
+Agent: Super Z (main)
+Task: Add a Cloudinary video as a full-site background (looping, muted, autoplay, responsive on all device sizes)
+
+Work Log:
+- Verified the Cloudinary video URL: https://res.cloudinary.com/dc4qh1wrh/video/upload/1_n3fzeu.mp4 (HTTP 200, 3.4 MB MP4/H.264, CORS-enabled)
+- Constructed optimized Cloudinary URLs: high-res (1920x1080) for desktop, lower-res (1280x720) fallback for slow networks, and a JPEG poster image (first frame, so_0)
+- Added CSS to globals.css:
+  * `body` background changed from solid #000000 to transparent (so the fixed video shows through)
+  * `.video-bg` class: position: fixed, inset: 0, width/height: 100dvw/100dvh (dynamic viewport units handle mobile address bar), object-fit: cover (scales to fill any screen without distortion), object-position: center, z-index: -2 (behind everything), pointer-events: none, black background while loading
+  * `.video-bg-overlay` class: fixed dark gradient overlay at z-index: -1 — combines a radial gradient (lighter at top, darker at bottom) with a vertical linear gradient for cinematic readability, mix-blend-mode: normal
+  * `.video-bg-tint` class: subtle gold + aurora color wash on top of the overlay to harmonize with the Himalayan theme
+  * `.video-bg-poster` class: poster image with same dimensions/positioning as video, hidden by default, shown only when video is hidden (reduced motion)
+  * `@media (prefers-reduced-motion: reduce)`: hides the video, forces the poster image visible — respects users who request less motion
+- Created `/home/z/my-project/src/components/VideoBackground.tsx`:
+  * Client component ('use client') because it needs browser-only video APIs
+  * Three rendered layers: poster <img> (default visible), <video> element (autoPlay, loop, muted, playsInline, disablePictureInPicture, disableRemotePlayback, preload=auto), dark overlay div, color tint div
+  * useEffect: checks prefers-reduced-motion, attempts video.play(), retries with explicit muted=true if blocked (mobile autoplay safety)
+  * onError: if primary source fails, swaps to lower-res fallback source and reloads
+  * onLoadedData: marks video as loaded so poster fades out gracefully (0.6s opacity transition)
+  * If reducedMotion is true, the <video> is not rendered at all — only the poster image shows
+- Mounted VideoBackground globally in layout.tsx (above {children}, so it persists across all routes without remounting on navigation)
+- Changed main element in page.tsx from `bg-black` to `bg-transparent` with `relative z-0` so the video shows through
+- Verified no remaining opaque backgrounds would cover the video (existing `bg-black/40`, `bg-black/30`, `bg-black/80` are intentional semi-transparent overlays for badges, modals, hover effects)
+- Verified dev server hot-reloaded cleanly: 0 compile errors, HTTP 200, 154 KB response
+- Confirmed in rendered HTML: <video autoPlay loop muted playsInline> element with Cloudinary MP4 source + JPEG poster, plus overlay and tint divs — all present and correctly attributed
+- Confirmed Cloudinary URLs all return HTTP 200: high-res MP4, fallback MP4, poster JPEG
+
+Stage Summary:
+- A looping, muted, autoplay video background is now live site-wide, sourced from the user's Cloudinary video (cloud_name=dc4qh1wrh, public_id=1_n3fzeu)
+- The video plays continuously behind all content, with a dark gradient overlay ensuring text stays readable
+- Responsive on every device: object-fit: cover + 100dvw/100dvh units fill mobile, tablet, desktop, and ultrawide screens without distortion
+- Mobile autoplay works: muted + playsInline are the two attributes iOS Safari requires
+- Reduced-motion users see a static poster image instead of the video
+- Slow connections: video auto-falls back to a 720p version if the 1080p version fails to load
+- Loading state: poster image shows until the video is ready, then fades out smoothly

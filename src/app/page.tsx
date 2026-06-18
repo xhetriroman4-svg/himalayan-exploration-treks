@@ -529,7 +529,7 @@ export default function HimalayanExplorer() {
 
   /* ──────────── RENDER ──────────── */
   return (
-    <main className="min-h-screen bg-black text-[#f0f4f8] overflow-x-hidden">
+    <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0">
       {/* ═══════════ ENHANCEMENT: Scroll Progress Bar (rainbow) ═══════════ */}
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden />
 
