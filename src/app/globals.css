@@ -81,23 +81,67 @@
 }
 
 /* ========== Full-Site Video Background ========== */
-/* The video element itself - fixed, fills viewport, behind everything */
+/* Poster image fallback (shown while iframe loads or when reduced-motion) */
+.video-bg-poster {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  width: 100dvw;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #000000;
+  display: none; /* hidden by default, shown via inline style when needed */
+}
+
+/* Cloudinary iframe embed — covers the viewport like object-fit: cover.
+   Iframes don't support object-fit, so we use the cover trick:
+   - width: 100vw + height: 56.25vw (= 100vw * 9/16) covers wide screens
+   - min-width: 177.78vh + min-height: 100vh covers tall screens
+   - position: fixed + transform: translate(-50%, -50%) centers it
+   Together these guarantee the iframe always covers the entire viewport
+   while preserving the 16:9 aspect ratio of the source video. */
+.video-bg-iframe {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw; /* 9/16 = 0.5625 */
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-width: 177.78vh; /* 16/9 = 1.7778 */
+  transform: translate(-50%, -50%);
+  border: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #000000;
+  filter: brightness(1.1) contrast(1.05) saturate(1.18);
+}
+
+/* Direct <video> element fallback (under iframe, becomes visible if iframe fails).
+   Uses object-fit: cover since <video> supports it natively. */
 .video-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  height: 100dvh; /* dynamic viewport height - handles mobile address bar */
+  height: 100dvh;
   width: 100dvw;
-  object-fit: cover; /* scales to fill while preserving aspect ratio */
+  object-fit: cover;
   object-position: center;
-  z-index: -2;
+  z-index: -3; /* below iframe (-2) so iframe wins when both are visible */
   pointer-events: none;
-  background-color: #000000; /* fallback color while loading */
-  /* Boost the video so it pops through the overlay */
+  background-color: #000000;
   filter: brightness(1.1) contrast(1.05) saturate(1.18);
+  transition: opacity 0.6s ease;
 }
+.video-bg-visible { opacity: 1; }
+.video-bg-hidden { opacity: 0; }
 
 /* Dark gradient overlay above the video, below content.
    Even lighter than v2 so the video is CRYSTAL CLEAR.
@@ -196,6 +240,7 @@
 
 /* Respect users who request reduced motion: hide the video, show poster only */
 @media (prefers-reduced-motion: reduce) {
+  .video-bg-iframe,
   .video-bg {
     display: none;
   }
@@ -204,22 +249,7 @@
   }
 }
 
-/* Poster fallback image (shown while video loads or if reduced-motion) */
-.video-bg-poster {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  width: 100dvw;
-  object-fit: cover;
-  object-position: center;
-  z-index: -2;
-  pointer-events: none;
-  background-color: #000000;
-  display: none; /* hidden by default, shown only when video is hidden */
-}
+/* (old .video-bg-poster block removed - now defined above with the iframe) */
 
 /* ========== Glass Cards ==========
    More transparent than v2 so the video shows through clearly.

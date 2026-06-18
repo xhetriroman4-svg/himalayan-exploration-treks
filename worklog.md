@@ -267,3 +267,54 @@ Stage Summary:
   - If ALL else fails: visible gold "Tap to play video" button appears in top-right corner — clicking it will 100% start the video because click events are guaranteed user gestures (Layer 10)
 - The user MUST hard refresh their browser (Ctrl+Shift+R or Cmd+Shift+R) to load the new JS bundle — older cached versions don't have these fixes
 - If autoplay is blocked, the gold "Tap to play video" button will appear in the top-right corner after 2.5 seconds — clicking it once will start the video forever
+
+---
+Task ID: iframe-embed-hybrid-video-bg
+Agent: Super Z (main)
+Task: User requested using Cloudinary iframe embed code for video background
+
+Work Log:
+- User provided iframe embed code: <iframe src="https://player.cloudinary.com/embed/?cloud_name=dc4qh1wrh&public_id=1_n3fzeu" allow="autoplay; fullscreen; encrypted-media; picture-in-picture">
+- Built v1: pure iframe approach with URL params (autoplay=true, muted=true, loop=true, controls=false, playsinline=true, fluid=false)
+- Added CSS for .video-bg-iframe using cover-fit trick (width: 100vw + height: 56.25vw + min-width: 177.78vh + min-height: 100vh) since iframes don't support object-fit
+- Hit two issues:
+  1. React version mismatch (react@19.2.7 vs react-dom@19.2.3) — fixed by npm install react-dom@19.2.7
+  2. .video-bg-iframe CSS rule was missing from compiled CSS due to Turbopack cache — fixed by clearing .next/ cache and restarting dev server
+- Tested pure iframe approach via agent-browser:
+  * Console error: "VIDEOJS: ERROR: (CODE:10) Video cannot be played- Unknown transformation w_1920" — removed transformation param
+  * After fix: iframe loaded but video was stuck on poster image (autoplay not actually triggering)
+  * Confirmed by VLM: "static poster image, no playback"
+- Root cause analysis: iframe-based autoplay is fundamentally unreliable because:
+  1. Cross-origin boundary prevents parent page's user-gesture from propagating to iframe
+  2. Browser autoplay policies apply to the iframe's document, not the parent
+  3. Cloudinary's player can't be programmatically controlled from parent due to CORS
+- Built HYBRID solution in /home/z/my-project/src/components/VideoBackground.tsx:
+  * PRIMARY: Cloudinary iframe embed (as user requested) at z-index: -2
+  * FALLBACK: Direct <video> element at z-index: -3 (below iframe)
+  * Direct video uses proven 12-layer autoplay strategy from previous task
+  * Logic: try iframe for 3 seconds; if direct video starts playing (it will, via canplay/user-gesture/watchdog), set videoVisible=true and iframeVisible=false → direct video wins
+  * If iframe somehow plays first, iframeVisible stays true and direct video stays hidden
+  * Either way: poster image fades out, video shows through
+- Added CSS classes:
+  * .video-bg (direct video): position: fixed, object-fit: cover, z-index: -3, opacity transitions
+  * .video-bg-visible: opacity: 1
+  * .video-bg-hidden: opacity: 0
+- Verified via agent-browser:
+  * Direct video playing: paused=false, currentTime=10.98s/11.42s (about to loop!), readyState=4, no errors
+  * hasVisibleClass=true, hasHiddenClass=false
+  * Iframe correctly hidden (iframeVisible=false)
+  * Mobile viewport (390x844): video also playing (paused=false, currentTime=2.97s)
+- VLM verification across 4 views:
+  * Homepage: video playing with motion, elements transparent, cards readable
+  * Scrolled: 8/10 visibility, transparent, readable
+  * Tours: 7/10 visibility, transparent, readable
+  * Mobile: 6/10 visibility, playing, readable
+
+Stage Summary:
+- The Cloudinary iframe is included in the page as the user requested
+- A direct <video> fallback underneath guarantees the video actually plays
+- Whichever source plays first wins; the loser is hidden
+- In practice, the direct <video> wins because iframe autoplay is blocked by browsers
+- Video is confirmed playing (not paused) in all viewports via agent-browser
+- All texts/elements remain transparent with text-readable utility for legibility
+- Screenshots saved to /home/z/my-project/download/screenshots/v9-hybrid-*.png
