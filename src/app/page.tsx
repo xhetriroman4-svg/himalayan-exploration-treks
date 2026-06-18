@@ -746,11 +746,11 @@ export default function HimalayanExplorer() {
           <div className="reveal">
             <span className="category-pill mb-6 inline-flex"><span className="glow-dot mr-2" />Adventure Travel Packages That Deliver Amazing Adventures</span>
           </div>
-          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-3d-depth">
+          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-3d-depth text-readable-strong">
             Discover Nepal&apos;s{' '}
             <span className="gradient-text-shimmer">Breathtaking Landscapes</span>
           </h1>
-          <p className="reveal text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-8">
+          <p className="reveal text-readable text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-8">
             At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
           </p>
           <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -884,8 +884,8 @@ export default function HimalayanExplorer() {
                 [statsValues[3], '', 'Years Experience'],
               ].map(([val, suffix, label], i) => (
                 <div key={label as string} className="text-center">
-                  <div className="text-2xl sm:text-3xl font-bold gradient-text-shimmer font-display">{(val as number).toLocaleString()}{suffix}</div>
-                  <div className="text-xs text-white/30 mt-1">{label}</div>
+                  <div className="text-readable-strong text-2xl sm:text-3xl font-bold gradient-text-shimmer font-display">{(val as number).toLocaleString()}{suffix}</div>
+                  <div className="text-readable text-xs text-white/50 mt-1">{label}</div>
                 </div>
               ))}
             </div>
@@ -897,31 +897,31 @@ export default function HimalayanExplorer() {
       <section id="destinations" className="py-16 sm:py-20 section-aurora-wash">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill pill-rose"><span className="glow-dot mr-2" />Trekking Holiday</span>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold mt-4 text-3d-depth">Popular <span className="gradient-text-shimmer">Trekking Expeditions</span></h2>
-            <p className="text-white/40 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
+            <span className="category-pill pill-rose text-readable"><span className="glow-dot mr-2" />Trekking Holiday</span>
+            <h2 className="font-display text-readable-strong text-3xl sm:text-4xl font-bold mt-4 text-3d-depth">Popular <span className="gradient-text-shimmer">Trekking Expeditions</span></h2>
+            <p className="text-readable text-white/60 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TOURS.map((tour) => (
               <div key={tour.title} className="glass-card holo-card overflow-hidden reveal-scale">
-                <div className={`relative h-44 bg-gradient-to-br ${tour.gradient} flex items-end p-4`}>
+                <div className={`relative h-44 bg-gradient-to-br ${tour.gradient} flex items-end p-4`} style={{ opacity: 0.65 }}>
                   <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
-                  <span className="absolute top-3 right-3 text-sm font-bold text-himalaya-gold bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">${tour.price.toLocaleString()}</span>
-                  <span className="absolute top-3 left-3 text-xs text-white/70 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded">{tour.country}</span>
+                  <span className="absolute top-3 right-3 text-readable-strong text-sm font-bold text-himalaya-gold bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">${tour.price.toLocaleString()}</span>
+                  <span className="absolute top-3 left-3 text-readable text-xs text-white bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">{tour.country}</span>
                 </div>
                 <div className="p-4 sm:p-5">
-                  <h3 className="font-semibold text-base mb-2">{tour.title}</h3>
-                  <p className="text-xs text-white/35 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
-                  <div className="flex items-center gap-3 text-xs text-white/40 mb-3">
-                    <span className="flex items-center gap-1">
+                  <h3 className="text-readable-strong font-semibold text-base mb-2">{tour.title}</h3>
+                  <p className="text-readable text-xs text-white/60 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
+                  <div className="flex items-center gap-3 text-xs text-white/55 mb-3">
+                    <span className="flex items-center gap-1 text-readable">
                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                       {tour.days} Days
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-1 text-readable">
                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
                       {tour.altitude}
                     </span>
-                    <span className="text-white/25">{tour.region}</span>
+                    <span className="text-readable text-white/40">{tour.region}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className={`text-xs px-2 py-0.5 rounded font-medium difficulty-${tour.difficulty}`}>{tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1)}</span>
@@ -929,7 +929,7 @@ export default function HimalayanExplorer() {
                   </div>
                   <div className="flex items-center gap-2 mt-3">
                     <button onClick={() => openCheckout(tour)} className="text-xs font-semibold bg-himalaya-gold text-black px-3 py-1.5 rounded-lg hover:bg-himalaya-gold/90 transition-colors">Book Now</button>
-                    <a href="#" className="text-xs text-himalaya-gold hover:text-himalaya-gold/80">View Details →</a>
+                    <a href="#" className="text-readable text-xs text-himalaya-gold hover:text-himalaya-gold/80">View Details →</a>
                   </div>
                 </div>
               </div>
