@@ -420,3 +420,50 @@ Stage Summary:
   * Mobile: works correctly
 - User MUST hard refresh (Ctrl+Shift+R or Cmd+Shift+R) to load new code
 - Screenshots saved to /home/z/my-project/download/screenshots/v13-*.png
+
+---
+Task ID: delete-and-rebuild-simple-video-bg
+Agent: Super Z (main)
+Task: Delete all existing video background code and rebuild from scratch with simple autoplay loop muted video
+
+Work Log:
+- User asked to delete ALL existing video background code and rebuild from scratch with a simple approach
+- DELETED:
+  * /home/z/my-project/src/components/VideoBackground.tsx (entire 311-line component file)
+  * All video-related CSS in globals.css (407 lines removed: video-bg-iframe, video-bg-poster, video-play-prominent, video-control-pill, video-control-paused, video-control-playing, video-play-button, all keyframes, all media queries)
+  * VideoBackground import from layout.tsx
+- REBUILT FROM SCRATCH - simple plain HTML5 <video> element in layout.tsx:
+  * <video className="video-bg" autoPlay loop muted playsInline src="https://res.cloudinary.com/dc4qh1wrh/video/upload/v1/1_n3fzeu.mp4" />
+  * Plus a <div className="video-bg-overlay" /> for subtle dark overlay
+  * ZERO JavaScript — no React state, no useEffect, no event listeners, no watchdog, no iframe, no poster, no fallbacks
+  * Just the standard 4 attributes that every browser supports natively
+- ADDED MINIMAL CSS (28 lines total):
+  * .video-bg: position: fixed, top: 0, left: 0, width: 100vw, height: 100dvh, object-fit: cover, z-index: -1, pointer-events: none, background: #000
+  * .video-bg-overlay: position: fixed, top: 0, left: 0, width: 100vw, height: 100dvh, z-index: -1, linear-gradient(180deg, 0.3 → 0.15 → 0.4) for subtle text readability
+- Cleared .next cache (Turbopack was serving stale CSS with old z-index: -3 rule)
+- Restarted dev server with fresh cache
+- VERIFIED via agent-browser in fresh sessions:
+  * Desktop (1440x900): video playing (paused=false, currentTime=6.18s of 8s, muted=true, loop=true, readyState=4, no errors, z-index=-1, object-fit=cover)
+  * Mobile (390x844): video playing (paused=false, currentTime=6.17s, muted=true, loop=true, readyState=4, no errors, width=390px, height=844px — fills mobile viewport)
+- TIME PROGRESSION TEST (definitive proof video is playing and looping):
+  * T1: 5.28s
+  * T2: 7.33s (after 2s — advanced ~2 seconds)
+  * T3: 1.32s (after 4s — the 8s video ended and looped back to start automatically)
+  * T4: 6.37s (after 9s — playing normally again)
+  * Conclusion: video is playing continuously and looping automatically without any user interaction
+- VLM verification across 4 views:
+  * Desktop homepage: 9/10 — video visible, clean, texts readable, no UI clutter
+  * Mobile: 8/10 — same
+  * Scrolled: 8/10 — same
+  * Tours: 7/10 — same (cards take more space)
+  * VLM confirms: "clean, professional website with a video background, no play buttons, no control pills, no overlays covering the video"
+
+Stage Summary:
+- Total code: layout.tsx (56 lines) + globals.css (28 lines for video) = 84 lines total
+- Compare to previous complex version: 311-line React component + 407 lines of CSS = 718 lines
+- 88% less code, 100% working
+- Video URL: https://res.cloudinary.com/dc4qh1wrh/video/upload/v1/1_n3fzeu.mp4 (direct MP4, NOT the iframe embed — the embed URL has autoplay issues)
+- Attributes: autoPlay + loop + muted + playsInline = the only combination that works reliably across all browsers
+- Video is 8 seconds long, plays continuously, loops automatically, no audio
+- Verified playing in both desktop and mobile viewports
+- User should hard refresh (Ctrl+Shift+R) to load the new simple code
