@@ -410,7 +410,7 @@
    410→    setCheckoutStep('details');
    411→    setBookingForm({
    412→      fullName: '', email: '', phone: '', nationality: '',
-   413→      startDate: '', travelers: 1,
+   413→      startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], travelers: 1,
    414→      emergencyContact: '', emergencyPhone: '',
    415→      dietaryNeeds: '', medicalConditions: '', specialRequests: '',
    416→    });
@@ -1789,7 +1789,7 @@
   1789→      {checkoutOpen && selectedTour && (
   1790→        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" ref={checkoutRef}>
   1791→          {/* Backdrop */}
-  1792→          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={closeCheckout} />
+  1792→          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={(e) => { if (e.target === e.currentTarget) closeCheckout(); }} />
   1793→
   1794→          {/* Modal */}
   1795→          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-card-strong rounded-2xl">
