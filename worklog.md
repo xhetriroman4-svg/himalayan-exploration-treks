@@ -784,3 +784,37 @@ Stage Summary:
 - Site deployed to Netlify: https://stalwart-kataifi-e7854c.netlify.app
 - All 6 pages (/, /trekking, /contact, /about, /stories, /experiences) return HTTP 200 on production
 - VLM verified production site is working correctly
+
+---
+Task ID: fix-netlify-deploy-and-create-zip
+Agent: Super Z (main)
+Task: Fix production site showing only video + redeploy + create ZIP file
+
+Work Log:
+- User reported production site only showing video, no website content
+- Diagnosed: previous deploy used `netlify deploy --dir=.next --no-build` which uploaded raw .next folder WITHOUT the Netlify Next.js plugin processing — this meant SSR/hydration didn't work, so React content stayed hidden (reveal animations never triggered)
+- VLM confirmed: "No content visible besides the video background. No texts, buttons, or UI elements visible."
+- Fixed by redeploying with `--build` flag (let Netlify run the build with @netlify/plugin-nextjs):
+  * Cleaned .next directory
+  * Ran: NETLIFY_AUTH_TOKEN=... netlify deploy --prod --site=2a30db5c-c876-4ce8-8664-a113e1a8ec8f --build
+  * Build completed in 8.5s, Functions bundling completed in 4.1s (packaged ___netlify-server-handler for SSR)
+  * Deploy completed in 54.5s total
+  * Production URL: https://stalwart-kataifi-e7854c.netlify.app
+- Verified production site now works:
+  * Homepage: H1 shows "Discover Nepal's Breathtaking Landscapes", nav shows all links, 6 premium cards visible
+  * All 6 pages return HTTP 200 with correct titles
+  * Trekking page shows all 16 tour cards (Everest, Annapurna, Mustang, Langtang, Manaslu, etc.)
+  * VLM confirms: "Yes, content (headline, text, buttons) is visible. Hero section shows the headline. Navigation is visible."
+- Created ZIP file for manual deployment:
+  * Path: /home/z/my-project/download/himalayan-exploration-treks.zip
+  * Size: 992KB, 107 files
+  * Excluded: node_modules, .next, .git, .netlify, download, upload, tool-results, scripts, skills, mini-services, .zscripts, logs, worklog.md, db/custom.db
+  * Includes: all source code (src/), package.json, package-lock.json, bun.lock, next.config.ts, netlify.toml, tsconfig.json, tailwind.config.ts, postcss.config.mjs, eslint.config.mjs, public/ (logo.svg, robots.txt, team/kumar-lama.jpg), prisma/schema.prisma, .env, .gitignore
+  * Verified all key files present: page.tsx, layout.tsx, globals.css, i18n.tsx, Providers.tsx, all route handlers, all 5 sub-pages, kumar-lama.jpg
+
+Stage Summary:
+- Production site FIXED: https://stalwart-kataifi-e7854c.netlify.app now shows full website content (hero, navigation, tour cards, all sections)
+- Root cause was previous deploy skipped the Netlify build step (--no-build flag), so SSR/hydration didn't work
+- Fixed by redeploying with --build flag which lets @netlify/plugin-nextjs properly process the Next.js build
+- All 6 pages verified working on production
+- ZIP file created at /home/z/my-project/download/himalayan-exploration-treks.zip (992KB, 107 files) for manual deployment to Netlify or any other host
