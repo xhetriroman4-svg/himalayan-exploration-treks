@@ -798,16 +798,42 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ========== Difficulty Badges ========== */
-.difficulty-easy { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
-.difficulty-moderate { background: rgba(212,168,83,0.15); color: #d4a853; border: 1px solid rgba(212,168,83,0.2); }
-.difficulty-challenging { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
-.difficulty-strenuous { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+/* ========== Difficulty Badges — high contrast for readability ========== */
+.difficulty-easy {
+  background: rgba(16,185,129,0.95);
+  color: #fff;
+  border: 1px solid rgba(16,185,129,1);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  font-weight: 700;
+}
+.difficulty-moderate {
+  background: rgba(212,168,83,0.95);
+  color: #000;
+  border: 1px solid rgba(212,168,83,1);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+  font-weight: 700;
+}
+.difficulty-challenging {
+  background: rgba(249,115,22,0.95);
+  color: #fff;
+  border: 1px solid rgba(249,115,22,1);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  font-weight: 700;
+}
+.difficulty-strenuous {
+  background: rgba(239,68,68,1);
+  color: #fff;
+  border: 1px solid rgba(220,38,38,1);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.4);
+}
 
-/* ========== Altitude Zones ========== */
-.alt-zone-safe { color: #10b981; }
-.alt-zone-caution { color: #eab308; }
-.alt-zone-danger { color: #f97316; }
-.alt-zone-extreme { color: #ef4444; }
+/* ========== Altitude Zones — bright, high-contrast colors ========== */
+.alt-zone-safe { color: #34d399; text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.alt-zone-caution { color: #facc15; text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.alt-zone-danger { color: #fb923c; text-shadow: 0 1px 3px rgba(0,0,0,0.7); }
+.alt-zone-extreme { color: #f87171; text-shadow: 0 1px 3px rgba(0,0,0,0.7); font-weight: 700; }
 
 /* ========== Progress Bar ========== */
 .progress-bar {

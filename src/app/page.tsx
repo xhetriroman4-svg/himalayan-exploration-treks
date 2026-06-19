@@ -1553,7 +1553,7 @@ export default function HimalayanExplorer() {
                     <div className="space-y-4">
                       <div className="tool-card !p-4">
                         <div className="text-xs text-white/30 mb-1">Risk Level</div>
-                        <div className={`text-lg font-bold ${altResult.risk === 'Low' ? 'text-green-400' : altResult.risk === 'Moderate' ? 'text-yellow-400' : altResult.risk === 'High' ? 'text-orange-400' : 'text-red-400'}`}>{altResult.risk}</div>
+                        <div className={`text-lg font-bold text-readable-strong ${altResult.risk === 'Low' ? 'text-green-400' : altResult.risk === 'Moderate' ? 'text-yellow-300' : altResult.risk === 'High' ? 'text-orange-400' : 'text-red-500'}`}>{altResult.risk}</div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="tool-card !p-3">
@@ -1591,7 +1591,7 @@ export default function HimalayanExplorer() {
                           <div className="text-xs text-white/30 mb-1">Symptoms to Watch</div>
                           <div className="flex flex-wrap gap-1">
                             {altResult.symptoms.map((s) => (
-                              <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-400">{s}</span>
+                              <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-red-500/30 text-red-300 font-bold text-readable">{s}</span>
                             ))}
                           </div>
                         </div>
