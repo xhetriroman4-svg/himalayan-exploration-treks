@@ -614,3 +614,48 @@ Stage Summary:
 - Customers can now select any combination of destinations + write a custom message about their wishes
 - All 16 tour packages verified rendering with images via agent-browser DOM inspection
 - Screenshots saved to /home/z/my-project/download/screenshots/v17-*.png
+
+---
+Task ID: text-readability-and-whatsapp-icon
+Agent: Super Z (main)
+Task: Make all texts clearly visible/readable + change chat icon to WhatsApp linking to 9841023371
+
+Work Log:
+- User reported texts not clearly visible + asked to change chat icon to WhatsApp linking to 9841023371
+- Analyzed user screenshot with VLM: confirmed descriptive paragraph had low contrast (light gray on dark video overlay), chat icon was generic gold speech bubble
+- Strengthened .text-readable CSS utility: increased shadow opacity from 0.6/0.5 to 0.85/0.75, added 3rd shadow layer for extra contrast
+- Strengthened .text-readable-strong: increased shadow opacity to 0.95/0.85/0.75, added 4th shadow layer
+- Added new .text-readable-hero class with 4-layer shadow for large hero headings (0.95/0.85/0.75/0.8 opacity)
+- Darkened video overlay: gradient changed from 0.3/0.15/0.4 → 0.45/0.25/0.55 for better text contrast
+- Increased glass-card opacity: 0.32 → 0.55 (better text legibility on cards while still showing video)
+- Increased glass-card-static opacity: 0.32 → 0.55
+- Increased glass-card-strong opacity: 0.45 → 0.72
+- Updated hero H1: text-white/95 → text-white, text-readable-strong → text-readable-hero (extra-strong shadow)
+- Updated hero paragraph: text-white/75 → text-white (full opacity for max readability)
+- Replaced chat widget entirely with WhatsApp contact widget:
+  * WhatsApp bubble icon: 60x60px green gradient (#25D366 → #128C7E) with official WhatsApp SVG logo (path data with "17.472" confirms authentic WhatsApp icon)
+  * Click opens info panel with green gradient header (#25D366 → #128C7E)
+  * Panel shows: WhatsApp logo, "Himalayan Exploration" business name, "Typically replies in minutes" with pulsing green dot
+  * Welcome message: "Namaste! 🙏 Welcome to Himalayan Exploration Treks..."
+  * 4 quick prompt buttons (Trip Info, Pricing, Visa Help, Custom Package) — each links to wa.me/9779841023371 with pre-filled message
+  * "Start Chat on WhatsApp" green CTA button with phone number +977 9841023371
+  * Bubble itself is an <a> tag linking to wa.me/9779841023371 with pre-filled message "Namaste! I'm interested in planning a Himalayan trek. Can you help me?"
+  * Title attribute: "Chat with us on WhatsApp: +977 9841023371"
+  * aria-label: "Open WhatsApp chat"
+  * target="_blank" rel="noopener noreferrer" for safe opening
+- Updated .chat-bubble CSS: background changed to green gradient with !important, box-shadow uses green rgba (37, 211, 102), size increased from 56px to 60px, added text-decoration: none
+- Cleared .next cache (Turbopack was serving stale CSS) and restarted dev server
+- Verified via agent-browser in fresh session:
+  * WhatsApp icon: tagName=A, href=https://wa.me/9779841023371?text=Namaste!..., background=linear-gradient(135deg, rgb(37, 211, 102), rgb(18, 140, 126)), 60x60px, isWhatsAppIcon=true (path data confirmed)
+  * Click opens panel correctly with all elements
+  * VLM confirms: "Yes, the chat icon in the bottom-right corner is a green circle with the WhatsApp logo. All texts are clearly visible and readable. The headline is clearly readable. The body paragraph is readable."
+  * VLM confirms WhatsApp panel: green header with WhatsApp logo, business name, welcome message, quick prompts, green Start Chat button with +977 9841023371
+
+Stage Summary:
+- Text readability dramatically improved: stronger shadows (4-layer), darker overlay (0.55 vs 0.4), more opaque glass cards (0.55 vs 0.32), full-white text instead of /75-/95 opacity
+- Chat icon replaced with official WhatsApp green icon (60x60px) linking to wa.me/9779841023371 with pre-filled greeting message
+- Click opens a WhatsApp-style info panel (green gradient header, logo, business name, welcome message, quick prompt buttons that each open WhatsApp with topic-specific messages, green Start Chat CTA showing phone number)
+- All texts verified readable by VLM
+- WhatsApp icon verified authentic (SVG path data matches official WhatsApp logo)
+- WhatsApp link verified: https://wa.me/9779841023371 with URL-encoded message
+- Screenshots saved to /home/z/my-project/download/screenshots/v18-*.png

@@ -878,13 +878,13 @@ export default function HimalayanExplorer() {
           </div>
 
           {/* Oversized cinematic headline with Playfair Display + golden shimmer */}
-          <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-strong">
-            <span className="block text-white/95">{t('hero.title1')}</span>
+          <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-hero">
+            <span className="block text-white">{t('hero.title1')}</span>
             <span className="block text-golden-shimmer italic">{t('hero.title2')}</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="reveal-fade-up text-readable text-lg sm:text-xl text-white/75 max-w-3xl mx-auto mb-10 leading-relaxed">
+          <p className="reveal-fade-up text-readable text-lg sm:text-xl text-white max-w-3xl mx-auto mb-10 leading-relaxed">
             {t('hero.subtitle')}
           </p>
 
@@ -2533,62 +2533,91 @@ export default function HimalayanExplorer() {
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
 
-      {/* ═══════════ 24. LIVE CHAT WIDGET ═══════════ */}
+      {/* ═══════════ 24. WHATSAPP CONTACT WIDGET ═══════════ */}
       <div className="chat-widget">
-        {/* Chat panel */}
+        {/* WhatsApp info panel - opens on hover/click */}
         {chatOpen && (
-          <div className="chat-panel">
+          <div className="chat-panel !w-[320px]">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-white/5">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-400" />
-                <span className="text-sm font-semibold">Himalayan Exploration Support</span>
-              </div>
-              <button onClick={() => setChatOpen(false)} className="text-white/30 hover:text-white transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-            {/* Messages */}
-            <div ref={chatMessagesRef} className="p-4 h-64 overflow-y-auto space-y-3">
-              <div className="flex gap-2">
-                <div className="w-7 h-7 rounded-full bg-himalaya-gold/20 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-3.5 h-3.5 text-himalaya-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/></svg>
+            <div className="flex items-center justify-between p-4 border-b border-white/5" style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
                 </div>
-                <div className="glass-card-static !rounded-bl-sm p-3 max-w-[240px]">
-                  <p className="text-xs text-white/60 leading-relaxed">Namaste! 🙏 How can we help you plan your Himalayan adventure?</p>
+                <div>
+                  <div className="text-sm font-bold text-white">Himalayan Exploration</div>
+                  <div className="text-xs text-white/80 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-green-300 animate-pulse" />
+                    Typically replies in minutes
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* Quick replies */}
-            <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-              {['Trip Info', 'Pricing', 'Visa Help', 'Insurance'].map((qr) => (
-                <button key={qr} onClick={() => setChatMessage(qr)} className="text-[10px] px-2.5 py-1 rounded-full border border-himalaya-gold/20 text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors">{qr}</button>
-              ))}
-            </div>
-            {/* Input */}
-            <div className="p-3 border-t border-white/5 flex gap-2">
-              <input
-                type="text"
-                value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
-                placeholder="Type a message..."
-                className="form-input !py-2 !text-xs flex-1"
-                onKeyDown={(e) => { if (e.key === 'Enter') setChatMessage(''); }}
-              />
-              <button onClick={() => setChatMessage('')} className="w-8 h-8 rounded-lg bg-himalaya-gold flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              <button onClick={() => setChatOpen(false)} className="text-white/60 hover:text-white transition-colors">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
             </div>
+            {/* Body */}
+            <div className="p-4 space-y-3">
+              <div className="glass-card-static !rounded-2xl !rounded-tl-sm p-3 max-w-[260px]">
+                <p className="text-xs text-white/80 leading-relaxed">
+                  Namaste! 🙏 Welcome to Himalayan Exploration Treks. We&apos;re here to help you plan your dream Himalayan adventure. Send us a WhatsApp message and our team will assist you personally.
+                </p>
+              </div>
+              {/* Quick prompts */}
+              <div className="flex flex-wrap gap-1.5">
+                {['Trip Info', 'Pricing', 'Visa Help', 'Custom Package'].map((qr) => (
+                  <a
+                    key={qr}
+                    href={`https://wa.me/9779841023371?text=${encodeURIComponent(`Hi! I'm interested in: ${qr}. Can you help me?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] px-2.5 py-1 rounded-full border border-himalaya-gold/30 text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors"
+                  >
+                    {qr}
+                  </a>
+                ))}
+              </div>
+            </div>
+            {/* CTA */}
+            <a
+              href={`https://wa.me/9779841023371?text=${encodeURIComponent("Namaste! I'm interested in planning a Himalayan trek. Can you help me?")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block p-4 text-center font-semibold text-white transition-colors"
+              style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Start Chat on WhatsApp
+              </div>
+              <div className="text-xs text-white/80 mt-1">+977 9841023371</div>
+            </a>
           </div>
         )}
-        {/* Chat bubble */}
-        <div className={`chat-bubble ${!chatOpen ? 'animate-chat-pulse' : ''}`} onClick={() => setChatOpen(!chatOpen)}>
+        {/* WhatsApp bubble - the icon itself */}
+        <a
+          href={`https://wa.me/9779841023371?text=${encodeURIComponent("Namaste! I'm interested in planning a Himalayan trek. Can you help me?")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`chat-bubble ${!chatOpen ? 'animate-chat-pulse' : ''}`}
+          onClick={(e) => { e.preventDefault(); setChatOpen(!chatOpen); }}
+          title="Chat with us on WhatsApp: +977 9841023371"
+          aria-label="Open WhatsApp chat"
+          style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
+        >
           {chatOpen ? (
-            <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
           ) : (
-            <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            /* WhatsApp official logo */
+            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
           )}
-        </div>
+        </a>
       </div>
 
       {/* ═══════════ 25. CHECKOUT OVERLAY ═══════════ */}
