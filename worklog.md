@@ -659,3 +659,40 @@ Stage Summary:
 - WhatsApp icon verified authentic (SVG path data matches official WhatsApp logo)
 - WhatsApp link verified: https://wa.me/9779841023371 with URL-encoded message
 - Screenshots saved to /home/z/my-project/download/screenshots/v18-*.png
+
+---
+Task ID: rename-lama-to-kumar-and-add-photo
+Agent: Super Z (main)
+Task: Change "Lama Tamang" name to "Kumar Lama" and add Google Drive image as his profile photo
+
+Work Log:
+- User asked to rename team member "Lama Tamang" to "Kumar Lama" and use a Google Drive image (file ID: 1_X5qykT05m-jfUvSt4asM9ShUEYQ5eDU) as his profile photo
+- Downloaded the Google Drive image using direct download URL format: https://drive.google.com/uc?export=download&id=1_X5qykT05m-jfUvSt4asM9ShUEYQ5eDU
+- Image downloaded successfully: 647KB JPEG, 960x959 pixels, valid JFIF format
+- Copied image to /home/z/my-project/public/team/kumar-lama.jpg (public folder so it's served at /team/kumar-lama.jpg)
+- Verified image is accessible via HTTP: GET /team/kumar-lama.jpg returns 200 OK
+- Updated TEAM_MEMBERS array in page.tsx:
+  * Changed name from 'Lama Tamang' to 'Kumar Lama'
+  * Changed initials from 'LT' to 'KL'
+  * Added image field: '/team/kumar-lama.jpg'
+  * Updated bio to use 'Kumar' instead of 'Lama' (e.g., "Kumar started as a trekking porter" instead of "Lama started as...")
+- Updated team card rendering to show image when available:
+  * If member.image exists: render a 20x20 (w-20 h-20) circular image with object-cover, gold ring (ring-2 ring-himalaya-gold/40), gradient background fallback
+  * If no image: fall back to the original initials avatar (w-14 h-14 circle with gradient + initials text)
+  * Image has alt text = member name, loading="lazy"
+- Verified via agent-browser DOM inspection:
+  * name: "Kumar Lama" ✓
+  * role: "Founder & Managing Director" ✓
+  * hasImage: true ✓
+  * imageSrc: "/team/kumar-lama.jpg" ✓
+  * imageAlt: "Kumar Lama" ✓
+- VLM verification: "Yes, the first team member's name is 'Kumar Lama' (not Lama Tamang). His profile shows a real photo (a person's face) instead of initials. The first team card displays a photo of a person (face visible) with the name 'Kumar Lama' and his title."
+
+Stage Summary:
+- Team member renamed from "Lama Tamang" to "Kumar Lama"
+- Google Drive image downloaded and saved to public/team/kumar-lama.jpg (647KB, 960x959 JPEG)
+- Profile photo now displays as a circular image with gold ring border instead of the "LT" initials avatar
+- Bio updated to reference "Kumar" instead of "Lama"
+- Initials updated from "LT" to "KL" (used as fallback if image fails to load)
+- Image is served from /team/kumar-lama.jpg (public folder)
+- Verified via both DOM inspection and VLM that name shows "Kumar Lama" and real photo is visible

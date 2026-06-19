@@ -237,7 +237,7 @@ const PRICING_TIERS = [
 ];
 
 const TEAM_MEMBERS = [
-  { name: 'Lama Tamang', role: 'Founder & Managing Director', initials: 'LT', bio: 'Born in Kabhre Palanchok, Lama started as a trekking porter and kitchen assistant before founding Himalayan Exploration Treks in 2013. A member of the indigenous Tamang community, he works with guides who love their country and try to make a difference by working in their villages and mountains.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
+  { name: 'Kumar Lama', role: 'Founder & Managing Director', initials: 'KL', image: '/team/kumar-lama.jpg', bio: 'Born in Kabhre Palanchok, Kumar started as a trekking porter and kitchen assistant before founding Himalayan Exploration Treks in 2013. A member of the indigenous Tamang community, he works with guides who love their country and try to make a difference by working in their villages and mountains.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
   { name: 'Pushpa Tamang', role: 'Australia Representative', initials: 'PT', bio: 'Based in Campsie, NSW, Pushpa handles international inquiries and bookings for our Australian clients, ensuring seamless coordination across time zones.', gradient: 'from-himalaya-teal/40 to-himalaya-teal/15' },
   { name: 'Senior Trekking Guide', role: 'Head Guide', initials: 'SG', bio: 'Our lead guides are tourism experts with deep knowledge of local culture and history. They possess a deep understanding of the mountains and ensure every trekker\'s safety and enjoyment.', gradient: 'from-himalaya-blue/40 to-himalaya-blue/15' },
   { name: 'Operations Team', role: 'Logistics & Support', initials: 'OT', bio: 'Our Kathmandu-based operations team ensures every expedition runs seamlessly — from airport pickups and hotel bookings to permit arrangements and emergency support, 24/7.', gradient: 'from-himalaya-emerald/40 to-himalaya-emerald/15' },
@@ -1801,9 +1801,20 @@ export default function HimalayanExplorer() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {TEAM_MEMBERS.map((member) => (
                 <div key={member.name} className="glass-card p-4 text-center">
-                  <div className={`w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center text-lg font-bold text-himalaya-gold`}>
-                    {member.initials}
-                  </div>
+                  {member.image ? (
+                    <div className={`w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden bg-gradient-to-br ${member.gradient} ring-2 ring-himalaya-gold/40 flex items-center justify-center`}>
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div className={`w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center text-lg font-bold text-himalaya-gold`}>
+                      {member.initials}
+                    </div>
+                  )}
                   <h4 className="font-semibold text-sm">{member.name}</h4>
                   <div className="text-xs text-himalaya-gold mb-2">{member.role}</div>
                   <p className="text-[10px] text-white/80 leading-relaxed">{member.bio}</p>
