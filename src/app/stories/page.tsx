@@ -82,7 +82,7 @@ export default function StoriesPage() {
             {TESTIMONIALS.map((tm) => (
               <div key={tm.name} className="card-premium holo-sheen p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600">
                     {tm.initials}
                   </div>
                   <div>
@@ -167,7 +167,7 @@ export default function StoriesPage() {
                 onClick={() => setFaqCategory(c)}
                 className={`px-3 py-1.5 rounded-full text-xs font-display font-medium transition-all ${
                   faqCategory === c
-                    ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-black'
+                    ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-red-600'
                     : 'glass-card-static text-white hover:text-himalaya-gold'
                 }`}
               >

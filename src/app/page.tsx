@@ -812,7 +812,7 @@ _Sent from himalayanexploration.com_`;
               {/* Wishlist */}
               <button className="relative p-2 text-white/90 hover:text-himalaya-gold transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-himalaya-gold text-black text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
+                {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-himalaya-gold text-red-600 text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
               </button>
               {/* User */}
               <button className="p-2 text-white/90 hover:text-himalaya-gold transition-colors">
@@ -866,10 +866,30 @@ _Sent from himalayanexploration.com_`;
             <span className="pill-cinematic mb-8">{t('hero.pill')}</span>
           </div>
 
-          {/* Oversized cinematic headline with Playfair Display + golden shimmer */}
-          <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-hero">
-            <span className="block text-white">{t('hero.title1')}</span>
-            <span className="block text-golden-shimmer italic">{t('hero.title2')}</span>
+          {/* Oversized cinematic headline with word-by-word animation + float */}
+          <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-hero hero-headline-float">
+            <span className="block text-white">
+              {t('hero.title1').split(' ').map((word, i) => (
+                <span
+                  key={i}
+                  className="hero-headline-word"
+                  style={{ animationDelay: `${0.3 + i * 0.15}s` }}
+                >
+                  {word}&nbsp;
+                </span>
+              ))}
+            </span>
+            <span className="block hero-golden-shimmer-animated italic">
+              {t('hero.title2').split(' ').map((word, i) => (
+                <span
+                  key={i}
+                  className="hero-headline-word"
+                  style={{ animationDelay: `${0.8 + i * 0.15}s` }}
+                >
+                  {word}&nbsp;
+                </span>
+              ))}
+            </span>
           </h1>
 
           {/* Subtitle */}

@@ -254,7 +254,7 @@ export default function ExperiencesPage() {
                 onClick={() => setActiveToolTab(tab)}
                 className={`px-4 py-2 rounded-full text-sm font-display font-medium capitalize transition-all ${
                   activeToolTab === tab
-                    ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-black'
+                    ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-red-600'
                     : 'glass-card-static text-white hover:text-himalaya-gold'
                 }`}
               >
@@ -446,7 +446,7 @@ export default function ExperiencesPage() {
             {/* Step 1 */}
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">1</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">1</div>
                 <h3 className="font-cinematic text-xl font-bold text-white">Select Destinations You Want to Visit</h3>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
@@ -483,7 +483,7 @@ export default function ExperiencesPage() {
             {/* Step 2 */}
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">2</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">2</div>
                 <h3 className="font-cinematic text-xl font-bold text-white">Trip Details</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -515,7 +515,7 @@ export default function ExperiencesPage() {
             {/* Step 3 */}
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">3</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">3</div>
                 <h3 className="font-cinematic text-xl font-bold text-white">Your Contact Information</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -529,7 +529,7 @@ export default function ExperiencesPage() {
             {/* Step 4 */}
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">4</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">4</div>
                 <h3 className="font-cinematic text-xl font-bold text-white">Your Wishes & Special Requests</h3>
               </div>
               <textarea

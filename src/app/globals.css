@@ -399,7 +399,7 @@
 /* ========== CTA Buttons ========== */
 .btn-primary {
   background: linear-gradient(135deg, #d4a853, #e8c06a);
-  color: #000000;
+  color: #dc2626;
   padding: 12px 28px;
   border-radius: 10px;
   font-weight: 700;
@@ -811,7 +811,7 @@ input[type="range"]::-moz-range-thumb {
 }
 .difficulty-moderate {
   background: rgba(212,168,83,0.95);
-  color: #000;
+  color: #dc2626;
   border: 1px solid rgba(212,168,83,1);
   text-shadow: 0 1px 2px rgba(255,255,255,0.3);
   font-weight: 700;
@@ -1432,6 +1432,61 @@ input[type="range"]::-moz-range-thumb {
   letter-spacing: -0.015em;
 }
 
+/* ─── Hero Headline Animation ───
+   Word-by-word slide-up + fade-in, then gentle floating loop.
+   The first line animates in, then the second line follows. */
+.hero-headline-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px) rotateX(-30deg);
+  animation: hero-word-enter 0.9s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+  transform-origin: bottom center;
+}
+@keyframes hero-word-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) rotateX(-30deg);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+/* Gentle floating animation for the whole headline after it enters */
+.hero-headline-float {
+  animation: hero-headline-float 6s ease-in-out 2s infinite;
+}
+@keyframes hero-headline-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Shimmer sweep across the golden text (continuous) */
+.hero-golden-shimmer-animated {
+  background: linear-gradient(
+    100deg,
+    #f0d68a 0%,
+    #d4a853 20%,
+    #fff8e1 40%,
+    #d4a853 60%,
+    #f97316 80%,
+    #f0d68a 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: golden-shimmer-flow 5s linear infinite, hero-word-enter 1.2s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+}
+
 /* ─── Golden Text Shimmer (premium cinematic) ─── */
 .text-golden-shimmer {
   background: linear-gradient(
@@ -1533,7 +1588,7 @@ input[type="range"]::-moz-range-thumb {
   font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 0.05em;
-  color: #000;
+  color: #dc2626;
   background: linear-gradient(135deg, #f0d68a 0%, #d4a853 50%, #a07830 100%);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
@@ -1679,7 +1734,7 @@ input[type="range"]::-moz-range-thumb {
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #000;
+  color: #dc2626;
   background: linear-gradient(135deg, #f43f5e, #f97316, #d4a853);
   background-size: 200% 200%;
   border-radius: 999px;

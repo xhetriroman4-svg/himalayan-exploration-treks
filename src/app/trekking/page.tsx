@@ -53,7 +53,7 @@ export default function TrekkingPage() {
               onClick={() => setTourFilter(region)}
               className={`px-4 py-2 rounded-full text-sm font-display font-medium transition-all ${
                 tourFilter === region
-                  ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-black'
+                  ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-red-600'
                   : 'glass-card-static text-white hover:text-himalaya-gold'
               }`}
             >
