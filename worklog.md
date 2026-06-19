@@ -696,3 +696,48 @@ Stage Summary:
 - Initials updated from "LT" to "KL" (used as fallback if image fails to load)
 - Image is served from /team/kumar-lama.jpg (public folder)
 - Verified via both DOM inspection and VLM that name shows "Kumar Lama" and real photo is visible
+
+---
+Task ID: split-homepage-into-pages
+Agent: Super Z (main)
+Task: Make homepage shorter by moving sections to dedicated pages for each nav option
+
+Work Log:
+- User asked to make homepage shorter (only important details) and create separate pages for each nav option (Trekking, Contact, About, Stories, Experiences)
+- Created 5 new Next.js route pages:
+  1. /trekking — All 16 tour packages with region filter tabs, tour detail modal with full info (highlights, season, group size, price, discount), custom package CTA
+  2. /contact — Contact info cards (WhatsApp +977 9841023371, email, office), customer support form (name, email, phone, subject dropdown, message), quick FAQ answers
+  3. /about — Founder story (Kumar Lama with photo), 4 company values, team grid (4 members with Kumar's photo), CTA
+  4. /stories — Testimonials (6 cards with 5-star ratings), photo gallery (12 tiles), blog posts (4 articles), FAQ with category filter
+  5. /experiences — Why travel with us (4 features), trekking regions grid (6 destinations), 4 planning tools (budget calculator, altitude safety, packing checklist, difficulty calculator), full custom package builder (4-step form)
+- Removed VideoBackground import from all sub-pages (video is already mounted globally in layout.tsx)
+- Updated all navigation links from anchor links (#destinations, #about, etc.) to route links (/trekking, /about, etc.) in both desktop nav and mobile menu
+- Updated hero "Explore Expeditions" CTA to link to /trekking
+- Updated "View All Expeditions" button to link to /trekking
+- Trimmed homepage by removing 21 sections (1248 lines removed):
+  * Removed: Custom Package Builder, Feature Grid, Product Showcase, Destinations Grid, Interactive Tools, About Us, Travel Guides, Trust & Safety, Gallery, Testimonials, Blog/Stories, FAQ, Pricing, Contact section, Countdown, CTA section, Trust Badges Marquee, Live Countdown, Testimonials Carousel, Interactive Nepal Map, Instagram Grid, Newsletter CTA section
+  * Kept: Navigation, Hero, Search Bar, Marquee, Wave Divider, Stats Counter, Featured Tours (trimmed to 6), Newsletter, Footer, Back to Top, WhatsApp Widget, Checkout Overlay
+- Updated Featured Tours section: heading changed from "Popular Trekking Expeditions" to "Featured Trekking Expeditions", subtitle updated to mention "Visit the Trekking page to see all 16 packages", removed region filter tabs, limited to TOURS.slice(0, 6) showing only 6 featured tours
+- Homepage size: 227KB → 65KB (71% reduction)
+- Homepage lines: 3092 → 1844 (40% reduction)
+- Verified via agent-browser: all 6 pages return HTTP 200
+- VLM verification across 7 screenshots (homepage top, homepage bottom, trekking, contact, about, stories, experiences):
+  * Homepage Top: 9/10 (clean hero + value prop)
+  * Homepage Bottom: 8/10 (footer + trust)
+  * Trekking Page: 9/10 (tours + filters)
+  * Contact Page: 9/10 (info + form)
+  * About Page: 9/10 (team + story)
+  * Stories Page: 9/10 (reviews + treks)
+  * Experiences Page: 9/10 (planning tools + value props)
+
+Stage Summary:
+- Homepage is now SHORT and focused: Hero → Search → Stats → 6 Featured Tours → Newsletter → Footer
+- 5 dedicated pages created for each nav option:
+  * /trekking — all 16 tour packages with filter + detail modal
+  * /contact — contact info + customer support form
+  * /about — founder story + team + values
+  * /stories — testimonials + gallery + blog + FAQ
+  * /experiences — features + planning tools + custom package builder
+- All nav links updated to route to the new pages
+- Homepage reduced from 227KB to 65KB (71% smaller)
+- All pages verified working with VLM scores of 8-9/10
