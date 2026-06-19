@@ -783,7 +783,7 @@ export default function HimalayanExplorer() {
                 { label: t('nav.stories'), href: '#stories' },
                 { label: t('nav.contact'), href: '#contact' },
               ].map((link) => (
-                <a key={link.href} href={link.href} className="nav-link-rainbow text-sm text-white/60 hover:text-white transition-colors font-display">{link.label}</a>
+                <a key={link.href} href={link.href} className="nav-link-rainbow text-sm text-white/90 hover:text-white transition-colors font-display">{link.label}</a>
               ))}
             </div>
 
@@ -797,7 +797,7 @@ export default function HimalayanExplorer() {
                 {showCurrencyDropdown && (
                   <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
                     {['USD','EUR','GBP','INR'].map((c) => (
-                      <button key={c} onClick={() => { setCurrency(c); setShowCurrencyDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${currency === c ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{c}</button>
+                      <button key={c} onClick={() => { setCurrency(c); setShowCurrencyDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${currency === c ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/90 hover:text-white hover:bg-white/5'}`}>{c}</button>
                     ))}
                   </div>
                 )}
@@ -812,7 +812,7 @@ export default function HimalayanExplorer() {
                 {showLanguageDropdown && (
                   <div className="absolute top-full right-0 mt-1 glass-card-strong p-1 min-w-[140px] z-50">
                     {LANGUAGES.map((l) => (
-                      <button key={l.code} onClick={() => { setLang(l.code); setShowLanguageDropdown(false); }} className={`flex items-center gap-2 w-full text-left px-3 py-2 text-xs rounded transition-colors ${lang === l.code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>
+                      <button key={l.code} onClick={() => { setLang(l.code); setShowLanguageDropdown(false); }} className={`flex items-center gap-2 w-full text-left px-3 py-2 text-xs rounded transition-colors ${lang === l.code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/90 hover:text-white hover:bg-white/5'}`}>
                         <span>{l.flag}</span>
                         <span>{l.label}</span>
                       </button>
@@ -821,12 +821,12 @@ export default function HimalayanExplorer() {
                 )}
               </div>
               {/* Wishlist */}
-              <button className="relative p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+              <button className="relative p-2 text-white/90 hover:text-himalaya-gold transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
                 {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-himalaya-gold text-black text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
               </button>
               {/* User */}
-              <button className="p-2 text-white/50 hover:text-himalaya-gold transition-colors">
+              <button className="p-2 text-white/90 hover:text-himalaya-gold transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
               </button>
               {/* CTA - cinematic */}
@@ -834,7 +834,7 @@ export default function HimalayanExplorer() {
             </div>
 
             {/* Mobile hamburger */}
-            <button className="md:hidden p-2 text-white/60" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button className="md:hidden p-2 text-white/90" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 {mobileMenuOpen ? <path d="M6 6l12 12M6 18L18 6"/> : <><path d="M4 6h16M4 12h16M4 18h16"/></>}
               </svg>
@@ -852,11 +852,11 @@ export default function HimalayanExplorer() {
               { label: t('nav.stories'), href: '#stories' },
               { label: t('nav.contact'), href: '#contact' },
             ].map((link) => (
-              <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-himalaya-gold py-2 transition-colors">{link.label}</a>
+              <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/90 hover:text-himalaya-gold py-2 transition-colors">{link.label}</a>
             ))}
             <div className="flex gap-2 pt-2 border-t border-white/5 flex-wrap">
               {LANGUAGES.map((l) => (
-                <button key={l.code} onClick={() => setLang(l.code)} className={`text-xs px-3 py-1.5 rounded ${lang === l.code ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/40'}`}>{l.flag} {l.code}</button>
+                <button key={l.code} onClick={() => setLang(l.code)} className={`text-xs px-3 py-1.5 rounded ${lang === l.code ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/85'}`}>{l.flag} {l.code}</button>
               ))}
             </div>
             <button className="btn-cinematic w-full !text-sm">{t('nav.book')}</button>
@@ -910,7 +910,7 @@ export default function HimalayanExplorer() {
             ].map(([val, label]) => (
               <div key={label} className="text-center">
                 <div className="stat-counter-cinematic text-readable-strong">{val}</div>
-                <div className="eyebrow mt-2 text-white/50">{label}</div>
+                <div className="eyebrow mt-2 text-white/90">{label}</div>
               </div>
             ))}
           </div>
@@ -927,7 +927,7 @@ export default function HimalayanExplorer() {
         <div className="max-w-5xl mx-auto glass-card-strong p-4 sm:p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div>
-              <label className="text-xs text-white/30 mb-1 block">Destination</label>
+              <label className="text-xs text-white/80 mb-1 block">Destination</label>
               <select className="form-select w-full">
                 <option>All Regions</option>
                 <option>Everest Region</option>
@@ -939,17 +939,17 @@ export default function HimalayanExplorer() {
               </select>
             </div>
             <div>
-              <label className="text-xs text-white/30 mb-1 block">Dates</label>
+              <label className="text-xs text-white/80 mb-1 block">Dates</label>
               <input type="date" className="search-input w-full" />
             </div>
             <div>
-              <label className="text-xs text-white/30 mb-1 block">Travelers</label>
+              <label className="text-xs text-white/80 mb-1 block">Travelers</label>
               <select className="form-select w-full">
                 {[1,2,3,4,5,6,7,8,9,'10+'].map((n) => <option key={String(n)}>{n} Traveler{n !== 1 ? 's' : ''}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-xs text-white/30 mb-1 block">Trip Type</label>
+              <label className="text-xs text-white/80 mb-1 block">Trip Type</label>
               <select className="form-select w-full">
                 <option>Trekking Holiday</option>
                 <option>Trekking Peak</option>
@@ -1026,7 +1026,7 @@ export default function HimalayanExplorer() {
               ].map(([val, suffix, label], i) => (
                 <div key={label as string} className="text-center">
                   <div className="text-readable-strong text-2xl sm:text-3xl font-bold gradient-text-shimmer font-display">{(val as number).toLocaleString()}{suffix}</div>
-                  <div className="text-readable text-xs text-white/50 mt-1">{label}</div>
+                  <div className="text-readable text-xs text-white/90 mt-1">{label}</div>
                 </div>
               ))}
             </div>
@@ -1042,7 +1042,7 @@ export default function HimalayanExplorer() {
             <h2 className="font-cinematic text-readable-strong text-4xl sm:text-5xl font-bold mt-6 mb-3">
               {t('section.trekking.title1')} <span className="text-golden-shimmer italic">{t('section.trekking.title2')}</span>
             </h2>
-            <p className="text-readable text-white/60 mt-2 max-w-2xl mx-auto">{t('section.trekking.subtitle')}</p>
+            <p className="text-readable text-white/90 mt-2 max-w-2xl mx-auto">{t('section.trekking.subtitle')}</p>
             <div className="divider-golden" />
           </div>
 
@@ -1055,7 +1055,7 @@ export default function HimalayanExplorer() {
                 className={`px-4 py-1.5 rounded-full text-xs font-display font-medium transition-all ${
                   tourFilter === region
                     ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-black'
-                    : 'glass-card-static text-white/60 hover:text-white'
+                    : 'glass-card-static text-white/90 hover:text-white'
                 }`}
               >
                 {region}
@@ -1091,7 +1091,7 @@ export default function HimalayanExplorer() {
                   {/* Title on image */}
                   <div className="absolute bottom-3 left-3 right-12">
                     <h3 className="text-readable-strong font-cinematic text-lg font-bold text-white leading-tight">{tour.title}</h3>
-                    <p className="text-readable text-xs text-white/70 mt-0.5">{tour.region}</p>
+                    <p className="text-readable text-xs text-white/85 mt-0.5">{tour.region}</p>
                   </div>
                 </div>
 
@@ -1099,21 +1099,21 @@ export default function HimalayanExplorer() {
                   {/* Quick stats row */}
                   <div className="grid grid-cols-3 gap-2 mb-4 text-center">
                     <div className="bg-white/5 rounded-lg py-2">
-                      <div className="text-xs text-white/40">Days</div>
+                      <div className="text-xs text-white/85">Days</div>
                       <div className="font-cinematic font-bold text-golden-shimmer text-lg">{tour.days}</div>
                     </div>
                     <div className="bg-white/5 rounded-lg py-2">
-                      <div className="text-xs text-white/40">Altitude</div>
+                      <div className="text-xs text-white/85">Altitude</div>
                       <div className="font-display font-bold text-white text-sm">{tour.altitude}</div>
                     </div>
                     <div className="bg-white/5 rounded-lg py-2">
-                      <div className="text-xs text-white/40">Difficulty</div>
+                      <div className="text-xs text-white/85">Difficulty</div>
                       <div className={`font-display font-bold text-xs uppercase difficulty-${tour.difficulty}`}>{tour.difficulty}</div>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-readable text-xs text-white/60 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
+                  <p className="text-readable text-xs text-white/90 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
 
                   {/* Highlights */}
                   <div className="flex flex-wrap gap-1 mb-4">
@@ -1121,12 +1121,12 @@ export default function HimalayanExplorer() {
                       <span key={h} className="text-[10px] px-2 py-0.5 rounded-full bg-himalaya-gold/10 text-himalaya-gold/90 border border-himalaya-gold/20">{h}</span>
                     ))}
                     {tour.highlights.length > 2 && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-white/50">+{tour.highlights.length - 2} more</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-white/90">+{tour.highlights.length - 2} more</span>
                     )}
                   </div>
 
                   {/* Season + Group size */}
-                  <div className="flex items-center gap-3 text-xs text-white/50 mb-4">
+                  <div className="flex items-center gap-3 text-xs text-white/90 mb-4">
                     <span className="flex items-center gap-1">
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
                       {tour.season}
@@ -1140,7 +1140,7 @@ export default function HimalayanExplorer() {
                   {/* Price + CTA */}
                   <div className="flex items-center justify-between pt-3 border-t border-white/10">
                     <div>
-                      <div className="text-xs text-white/40 line-through">${tour.oldPrice.toLocaleString()}</div>
+                      <div className="text-xs text-white/85 line-through">${tour.oldPrice.toLocaleString()}</div>
                       <div className="font-cinematic text-2xl font-bold text-golden-shimmer">${tour.price.toLocaleString()}</div>
                     </div>
                     <button onClick={() => openCheckout(tour)} className="btn-cinematic !text-xs !py-2 !px-4">
@@ -1168,7 +1168,7 @@ export default function HimalayanExplorer() {
             <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
               Build Your <span className="text-golden-shimmer italic">Dream Adventure</span>
             </h2>
-            <p className="text-readable text-white/60 max-w-2xl mx-auto">
+            <p className="text-readable text-white/90 max-w-2xl mx-auto">
               Can&apos;t find the perfect package? Create your own custom itinerary. Select the destinations you want to visit, tell us your preferences, and our team will craft a personalized trek just for you.
             </p>
             <div className="divider-golden" />
@@ -1188,7 +1188,7 @@ export default function HimalayanExplorer() {
                     className={`flex items-center gap-2 p-2.5 rounded-lg cursor-pointer transition-all border ${
                       customDestinations.includes(tour.title)
                         ? 'bg-himalaya-gold/15 border-himalaya-gold/50 text-white'
-                        : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'
+                        : 'bg-white/5 border-white/10 text-white/90 hover:bg-white/10'
                     }`}
                   >
                     <input
@@ -1222,7 +1222,7 @@ export default function HimalayanExplorer() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
-                  <label className="text-xs text-white/50 mb-1 block font-display">Preferred Start Date</label>
+                  <label className="text-xs text-white/90 mb-1 block font-display">Preferred Start Date</label>
                   <input
                     type="date"
                     value={customTrip.startDate}
@@ -1231,7 +1231,7 @@ export default function HimalayanExplorer() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-white/50 mb-1 block font-display">Duration (days)</label>
+                  <label className="text-xs text-white/90 mb-1 block font-display">Duration (days)</label>
                   <input
                     type="number"
                     min="1"
@@ -1242,7 +1242,7 @@ export default function HimalayanExplorer() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-white/50 mb-1 block font-display">Travelers</label>
+                  <label className="text-xs text-white/90 mb-1 block font-display">Travelers</label>
                   <input
                     type="number"
                     min="1"
@@ -1253,7 +1253,7 @@ export default function HimalayanExplorer() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-white/50 mb-1 block font-display">Budget per Person (USD)</label>
+                  <label className="text-xs text-white/90 mb-1 block font-display">Budget per Person (USD)</label>
                   <select
                     value={customTrip.budget}
                     onChange={(e) => setCustomTrip({...customTrip, budget: e.target.value})}
@@ -1324,7 +1324,7 @@ export default function HimalayanExplorer() {
 
             {/* Submit */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
-              <p className="text-xs text-white/40 text-center sm:text-left">
+              <p className="text-xs text-white/85 text-center sm:text-left">
                 Our team will respond within 24 hours with a personalized itinerary and quote.
               </p>
               <button
@@ -1358,7 +1358,7 @@ export default function HimalayanExplorer() {
                   <FeatureIcon type={feat.icon} />
                 </div>
                 <h3 className="font-semibold mb-2">{feat.title}</h3>
-                <p className="text-xs text-white/40 leading-relaxed">{feat.desc}</p>
+                <p className="text-xs text-white/85 leading-relaxed">{feat.desc}</p>
                 <a href="#" className="text-xs text-himalaya-gold mt-3 inline-block hover:underline">Learn more →</a>
               </div>
             ))}
@@ -1373,7 +1373,7 @@ export default function HimalayanExplorer() {
             <div className="reveal">
               <span className="category-pill">🏔️ Featured Expedition</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">Everest Base Camp Trek</h2>
-              <p className="text-white/40 mb-6 leading-relaxed">If you have ever dreamed of standing at the foot of the world&apos;s tallest mountain, the Everest Base Camp Trek is a seriously epic adventure far beyond easy hiking. Whether you&apos;ve never done a serious hike or you&apos;re already a seasoned mountain climber, this 14-day journey works for everyone — from total beginners to mountain veterans, older adults, and families who want their kids to experience what real adventure looks like.</p>
+              <p className="text-white/85 mb-6 leading-relaxed">If you have ever dreamed of standing at the foot of the world&apos;s tallest mountain, the Everest Base Camp Trek is a seriously epic adventure far beyond easy hiking. Whether you&apos;ve never done a serious hike or you&apos;re already a seasoned mountain climber, this 14-day journey works for everyone — from total beginners to mountain veterans, older adults, and families who want their kids to experience what real adventure looks like.</p>
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {[
                   ['⏱ Duration', '14 Days'],
@@ -1382,7 +1382,7 @@ export default function HimalayanExplorer() {
                   ['👥 Min Group', '1'],
                 ].map(([label, val]) => (
                   <div key={label} className="glass-card-static p-3">
-                    <div className="text-[10px] text-white/30">{label}</div>
+                    <div className="text-[10px] text-white/80">{label}</div>
                     <div className="text-sm font-semibold mt-0.5">{val}</div>
                   </div>
                 ))}
@@ -1428,11 +1428,11 @@ export default function HimalayanExplorer() {
                   <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
                   <div>
                     <h3 className="font-bold text-lg">{dest.name}</h3>
-                    <p className="text-xs text-white/50">{dest.tagline}</p>
+                    <p className="text-xs text-white/90">{dest.tagline}</p>
                   </div>
                 </div>
                 <div className="p-4 flex items-center justify-between">
-                  <div className="text-xs text-white/40">
+                  <div className="text-xs text-white/85">
                     <span className="text-himalaya-gold font-semibold">{dest.trips}</span> trips · From <span className="text-himalaya-gold font-semibold">${dest.priceFrom.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-himalaya-gold">
@@ -1471,7 +1471,7 @@ export default function HimalayanExplorer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Destination</label>
+                    <label className="text-xs text-white/80 mb-1 block">Destination</label>
                     <select value={budgetDest} onChange={(e) => setBudgetDest(e.target.value)} className="form-select w-full">
                       <option value="nepal">Nepal</option>
                       <option value="bhutan">Bhutan</option>
@@ -1482,14 +1482,14 @@ export default function HimalayanExplorer() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Duration: {budgetDuration} days</label>
+                    <label className="text-xs text-white/80 mb-1 block">Duration: {budgetDuration} days</label>
                     <input type="range" min="1" max="30" value={budgetDuration} onChange={(e) => setBudgetDuration(Number(e.target.value))} className="w-full" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-2 block">Travel Style</label>
+                    <label className="text-xs text-white/80 mb-2 block">Travel Style</label>
                     <div className="flex gap-2">
                       {[['budget','Budget'],['mid','Mid-range'],['luxury','Luxury']].map(([val, label]) => (
-                        <label key={val} className={`flex-1 text-center text-xs py-2 rounded cursor-pointer border transition-colors ${budgetStyle === val ? 'border-himalaya-gold/40 bg-himalaya-gold/10 text-himalaya-gold' : 'border-white/10 text-white/40 hover:border-white/20'}`}>
+                        <label key={val} className={`flex-1 text-center text-xs py-2 rounded cursor-pointer border transition-colors ${budgetStyle === val ? 'border-himalaya-gold/40 bg-himalaya-gold/10 text-himalaya-gold' : 'border-white/10 text-white/85 hover:border-white/20'}`}>
                           <input type="radio" name="style" value={val} checked={budgetStyle === val} onChange={() => setBudgetStyle(val)} className="sr-only" />
                           {label}
                         </label>
@@ -1497,7 +1497,7 @@ export default function HimalayanExplorer() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Travelers</label>
+                    <label className="text-xs text-white/80 mb-1 block">Travelers</label>
                     <select value={budgetTravelers} onChange={(e) => setBudgetTravelers(Number(e.target.value))} className="form-select w-full">
                       {[1,2,3,4,5,6,7,8,9,10].map((n) => <option key={n} value={n}>{n}</option>)}
                     </select>
@@ -1507,10 +1507,10 @@ export default function HimalayanExplorer() {
                 <div>
                   {budgetResult ? (
                     <div className="space-y-3">
-                      <h4 className="text-sm font-semibold text-white/60 mb-3">Estimated Breakdown</h4>
+                      <h4 className="text-sm font-semibold text-white/90 mb-3">Estimated Breakdown</h4>
                       {Object.entries(budgetResult).map(([key, val]) => (
                         <div key={key} className="tool-card flex items-center justify-between !p-3">
-                          <span className="text-xs text-white/40">{key}</span>
+                          <span className="text-xs text-white/85">{key}</span>
                           <span className="text-sm font-semibold text-himalaya-gold">${val.toLocaleString()}</span>
                         </div>
                       ))}
@@ -1520,7 +1520,7 @@ export default function HimalayanExplorer() {
                       </div>
                     </div>
                   ) : (
-                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+                    <div className="h-full flex items-center justify-center text-white/85 text-sm">
                       Configure your trip and click Calculate
                     </div>
                   )}
@@ -1535,15 +1535,15 @@ export default function HimalayanExplorer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Max Altitude (m)</label>
+                    <label className="text-xs text-white/80 mb-1 block">Max Altitude (m)</label>
                     <input type="number" value={altMax} onChange={(e) => setAltMax(Number(e.target.value))} className="form-input" placeholder="e.g. 5364" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Starting Altitude (m)</label>
+                    <label className="text-xs text-white/80 mb-1 block">Starting Altitude (m)</label>
                     <input type="number" value={altStart} onChange={(e) => setAltStart(Number(e.target.value))} className="form-input" placeholder="e.g. 2800" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Trekking Days</label>
+                    <label className="text-xs text-white/80 mb-1 block">Trekking Days</label>
                     <input type="number" value={altDays} onChange={(e) => setAltDays(Number(e.target.value))} className="form-input" placeholder="e.g. 10" />
                   </div>
                   <button onClick={calculateAltitude} className="btn-primary w-full mt-2">Analyze Altitude</button>
@@ -1552,26 +1552,26 @@ export default function HimalayanExplorer() {
                   {altResult ? (
                     <div className="space-y-4">
                       <div className="tool-card !p-4">
-                        <div className="text-xs text-white/30 mb-1">Risk Level</div>
+                        <div className="text-xs text-white/80 mb-1">Risk Level</div>
                         <div className={`text-lg font-bold text-readable-strong ${altResult.risk === 'Low' ? 'text-green-400' : altResult.risk === 'Moderate' ? 'text-yellow-300' : altResult.risk === 'High' ? 'text-orange-400' : 'text-red-500'}`}>{altResult.risk}</div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="tool-card !p-3">
-                          <div className="text-xs text-white/30">Acclimatization Days</div>
+                          <div className="text-xs text-white/80">Acclimatization Days</div>
                           <div className="text-sm font-semibold mt-0.5">{altResult.acclimDays} days</div>
                         </div>
                         <div className="tool-card !p-3">
-                          <div className="text-xs text-white/30">Max Daily Gain</div>
+                          <div className="text-xs text-white/80">Max Daily Gain</div>
                           <div className="text-sm font-semibold mt-0.5">{altResult.maxDailyGain}m/day</div>
                         </div>
                         <div className="tool-card !p-3">
-                          <div className="text-xs text-white/30">O₂ at Peak</div>
+                          <div className="text-xs text-white/80">O₂ at Peak</div>
                           <div className="text-sm font-semibold mt-0.5">{altResult.oxygenPct}%</div>
                         </div>
                       </div>
                       {/* Altitude profile */}
                       <div className="tool-card !p-4">
-                        <div className="text-xs text-white/30 mb-2">Altitude Zone Profile</div>
+                        <div className="text-xs text-white/80 mb-2">Altitude Zone Profile</div>
                         <div className="flex gap-1 items-end h-24">
                           {[
                             { label: 'Safe', h: Math.min(altStart, 3000), color: 'bg-green-500/40' },
@@ -1581,14 +1581,14 @@ export default function HimalayanExplorer() {
                           ].map((zone) => (
                             <div key={zone.label} className="flex-1 flex flex-col items-center justify-end h-full">
                               <div className={`w-full ${zone.color} rounded-t`} style={{ height: `${Math.max((zone.h / altMax) * 100, zone.h > 0 ? 8 : 0)}%` }} />
-                              <span className="text-[9px] text-white/30 mt-1">{zone.label}</span>
+                              <span className="text-[9px] text-white/80 mt-1">{zone.label}</span>
                             </div>
                           ))}
                         </div>
                       </div>
                       {altResult.symptoms.length > 0 && (
                         <div className="tool-card !p-3">
-                          <div className="text-xs text-white/30 mb-1">Symptoms to Watch</div>
+                          <div className="text-xs text-white/80 mb-1">Symptoms to Watch</div>
                           <div className="flex flex-wrap gap-1">
                             {altResult.symptoms.map((s) => (
                               <span key={s} className="text-[10px] px-2 py-0.5 rounded bg-red-500/30 text-red-300 font-bold text-readable">{s}</span>
@@ -1598,7 +1598,7 @@ export default function HimalayanExplorer() {
                       )}
                     </div>
                   ) : (
-                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+                    <div className="h-full flex items-center justify-center text-white/85 text-sm">
                       Enter altitude details and click Analyze
                     </div>
                   )}
@@ -1612,13 +1612,13 @@ export default function HimalayanExplorer() {
             <div className="glass-card-static p-6 sm:p-8 reveal">
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-white/40">Packing Progress</span>
+                  <span className="text-sm text-white/85">Packing Progress</span>
                   <span className="text-sm font-semibold gradient-text">{packedPct}%</span>
                 </div>
                 <div className="progress-bar">
                   <div className="progress-fill" style={{ width: `${packedPct}%` }} />
                 </div>
-                <div className="text-xs text-white/20 mt-1">{packedCount} of {totalItems} items packed</div>
+                <div className="text-xs text-white/85 mt-1">{packedCount} of {totalItems} items packed</div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(PACKING_ITEMS).map(([category, items]) => (
@@ -1636,7 +1636,7 @@ export default function HimalayanExplorer() {
                             checked={!!packedItems[item]}
                             onChange={(e) => setPackedItems((prev) => ({ ...prev, [item]: e.target.checked }))}
                           />
-                          <span className={`text-xs transition-colors ${packedItems[item] ? 'text-white/30 line-through' : 'text-white/60 group-hover:text-white/80'}`}>{item}</span>
+                          <span className={`text-xs transition-colors ${packedItems[item] ? 'text-white/80 line-through' : 'text-white/90 group-hover:text-white/80'}`}>{item}</span>
                         </label>
                       ))}
                     </div>
@@ -1656,19 +1656,19 @@ export default function HimalayanExplorer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Trek Distance: {diffDistance} km</label>
+                    <label className="text-xs text-white/80 mb-1 block">Trek Distance: {diffDistance} km</label>
                     <input type="range" min="10" max="200" value={diffDistance} onChange={(e) => setDiffDistance(Number(e.target.value))} className="w-full" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Max Altitude: {diffAltitude.toLocaleString()} m</label>
+                    <label className="text-xs text-white/80 mb-1 block">Max Altitude: {diffAltitude.toLocaleString()} m</label>
                     <input type="range" min="1000" max="8849" step="100" value={diffAltitude} onChange={(e) => setDiffAltitude(Number(e.target.value))} className="w-full" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Total Ascent: {diffAscent.toLocaleString()} m</label>
+                    <label className="text-xs text-white/80 mb-1 block">Total Ascent: {diffAscent.toLocaleString()} m</label>
                     <input type="range" min="500" max="5000" step="100" value={diffAscent} onChange={(e) => setDiffAscent(Number(e.target.value))} className="w-full" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Terrain Type</label>
+                    <label className="text-xs text-white/80 mb-1 block">Terrain Type</label>
                     <select value={diffTerrain} onChange={(e) => setDiffTerrain(e.target.value)} className="form-select w-full">
                       <option value="trail">Trail</option>
                       <option value="rocky">Rocky</option>
@@ -1678,7 +1678,7 @@ export default function HimalayanExplorer() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Fitness Level</label>
+                    <label className="text-xs text-white/80 mb-1 block">Fitness Level</label>
                     <select value={diffFitness} onChange={(e) => setDiffFitness(e.target.value)} className="form-select w-full">
                       <option value="beginner">Beginner</option>
                       <option value="intermediate">Intermediate</option>
@@ -1692,34 +1692,34 @@ export default function HimalayanExplorer() {
                   {diffResult ? (
                     <div className="space-y-4">
                       <div className="tool-card !p-4 text-center">
-                        <div className="text-xs text-white/30 mb-1">Difficulty Score</div>
+                        <div className="text-xs text-white/80 mb-1">Difficulty Score</div>
                         <div className="text-4xl font-bold gradient-text">{diffResult.score}/10</div>
                         <div className={`mt-1 text-sm font-semibold difficulty-${diffResult.label.toLowerCase()}`}>{diffResult.label}</div>
                       </div>
                       {/* Gauge bar */}
                       <div className="tool-card !p-4">
-                        <div className="text-xs text-white/30 mb-2">Difficulty Gauge</div>
+                        <div className="text-xs text-white/80 mb-2">Difficulty Gauge</div>
                         <div className="h-3 bg-white/5 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-700 ${diffResult.score <= 3 ? 'bg-green-500' : diffResult.score <= 5 ? 'bg-yellow-500' : diffResult.score <= 7 ? 'bg-orange-500' : 'bg-red-500'}`}
                             style={{ width: `${diffResult.score * 10}%` }}
                           />
                         </div>
-                        <div className="flex justify-between text-[9px] text-white/20 mt-1">
+                        <div className="flex justify-between text-[9px] text-white/85 mt-1">
                           <span>Easy</span><span>Moderate</span><span>Challenging</span><span>Strenuous</span>
                         </div>
                       </div>
                       <div className="tool-card !p-3">
-                        <div className="text-xs text-white/30">Estimated Completion Time</div>
+                        <div className="text-xs text-white/80">Estimated Completion Time</div>
                         <div className="text-sm font-semibold mt-0.5">{diffResult.time}</div>
                       </div>
                       <div className="tool-card !p-3">
-                        <div className="text-xs text-white/30">Training Recommendations</div>
-                        <div className="text-sm text-white/60 mt-0.5 leading-relaxed">{diffResult.training}</div>
+                        <div className="text-xs text-white/80">Training Recommendations</div>
+                        <div className="text-sm text-white/90 mt-0.5 leading-relaxed">{diffResult.training}</div>
                       </div>
                     </div>
                   ) : (
-                    <div className="h-full flex items-center justify-center text-white/20 text-sm">
+                    <div className="h-full flex items-center justify-center text-white/85 text-sm">
                       Enter trek details and click Estimate
                     </div>
                   )}
@@ -1759,21 +1759,21 @@ export default function HimalayanExplorer() {
             <div className="reveal">
               <span className="category-pill">🏔️ Our Story</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">About Himalayan Exploration Treks</h2>
-              <p className="text-white/40 leading-relaxed mb-4">We&apos;re a small company based in Kathmandu, which provides adventure travel packages that deliver amazing adventures. Founded in 2013, Himalayan Exploration Treks was born from a deep passion for travel and an earnest desire to deliver unforgettable experiences to all our clients.</p>
-              <p className="text-white/40 leading-relaxed mb-4">I am from the hill district of Kabhre Palanchok, a half-day road trip from Kathmandu. As a member of the Tamang family, one of the indigenous hill groups of Nepal, born to work in the mountains, I started my career as a trekking porter and kitchen assistant before founding this agency in 2013.</p>
-              <p className="text-white/40 leading-relaxed mb-6">Your trip with our team means a lot to us. It&apos;s not just another trekking trip — it contributes to a group of local staff who care about their country, places, and fellow people. You are in good hands with us and will surely get a happy and lasting holiday!</p>
+              <p className="text-white/85 leading-relaxed mb-4">We&apos;re a small company based in Kathmandu, which provides adventure travel packages that deliver amazing adventures. Founded in 2013, Himalayan Exploration Treks was born from a deep passion for travel and an earnest desire to deliver unforgettable experiences to all our clients.</p>
+              <p className="text-white/85 leading-relaxed mb-4">I am from the hill district of Kabhre Palanchok, a half-day road trip from Kathmandu. As a member of the Tamang family, one of the indigenous hill groups of Nepal, born to work in the mountains, I started my career as a trekking porter and kitchen assistant before founding this agency in 2013.</p>
+              <p className="text-white/85 leading-relaxed mb-6">Your trip with our team means a lot to us. It&apos;s not just another trekking trip — it contributes to a group of local staff who care about their country, places, and fellow people. You are in good hands with us and will surely get a happy and lasting holiday!</p>
               <div className="flex gap-4 text-sm">
                 <div className="glass-card-static p-3 flex-1 text-center">
                   <div className="text-himalaya-gold font-bold text-lg">2013</div>
-                  <div className="text-white/30 text-xs">Founded</div>
+                  <div className="text-white/80 text-xs">Founded</div>
                 </div>
                 <div className="glass-card-static p-3 flex-1 text-center">
                   <div className="text-himalaya-gold font-bold text-lg">6</div>
-                  <div className="text-white/30 text-xs">Trekking Regions</div>
+                  <div className="text-white/80 text-xs">Trekking Regions</div>
                 </div>
                 <div className="glass-card-static p-3 flex-1 text-center">
                   <div className="text-himalaya-gold font-bold text-lg">0</div>
-                  <div className="text-white/30 text-xs">Major Incidents</div>
+                  <div className="text-white/80 text-xs">Major Incidents</div>
                 </div>
               </div>
             </div>
@@ -1790,7 +1790,7 @@ export default function HimalayanExplorer() {
               <div key={v.title} className="glass-card p-4 text-center">
                 <div className="text-2xl mb-2">{v.icon}</div>
                 <h4 className="font-semibold text-sm mb-1">{v.title}</h4>
-                <p className="text-[10px] text-white/30">{v.desc}</p>
+                <p className="text-[10px] text-white/80">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -1806,7 +1806,7 @@ export default function HimalayanExplorer() {
                   </div>
                   <h4 className="font-semibold text-sm">{member.name}</h4>
                   <div className="text-xs text-himalaya-gold mb-2">{member.role}</div>
-                  <p className="text-[10px] text-white/30 leading-relaxed">{member.bio}</p>
+                  <p className="text-[10px] text-white/80 leading-relaxed">{member.bio}</p>
                 </div>
               ))}
             </div>
@@ -1828,7 +1828,7 @@ export default function HimalayanExplorer() {
                   <ResourceIcon type={res.icon} />
                 </div>
                 <h3 className="font-semibold mb-2">{res.title}</h3>
-                <p className="text-xs text-white/40 leading-relaxed mb-4">{res.desc}</p>
+                <p className="text-xs text-white/85 leading-relaxed mb-4">{res.desc}</p>
                 <button className="btn-ghost text-xs">{res.cta}</button>
               </div>
             ))}
@@ -1849,7 +1849,7 @@ export default function HimalayanExplorer() {
                 <div className="text-himalaya-gold flex-shrink-0"><TrustIcon type={item.icon} /></div>
                 <div>
                   <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                  <p className="text-xs text-white/40">{item.desc}</p>
+                  <p className="text-xs text-white/85">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -1867,7 +1867,7 @@ export default function HimalayanExplorer() {
                 ['UK Embassy', '+977-1-441-0583'],
               ].map(([label, num]) => (
                 <div key={label} className="text-center">
-                  <div className="text-xs text-white/30">{label}</div>
+                  <div className="text-xs text-white/80">{label}</div>
                   <div className="text-sm font-semibold text-himalaya-gold">{num}</div>
                 </div>
               ))}
@@ -1875,10 +1875,10 @@ export default function HimalayanExplorer() {
           </div>
           {/* Partners */}
           <div className="reveal">
-            <div className="text-center text-xs text-white/20 mb-3">Trusted Partners & Certifications</div>
+            <div className="text-center text-xs text-white/85 mb-3">Trusted Partners & Certifications</div>
             <div className="flex flex-wrap justify-center gap-2">
               {['ATTA', 'GSTC', 'Nepal Tourism Board', 'World Nomads', 'Allianz', 'SafetyWing'].map((p) => (
-                <span key={p} className="glass-card-static px-4 py-1.5 text-xs text-white/40">{p}</span>
+                <span key={p} className="glass-card-static px-4 py-1.5 text-xs text-white/85">{p}</span>
               ))}
             </div>
           </div>
@@ -1907,7 +1907,7 @@ export default function HimalayanExplorer() {
                   <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-end p-3 group cursor-pointer">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="text-sm font-semibold">{item.title}</div>
-                      <div className="text-xs text-white/50">{item.location}</div>
+                      <div className="text-xs text-white/90">{item.location}</div>
                     </div>
                   </div>
                 </div>
@@ -1929,19 +1929,19 @@ export default function HimalayanExplorer() {
             <div className="mt-3 flex items-center justify-center gap-2">
               <StarRating count={5} />
               <span className="text-sm font-semibold">4.9/5</span>
-              <span className="text-xs text-white/30">based on 2,500+ verified reviews</span>
+              <span className="text-xs text-white/80">based on 2,500+ verified reviews</span>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {TESTIMONIALS.map((t) => (
               <div key={t.name} className="glass-card p-6 reveal-scale">
                 <StarRating count={5} />
-                <p className="text-sm text-white/60 leading-relaxed mt-3 mb-4">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-sm text-white/90 leading-relaxed mt-3 mb-4">&ldquo;{t.quote}&rdquo;</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-himalaya-gold/30 to-himalaya-gold/10 flex items-center justify-center text-sm font-bold text-himalaya-gold">{t.initials}</div>
                   <div>
                     <div className="text-sm font-semibold">{t.name}</div>
-                    <div className="text-xs text-white/30">{t.trip}</div>
+                    <div className="text-xs text-white/80">{t.trip}</div>
                   </div>
                 </div>
               </div>
@@ -1962,13 +1962,13 @@ export default function HimalayanExplorer() {
               <article key={post.title} className="glass-card overflow-hidden reveal-scale">
                 <div className={`h-40 bg-gradient-to-br ${post.gradient} relative`}>
                   <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
-                  <span className="absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded bg-black/40 text-white/70">{post.category}</span>
+                  <span className="absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded bg-black/40 text-white/85">{post.category}</span>
                 </div>
                 <div className="p-4 sm:p-5">
                   <h3 className="font-semibold text-sm mb-2">{post.title}</h3>
-                  <p className="text-xs text-white/40 leading-relaxed mb-3">{post.excerpt}</p>
+                  <p className="text-xs text-white/85 leading-relaxed mb-3">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-white/20">{post.readTime} read</span>
+                    <span className="text-[10px] text-white/85">{post.readTime} read</span>
                     <a href="#" className="text-xs text-himalaya-gold hover:underline">Read More →</a>
                   </div>
                 </div>
@@ -1998,10 +1998,10 @@ export default function HimalayanExplorer() {
               <div key={i} className={`faq-item ${faqOpenIndex === i ? 'open' : ''}`}>
                 <button onClick={() => setFaqOpenIndex(faqOpenIndex === i ? null : i)} className="w-full flex items-center justify-between p-4 text-left">
                   <span className="text-sm font-medium pr-4">{faq.q}</span>
-                  <svg className="faq-chevron w-4 h-4 flex-shrink-0 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                  <svg className="faq-chevron w-4 h-4 flex-shrink-0 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
                 <div className="faq-answer">
-                  <div className="px-4 pb-4 text-sm text-white/40 leading-relaxed">{faq.a}</div>
+                  <div className="px-4 pb-4 text-sm text-white/85 leading-relaxed">{faq.a}</div>
                 </div>
               </div>
             ))}
@@ -2026,11 +2026,11 @@ export default function HimalayanExplorer() {
                 <h3 className="font-bold text-lg mb-1">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mb-4">
                   <span className="text-3xl font-bold gradient-text">${tier.price.toLocaleString()}</span>
-                  <span className="text-xs text-white/30">/person</span>
+                  <span className="text-xs text-white/80">/person</span>
                 </div>
                 <ul className="space-y-2 mb-6">
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-xs text-white/50">
+                    <li key={f} className="flex items-start gap-2 text-xs text-white/90">
                       <svg className="w-4 h-4 text-himalaya-gold flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
                       {f}
                     </li>
@@ -2055,7 +2055,7 @@ export default function HimalayanExplorer() {
             <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-gradient-to-br from-himalaya-aurora/10 to-himalaya-teal/10 rounded-full blur-[60px]" />
             <div className="relative z-10 text-center">
               <h2 className="text-2xl sm:text-3xl font-bold mb-2">Stay Inspired</h2>
-              <p className="text-white/40 text-sm mb-1">Get exclusive deals, travel tips, and early access to new expeditions.</p>
+              <p className="text-white/85 text-sm mb-1">Get exclusive deals, travel tips, and early access to new expeditions.</p>
               <p className="text-xs text-himalaya-gold mb-6">Join 15,000+ subscribers. Get 10% off your first booking.</p>
               {newsletterSubmitted ? (
                 <div className="text-himalaya-gold text-sm font-semibold">✓ Welcome aboard! Check your inbox for your 10% discount code.</div>
@@ -2071,7 +2071,7 @@ export default function HimalayanExplorer() {
                   <button onClick={() => { if (newsletterEmail.includes('@')) setNewsletterSubmitted(true); }} className="btn-primary whitespace-nowrap">Subscribe</button>
                 </div>
               )}
-              <p className="text-[10px] text-white/20 mt-3">No spam. Unsubscribe anytime.</p>
+              <p className="text-[10px] text-white/85 mt-3">No spam. Unsubscribe anytime.</p>
             </div>
           </div>
         </div>
@@ -2090,21 +2090,21 @@ export default function HimalayanExplorer() {
               <form onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll get back to you soon.'); }} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Name</label>
+                    <label className="text-xs text-white/80 mb-1 block">Name</label>
                     <input type="text" value={contactForm.name} onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))} className="form-input" placeholder="Your name" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Email</label>
+                    <label className="text-xs text-white/80 mb-1 block">Email</label>
                     <input type="email" value={contactForm.email} onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))} className="form-input" placeholder="you@example.com" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Phone</label>
+                    <label className="text-xs text-white/80 mb-1 block">Phone</label>
                     <input type="tel" value={contactForm.phone} onChange={(e) => setContactForm((p) => ({ ...p, phone: e.target.value }))} className="form-input" placeholder="+1 (555) 000-0000" />
                   </div>
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Trip Interest</label>
+                    <label className="text-xs text-white/80 mb-1 block">Trip Interest</label>
                     <select value={contactForm.trip} onChange={(e) => setContactForm((p) => ({ ...p, trip: e.target.value }))} className="form-select w-full">
                       <option value="">Select a trip</option>
                       <option>Everest Base Camp</option>
@@ -2118,7 +2118,7 @@ export default function HimalayanExplorer() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-white/30 mb-1 block">Message</label>
+                  <label className="text-xs text-white/80 mb-1 block">Message</label>
                   <textarea value={contactForm.message} onChange={(e) => setContactForm((p) => ({ ...p, message: e.target.value }))} className="form-input" rows={4} placeholder="Tell us about your dream expedition..." />
                 </div>
                 <button type="submit" className="btn-primary w-full sm:w-auto">Send Message</button>
@@ -2137,20 +2137,20 @@ export default function HimalayanExplorer() {
                 ].map(([label, val]) => (
                   <div key={label} className="flex items-center gap-3">
                     <span className="text-sm">{label}</span>
-                    <span className="text-sm text-white/50">{val}</span>
+                    <span className="text-sm text-white/90">{val}</span>
                   </div>
                 ))}
               </div>
               {/* Social icons */}
               <div className="flex gap-3 mb-6">
                 {['Facebook','X','Instagram','YouTube'].map((s) => (
-                  <button key={s} className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/40 hover:text-himalaya-gold hover:border-himalaya-gold/30 transition-colors text-xs">{s.charAt(0)}</button>
+                  <button key={s} className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/85 hover:text-himalaya-gold hover:border-himalaya-gold/30 transition-colors text-xs">{s.charAt(0)}</button>
                 ))}
               </div>
               {/* Australia Office */}
               <div className="glass-card-static p-3 mb-4">
                 <h4 className="text-xs font-semibold text-himalaya-gold mb-2">Australia Office</h4>
-                <div className="space-y-1 text-xs text-white/40">
+                <div className="space-y-1 text-xs text-white/85">
                   <p>5th Avenue, Campsie, NSW 2194</p>
                   <p>+61 412 543 886</p>
                   <p>pushpa@himalayanexploration.com</p>
@@ -2163,7 +2163,7 @@ export default function HimalayanExplorer() {
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
                     <circle cx="12" cy="9" r="2.5"/>
                   </svg>
-                  <span className="absolute bottom-3 text-xs text-white/30">Kathmandu, Nepal</span>
+                  <span className="absolute bottom-3 text-xs text-white/80">Kathmandu, Nepal</span>
                 </div>
               </div>
             </div>
@@ -2177,7 +2177,7 @@ export default function HimalayanExplorer() {
           <div className="glass-card-strong p-8 text-center">
             <span className="category-pill pill-aurora">⏰ Next Departure</span>
             <h2 className="text-2xl font-bold mt-4 mb-2">Everest Base Camp — Spring 2026</h2>
-            <p className="text-sm text-white/30 mb-6">Limited spots remaining for our most popular expedition</p>
+            <p className="text-sm text-white/80 mb-6">Limited spots remaining for our most popular expedition</p>
             <div className="flex justify-center gap-3 mb-6">
               {[
                 ['Days', countdown.days],
@@ -2187,7 +2187,7 @@ export default function HimalayanExplorer() {
               ].map(([label, val]) => (
                 <div key={label} className="countdown-digit">
                   <div className="text-2xl font-bold gradient-text">{String(val).padStart(2, '0')}</div>
-                  <div className="text-[10px] text-white/30 mt-0.5">{label}</div>
+                  <div className="text-[10px] text-white/80 mt-0.5">{label}</div>
                 </div>
               ))}
             </div>
@@ -2205,7 +2205,7 @@ export default function HimalayanExplorer() {
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center reveal">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach <span className="gradient-text-aurora">New Heights</span>?</h2>
-          <p className="text-white/40 mb-8 max-w-lg mx-auto">Your trip with our team means a lot to us. Whether it&apos;s cultural exploration or extreme adventure such as trekking to Everest Base Camp, we can help create a great trip plan according to your requirements.</p>
+          <p className="text-white/85 mb-8 max-w-lg mx-auto">Your trip with our team means a lot to us. Whether it&apos;s cultural exploration or extreme adventure such as trekking to Everest Base Camp, we can help create a great trip plan according to your requirements.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="btn-cinematic" onClick={() => openCheckout(TOURS[0])}>Start Your Journey</button>
             <button className="btn-outline-cinematic">Talk to an Expert</button>
@@ -2217,7 +2217,7 @@ export default function HimalayanExplorer() {
       <section className="py-10 border-y border-white/5 section-wash-gold">
         <div className="max-w-7xl mx-auto px-4 text-center mb-6">
           <p className="eyebrow">{t('trust.title')}</p>
-          <p className="text-readable text-xs text-white/40 mt-2">{t('trust.subtitle')}</p>
+          <p className="text-readable text-xs text-white/85 mt-2">{t('trust.subtitle')}</p>
         </div>
         <div className="marquee-cinematic">
           <div className="marquee-cinematic-track">
@@ -2235,7 +2235,7 @@ export default function HimalayanExplorer() {
                 ].map((badge, i) => (
                   <div key={`${dup}-${i}`} className="flex flex-col items-center gap-1 flex-shrink-0">
                     <div className="font-cinematic text-2xl font-bold text-golden-shimmer">{badge.name}</div>
-                    <div className="eyebrow text-white/40 !text-[0.6rem]">{badge.sub}</div>
+                    <div className="eyebrow text-white/85 !text-[0.6rem]">{badge.sub}</div>
                   </div>
                 ))}
               </div>
@@ -2253,7 +2253,7 @@ export default function HimalayanExplorer() {
           <h2 className="reveal-fade-up font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
             {t('countdown.title1')} <span className="text-golden-shimmer italic">{t('countdown.title2')}</span>
           </h2>
-          <p className="reveal-fade-up text-readable text-white/60 max-w-2xl mx-auto mb-12">{t('countdown.subtitle')}</p>
+          <p className="reveal-fade-up text-readable text-white/90 max-w-2xl mx-auto mb-12">{t('countdown.subtitle')}</p>
           <div className="reveal-fade-up flex flex-wrap justify-center gap-4">
             {([
               ['days', countdown.days],
@@ -2278,7 +2278,7 @@ export default function HimalayanExplorer() {
             <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
               {t('testimonials.title1')} <span className="text-golden-shimmer italic">{t('testimonials.title2')}</span>
             </h2>
-            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('testimonials.subtitle')}</p>
+            <p className="text-readable text-white/90 max-w-2xl mx-auto">{t('testimonials.subtitle')}</p>
             <div className="divider-golden" />
           </div>
           <div className="reveal-fade-up grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -2290,7 +2290,7 @@ export default function HimalayanExplorer() {
                   </div>
                   <div>
                     <div className="font-display font-semibold text-white">{tm.name}</div>
-                    <div className="text-xs text-white/40">{tm.trip}</div>
+                    <div className="text-xs text-white/85">{tm.trip}</div>
                   </div>
                 </div>
                 <div className="flex gap-0.5 mb-3">
@@ -2298,7 +2298,7 @@ export default function HimalayanExplorer() {
                     <svg key={s} className="w-4 h-4 text-himalaya-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.4-6.3-4.6-6.3 4.6L7.9 14 2 9.4h7.6z"/></svg>
                   ))}
                 </div>
-                <p className="text-readable text-sm text-white/70 leading-relaxed line-clamp-5">"{tm.quote}"</p>
+                <p className="text-readable text-sm text-white/85 leading-relaxed line-clamp-5">"{tm.quote}"</p>
               </div>
             ))}
           </div>
@@ -2313,7 +2313,7 @@ export default function HimalayanExplorer() {
             <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
               {t('map.title1')} <span className="text-golden-shimmer italic">{t('map.title2')}</span>
             </h2>
-            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('map.subtitle')}</p>
+            <p className="text-readable text-white/90 max-w-2xl mx-auto">{t('map.subtitle')}</p>
             <div className="divider-golden" />
           </div>
           <div className="reveal-fade-up grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -2356,14 +2356,14 @@ export default function HimalayanExplorer() {
                 <div key={dest.name} className="card-premium p-4 flex items-center justify-between gap-4">
                   <div className="flex-1">
                     <div className="font-cinematic text-lg font-bold text-white">{dest.name}</div>
-                    <div className="text-xs text-white/50">{dest.tagline}</div>
+                    <div className="text-xs text-white/90">{dest.tagline}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-white/40">from</div>
+                    <div className="text-xs text-white/85">from</div>
                     <div className="font-cinematic text-xl font-bold text-golden-shimmer">${dest.priceFrom}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-white/40">trips</div>
+                    <div className="text-xs text-white/85">trips</div>
                     <div className="font-display font-bold text-white">{dest.trips}</div>
                   </div>
                 </div>
@@ -2381,7 +2381,7 @@ export default function HimalayanExplorer() {
             <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
               {t('instagram.title1')} <span className="text-golden-shimmer italic">{t('instagram.title2')}</span>
             </h2>
-            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('instagram.subtitle')}</p>
+            <p className="text-readable text-white/90 max-w-2xl mx-auto">{t('instagram.subtitle')}</p>
             <div className="divider-golden" />
           </div>
           <div className="reveal-fade-up grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
@@ -2404,7 +2404,7 @@ export default function HimalayanExplorer() {
                   <div className="text-xs font-display text-white/80">{tile.name}</div>
                   <div className="flex items-center gap-1 mt-1">
                     <svg className="w-3 h-3 text-rose-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    <span className="text-xs text-white/70">{tile.likes}</span>
+                    <span className="text-xs text-white/85">{tile.likes}</span>
                   </div>
                 </div>
               </div>
@@ -2442,7 +2442,7 @@ export default function HimalayanExplorer() {
               {t('newsletter.cta')}
             </button>
           </form>
-          <p className="reveal-fade-up text-xs text-white/35 mt-4">{t('newsletter.disclaimer')}</p>
+          <p className="reveal-fade-up text-xs text-white/80 mt-4">{t('newsletter.disclaimer')}</p>
         </div>
       </section>
 
@@ -2459,10 +2459,10 @@ export default function HimalayanExplorer() {
                 </svg>
                 <span className="font-bold">Himalayan Exploration</span>
               </div>
-              <p className="text-xs text-white/30 leading-relaxed mb-4">Himalayan Exploration Treks — A small company based in Kathmandu providing adventure travel packages since 2013.</p>
+              <p className="text-xs text-white/80 leading-relaxed mb-4">Himalayan Exploration Treks — A small company based in Kathmandu providing adventure travel packages since 2013.</p>
               <div className="flex gap-2">
                 {['F','X','In','YT'].map((s) => (
-                  <button key={s} className="w-8 h-8 rounded bg-white/5 text-white/30 hover:text-himalaya-gold hover:bg-himalaya-gold/10 transition-colors text-xs flex items-center justify-center">{s}</button>
+                  <button key={s} className="w-9 h-9 rounded-lg bg-white/10 text-white/90 hover:text-himalaya-gold hover:bg-himalaya-gold/15 transition-colors text-sm font-bold flex items-center justify-center border border-white/15">{s}</button>
                 ))}
               </div>
             </div>
@@ -2471,7 +2471,7 @@ export default function HimalayanExplorer() {
               <h4 className="text-sm font-semibold mb-3">Trekking Regions</h4>
               <ul className="space-y-1.5">
                 {['Everest Region','Annapurna Region','Langtang Region','Manaslu Region','Mustang Region','Dolpo Region'].map((l) => (
-                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+                  <li key={l}><a href="#" className="text-xs text-white/80 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
             </div>
@@ -2480,7 +2480,7 @@ export default function HimalayanExplorer() {
               <h4 className="text-sm font-semibold mb-3">Company</h4>
               <ul className="space-y-1.5">
                 {['About Us','Our Team','Blog','Contact','Terms & Conditions','Privacy Policy'].map((l) => (
-                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+                  <li key={l}><a href="#" className="text-xs text-white/80 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
             </div>
@@ -2489,7 +2489,7 @@ export default function HimalayanExplorer() {
               <h4 className="text-sm font-semibold mb-3">Support</h4>
               <ul className="space-y-1.5">
                 {['Safety','Travel Insurance','Visa Guide','Packing Lists','FAQ','Cookies'].map((l) => (
-                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+                  <li key={l}><a href="#" className="text-xs text-white/80 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
             </div>
@@ -2498,26 +2498,26 @@ export default function HimalayanExplorer() {
               <h4 className="text-sm font-semibold mb-3">Legal</h4>
               <ul className="space-y-1.5">
                 {['Terms & Conditions','Privacy Policy','Cookies','Responsible Travel'].map((l) => (
-                  <li key={l}><a href="#" className="text-xs text-white/30 hover:text-himalaya-gold transition-colors">{l}</a></li>
+                  <li key={l}><a href="#" className="text-xs text-white/80 hover:text-himalaya-gold transition-colors">{l}</a></li>
                 ))}
               </ul>
             </div>
           </div>
           {/* Payment methods */}
           <div className="border-t border-white/5 pt-6 mb-6">
-            <div className="text-center text-xs text-white/20 mb-3">Pay Safely With Us — The payment is encrypted and transmitted securely with an SSL protocol</div>
+            <div className="text-center text-xs text-white/85 mb-3">Pay Safely With Us — The payment is encrypted and transmitted securely with an SSL protocol</div>
             <div className="flex flex-wrap justify-center gap-2">
               {['Visa','Mastercard','PayPal','Apple Pay','Google Pay'].map((m) => (
-                <span key={m} className="glass-card-static px-3 py-1 text-[10px] text-white/30">{m}</span>
+                <span key={m} className="glass-card-static px-3 py-1.5 text-xs text-white font-medium">{m}</span>
               ))}
             </div>
           </div>
           {/* Bottom bar */}
           <div className="border-t border-white/5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-[10px] text-white/20">© 2013 - {new Date().getFullYear()} Himalayan Exploration Travel. All Rights Reserved.</p>
+            <p className="text-xs text-white/90">© 2013 - {new Date().getFullYear()} Himalayan Exploration Travel. All Rights Reserved.</p>
             <div className="flex gap-4">
               {['Privacy','Terms','Cookies'].map((l) => (
-                <a key={l} href="#" className="text-[10px] text-white/20 hover:text-white/40 transition-colors">{l}</a>
+                <a key={l} href="#" className="text-xs text-white/90 hover:text-himalaya-gold transition-colors font-medium">{l}</a>
               ))}
             </div>
           </div>
@@ -2554,7 +2554,7 @@ export default function HimalayanExplorer() {
                   </div>
                 </div>
               </div>
-              <button onClick={() => setChatOpen(false)} className="text-white/60 hover:text-white transition-colors">
+              <button onClick={() => setChatOpen(false)} className="text-white/90 hover:text-white transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
               </button>
             </div>
@@ -2629,7 +2629,7 @@ export default function HimalayanExplorer() {
           {/* Modal */}
           <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-card-strong rounded-2xl">
             {/* Close button */}
-            <button onClick={closeCheckout} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/20 transition-colors">
+            <button onClick={closeCheckout} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-colors">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
 
@@ -2641,7 +2641,7 @@ export default function HimalayanExplorer() {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold">Book Your Trek</h2>
-                  <p className="text-xs text-white/40">Complete your booking in 3 easy steps</p>
+                  <p className="text-xs text-white/85">Complete your booking in 3 easy steps</p>
                 </div>
               </div>
 
@@ -2658,7 +2658,7 @@ export default function HimalayanExplorer() {
                         ? 'bg-himalaya-gold/20 text-himalaya-gold border border-himalaya-gold/30'
                         : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1)
                           ? 'bg-himalaya-emerald/10 text-himalaya-emerald border border-himalaya-emerald/20'
-                          : 'bg-white/5 text-white/30 border border-white/5'
+                          : 'bg-white/5 text-white/80 border border-white/5'
                     }`}>
                       <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold" style={{
                         backgroundColor: checkoutStep === step.key ? '#d4a853' : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '#10b981' : 'rgba(255,255,255,0.1)',
@@ -2679,11 +2679,11 @@ export default function HimalayanExplorer() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${selectedTour.gradient} flex items-center justify-center flex-shrink-0`}>
-                    <svg className="w-6 h-6 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
+                    <svg className="w-6 h-6 text-white/85" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
                   </div>
                   <div>
                     <h3 className="font-semibold text-sm">{selectedTour.title}</h3>
-                    <div className="flex items-center gap-2 text-xs text-white/40">
+                    <div className="flex items-center gap-2 text-xs text-white/85">
                       <span>{selectedTour.days} Days</span>
                       <span>·</span>
                       <span>{selectedTour.altitude}</span>
@@ -2694,7 +2694,7 @@ export default function HimalayanExplorer() {
                 </div>
                 <div className="text-right sm:text-right">
                   <div className="text-lg font-bold text-himalaya-gold">${selectedTour.price.toLocaleString()}</div>
-                  <div className="text-[10px] text-white/30">per person</div>
+                  <div className="text-[10px] text-white/80">per person</div>
                 </div>
               </div>
             </div>
@@ -2703,58 +2703,58 @@ export default function HimalayanExplorer() {
               {/* ──── STEP 1: TRAVELER DETAILS ──── */}
               {checkoutStep === 'details' && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-white/70 mb-2">Traveler Information</h3>
+                  <h3 className="text-sm font-semibold text-white/85 mb-2">Traveler Information</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Full Name *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Full Name *</label>
                       <input type="text" value={bookingForm.fullName} onChange={(e) => setBookingForm(p => ({ ...p, fullName: e.target.value }))} className="form-input w-full" placeholder="Your full name" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Email Address *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Email Address *</label>
                       <input type="email" value={bookingForm.email} onChange={(e) => setBookingForm(p => ({ ...p, email: e.target.value }))} className="form-input w-full" placeholder="you@example.com" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Phone Number *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Phone Number *</label>
                       <input type="tel" value={bookingForm.phone} onChange={(e) => setBookingForm(p => ({ ...p, phone: e.target.value }))} className="form-input w-full" placeholder="+977 98XXXXXXXX" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Nationality *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Nationality *</label>
                       <input type="text" value={bookingForm.nationality} onChange={(e) => setBookingForm(p => ({ ...p, nationality: e.target.value }))} className="form-input w-full" placeholder="e.g., Nepali, American" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Preferred Start Date *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Preferred Start Date *</label>
                       <input type="date" value={bookingForm.startDate} onChange={(e) => setBookingForm(p => ({ ...p, startDate: e.target.value }))} className="form-input w-full" min={new Date().toISOString().split('T')[0]} />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Number of Travelers *</label>
+                      <label className="text-xs text-white/80 mb-1 block">Number of Travelers *</label>
                       <select value={bookingForm.travelers} onChange={(e) => setBookingForm(p => ({ ...p, travelers: Number(e.target.value) }))} className="form-select w-full">
                         {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n} Traveler{n > 1 ? 's' : ''}</option>)}
                       </select>
                     </div>
                   </div>
 
-                  <h3 className="text-sm font-semibold text-white/70 mt-4 mb-2">Emergency & Health</h3>
+                  <h3 className="text-sm font-semibold text-white/85 mt-4 mb-2">Emergency & Health</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Emergency Contact Name</label>
+                      <label className="text-xs text-white/80 mb-1 block">Emergency Contact Name</label>
                       <input type="text" value={bookingForm.emergencyContact} onChange={(e) => setBookingForm(p => ({ ...p, emergencyContact: e.target.value }))} className="form-input w-full" placeholder="Contact person name" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Emergency Contact Phone</label>
+                      <label className="text-xs text-white/80 mb-1 block">Emergency Contact Phone</label>
                       <input type="tel" value={bookingForm.emergencyPhone} onChange={(e) => setBookingForm(p => ({ ...p, emergencyPhone: e.target.value }))} className="form-input w-full" placeholder="+1 555 000 0000" />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Dietary Requirements</label>
+                      <label className="text-xs text-white/80 mb-1 block">Dietary Requirements</label>
                       <input type="text" value={bookingForm.dietaryNeeds} onChange={(e) => setBookingForm(p => ({ ...p, dietaryNeeds: e.target.value }))} className="form-input w-full" placeholder="Vegetarian, vegan, allergies..." />
                     </div>
                     <div>
-                      <label className="text-xs text-white/30 mb-1 block">Medical Conditions</label>
+                      <label className="text-xs text-white/80 mb-1 block">Medical Conditions</label>
                       <input type="text" value={bookingForm.medicalConditions} onChange={(e) => setBookingForm(p => ({ ...p, medicalConditions: e.target.value }))} className="form-input w-full" placeholder="Any relevant medical conditions" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/30 mb-1 block">Special Requests</label>
+                    <label className="text-xs text-white/80 mb-1 block">Special Requests</label>
                     <textarea value={bookingForm.specialRequests} onChange={(e) => setBookingForm(p => ({ ...p, specialRequests: e.target.value }))} className="form-input w-full" rows={2} placeholder="Anything else you'd like us to know..." />
                   </div>
 
@@ -2778,7 +2778,7 @@ export default function HimalayanExplorer() {
               {/* ──── STEP 2: PAYMENT METHOD ──── */}
               {checkoutStep === 'payment' && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-white/70 mb-3">Choose Payment Method</h3>
+                  <h3 className="text-sm font-semibold text-white/85 mb-3">Choose Payment Method</h3>
 
                   {/* eSewa */}
                   <div
@@ -2802,11 +2802,11 @@ export default function HimalayanExplorer() {
                             {paymentMethod === 'esewa' && <div className="w-2 h-2 rounded-full bg-[#60BB46]" />}
                           </div>
                         </div>
-                        <p className="text-xs text-white/40 mt-1">Nepal&apos;s most popular digital wallet. Pay instantly using your eSewa account. Secure and fast payment with real-time confirmation.</p>
+                        <p className="text-xs text-white/85 mt-1">Nepal&apos;s most popular digital wallet. Pay instantly using your eSewa account. Secure and fast payment with real-time confirmation.</p>
                         {paymentMethod === 'esewa' && (
                           <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
-                            <p className="text-xs text-white/50">After clicking &quot;Pay Now&quot;, you&apos;ll be redirected to eSewa&apos;s secure payment page to complete your transaction.</p>
-                            <div className="flex items-center gap-2 text-[10px] text-white/30">
+                            <p className="text-xs text-white/90">After clicking &quot;Pay Now&quot;, you&apos;ll be redirected to eSewa&apos;s secure payment page to complete your transaction.</p>
+                            <div className="flex items-center gap-2 text-[10px] text-white/80">
                               <span className="px-1.5 py-0.5 bg-[#60BB46]/10 text-[#60BB46] rounded">Verified Merchant</span>
                               <span>SSL Encrypted</span>
                               <span>Instant Confirmation</span>
@@ -2841,16 +2841,16 @@ export default function HimalayanExplorer() {
                             {paymentMethod === 'bank' && <div className="w-2 h-2 rounded-full bg-himalaya-blue" />}
                           </div>
                         </div>
-                        <p className="text-xs text-white/40 mt-1">Transfer directly to our bank account. Your booking will be confirmed once we verify the payment (usually within 24 hours).</p>
+                        <p className="text-xs text-white/85 mt-1">Transfer directly to our bank account. Your booking will be confirmed once we verify the payment (usually within 24 hours).</p>
                         {paymentMethod === 'bank' && (
                           <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
                             <h5 className="text-xs font-semibold text-himalaya-blue">Bank Account Details</h5>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/50">
-                              <div><span className="text-white/30">Bank:</span> Nepal Investment Mega Bank</div>
-                              <div><span className="text-white/30">Account Name:</span> Himalayan Exploration Treks</div>
-                              <div><span className="text-white/30">Account No:</span> 012010502XXXXX</div>
-                              <div><span className="text-white/30">SWIFT Code:</span> NIMBNPKA</div>
-                              <div className="sm:col-span-2"><span className="text-white/30">Branch:</span> Khusibu-17, Kathmandu, Nepal</div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/90">
+                              <div><span className="text-white/80">Bank:</span> Nepal Investment Mega Bank</div>
+                              <div><span className="text-white/80">Account Name:</span> Himalayan Exploration Treks</div>
+                              <div><span className="text-white/80">Account No:</span> 012010502XXXXX</div>
+                              <div><span className="text-white/80">SWIFT Code:</span> NIMBNPKA</div>
+                              <div className="sm:col-span-2"><span className="text-white/80">Branch:</span> Khusibu-17, Kathmandu, Nepal</div>
                             </div>
                             <p className="text-[10px] text-himalaya-gold/60 mt-1">Please include your booking reference as the payment reference. Send a screenshot of the transfer to lama@himalayanexploration.com</p>
                           </div>
@@ -2883,16 +2883,16 @@ export default function HimalayanExplorer() {
                             {paymentMethod === 'arrival' && <div className="w-2 h-2 rounded-full bg-himalaya-orange" />}
                           </div>
                         </div>
-                        <p className="text-xs text-white/40 mt-1">Pay when you arrive in Kathmandu. A 30% deposit is required upon arrival, with the full balance due before the trek begins.</p>
+                        <p className="text-xs text-white/85 mt-1">Pay when you arrive in Kathmandu. A 30% deposit is required upon arrival, with the full balance due before the trek begins.</p>
                         {paymentMethod === 'arrival' && (
                           <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
                             <div className="flex items-center gap-2 text-xs">
                               <span className="px-1.5 py-0.5 bg-himalaya-orange/10 text-himalaya-orange rounded text-[10px]">Popular Option</span>
-                              <span className="text-white/40">No advance payment required</span>
+                              <span className="text-white/85">No advance payment required</span>
                             </div>
-                            <p className="text-[10px] text-white/30">• 30% deposit payable on arrival in Kathmandu</p>
-                            <p className="text-[10px] text-white/30">• Remaining 70% before trek departure</p>
-                            <p className="text-[10px] text-white/30">• Accepted: Cash (USD/NPR), Credit Card (+3.5% surcharge)</p>
+                            <p className="text-[10px] text-white/80">• 30% deposit payable on arrival in Kathmandu</p>
+                            <p className="text-[10px] text-white/80">• Remaining 70% before trek departure</p>
+                            <p className="text-[10px] text-white/80">• Accepted: Cash (USD/NPR), Credit Card (+3.5% surcharge)</p>
                             <p className="text-[10px] text-himalaya-gold/60 mt-1">Your booking is confirmed immediately, subject to availability.</p>
                           </div>
                         )}
@@ -2904,24 +2904,24 @@ export default function HimalayanExplorer() {
                   <div className="glass-card-static p-4 rounded-xl mt-4">
                     <h4 className="text-sm font-semibold mb-3">Order Summary</h4>
                     <div className="space-y-2 text-xs">
-                      <div className="flex justify-between text-white/50">
+                      <div className="flex justify-between text-white/90">
                         <span>{selectedTour.title} × {bookingForm.travelers} traveler{bookingForm.travelers > 1 ? 's' : ''}</span>
                         <span>${(selectedTour.price * bookingForm.travelers).toLocaleString()}</span>
                       </div>
-                      <div className="flex justify-between text-white/50">
+                      <div className="flex justify-between text-white/90">
                         <span>TIMS & Conservation Permits</span>
                         <span className="text-himalaya-emerald">Included</span>
                       </div>
-                      <div className="flex justify-between text-white/50">
+                      <div className="flex justify-between text-white/90">
                         <span>Guide & Porter Services</span>
                         <span className="text-himalaya-emerald">Included</span>
                       </div>
-                      <div className="flex justify-between text-white/50">
+                      <div className="flex justify-between text-white/90">
                         <span>Emergency Evacuation Arrangement</span>
                         <span className="text-himalaya-emerald">Included</span>
                       </div>
                       {paymentMethod === 'bank' && (
-                        <div className="flex justify-between text-white/50">
+                        <div className="flex justify-between text-white/90">
                           <span>Bank Transfer Fee</span>
                           <span className="text-himalaya-emerald">Free</span>
                         </div>
@@ -2947,7 +2947,7 @@ export default function HimalayanExplorer() {
                       onChange={(e) => setAgreeTerms(e.target.checked)}
                       className="custom-checkbox mt-0.5"
                     />
-                    <span className="text-xs text-white/40 leading-relaxed">
+                    <span className="text-xs text-white/85 leading-relaxed">
                       I agree to the <a href="#" className="text-himalaya-gold underline">Terms & Conditions</a> and <a href="#" className="text-himalaya-gold underline">Privacy Policy</a>. I understand that cancellation policies apply as outlined on the website.
                     </span>
                   </label>
@@ -2990,33 +2990,33 @@ export default function HimalayanExplorer() {
                   </div>
 
                   <h3 className="text-xl font-bold mb-2">Booking Confirmed!</h3>
-                  <p className="text-sm text-white/50 mb-6">Your trek booking has been successfully submitted. A confirmation email has been sent to <span className="text-himalaya-gold">{bookingForm.email}</span></p>
+                  <p className="text-sm text-white/90 mb-6">Your trek booking has been successfully submitted. A confirmation email has been sent to <span className="text-himalaya-gold">{bookingForm.email}</span></p>
 
                   {/* Booking Reference */}
                   <div className="glass-card-static p-5 rounded-xl mb-6 max-w-sm mx-auto">
-                    <div className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Booking Reference</div>
+                    <div className="text-[10px] text-white/80 uppercase tracking-widest mb-1">Booking Reference</div>
                     <div className="text-2xl font-bold text-himalaya-gold font-mono tracking-wider">{bookingResult.bookingRef}</div>
-                    <div className="text-xs text-white/40 mt-2">Save this reference for future inquiries</div>
+                    <div className="text-xs text-white/85 mt-2">Save this reference for future inquiries</div>
                   </div>
 
                   {/* Booking details */}
                   <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto">
-                    <h4 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wider">Booking Details</h4>
+                    <h4 className="text-xs font-semibold text-white/90 mb-3 uppercase tracking-wider">Booking Details</h4>
                     <div className="space-y-2 text-xs">
                       <div className="flex justify-between">
-                        <span className="text-white/40">Trek</span>
+                        <span className="text-white/85">Trek</span>
                         <span>{selectedTour.title}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/40">Date</span>
+                        <span className="text-white/85">Date</span>
                         <span>{bookingForm.startDate}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/40">Travelers</span>
+                        <span className="text-white/85">Travelers</span>
                         <span>{bookingForm.travelers}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/40">Payment Method</span>
+                        <span className="text-white/85">Payment Method</span>
                         <span className="capitalize">{paymentMethod === 'esewa' ? 'eSewa' : paymentMethod === 'bank' ? 'Bank Transfer' : 'Pay on Arrival'}</span>
                       </div>
                       <div className="border-t border-white/10 pt-2 flex justify-between font-semibold text-sm">
@@ -3030,7 +3030,7 @@ export default function HimalayanExplorer() {
                   {paymentMethod === 'esewa' && (
                     <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-[#60BB46]/20">
                       <h4 className="text-xs font-semibold text-[#60BB46] mb-2">eSewa Payment Instructions</h4>
-                      <div className="space-y-1 text-xs text-white/40">
+                      <div className="space-y-1 text-xs text-white/85">
                         <p>1. You will receive an email with a secure eSewa payment link</p>
                         <p>2. Click the link and log in to your eSewa account</p>
                         <p>3. Confirm the payment amount of <span className="text-himalaya-gold">${bookingResult.amount.toLocaleString()}</span></p>
@@ -3041,7 +3041,7 @@ export default function HimalayanExplorer() {
                   {paymentMethod === 'bank' && (
                     <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-himalaya-blue/20">
                       <h4 className="text-xs font-semibold text-himalaya-blue mb-2">Bank Transfer Instructions</h4>
-                      <div className="space-y-1 text-xs text-white/40">
+                      <div className="space-y-1 text-xs text-white/85">
                         <p>1. Transfer <span className="text-himalaya-gold">${bookingResult.amount.toLocaleString()}</span> to our bank account</p>
                         <p>2. Use reference: <span className="text-himalaya-gold font-mono">{bookingResult.bookingRef}</span></p>
                         <p>3. Email the transfer receipt to lama@himalayanexploration.com</p>
@@ -3052,7 +3052,7 @@ export default function HimalayanExplorer() {
                   {paymentMethod === 'arrival' && (
                     <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-himalaya-orange/20">
                       <h4 className="text-xs font-semibold text-himalaya-orange mb-2">Pay on Arrival Information</h4>
-                      <div className="space-y-1 text-xs text-white/40">
+                      <div className="space-y-1 text-xs text-white/85">
                         <p>1. Your booking is <span className="text-himalaya-emerald">confirmed</span> — no advance payment needed</p>
                         <p>2. Pay 30% deposit (${Math.round(bookingResult.amount * 0.3).toLocaleString()}) upon arrival in Kathmandu</p>
                         <p>3. Remaining 70% (${Math.round(bookingResult.amount * 0.7).toLocaleString()}) before trek departure</p>
@@ -3062,7 +3062,7 @@ export default function HimalayanExplorer() {
                   )}
 
                   {/* Contact info */}
-                  <div className="text-xs text-white/30 mb-6">
+                  <div className="text-xs text-white/80 mb-6">
                     Questions? Contact us at <span className="text-himalaya-gold">lama@himalayanexploration.com</span> or <span className="text-himalaya-gold">+977-9851-188161</span>
                   </div>
 
