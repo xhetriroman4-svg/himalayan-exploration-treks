@@ -550,3 +550,67 @@ Stage Summary:
 - All sections use translation keys for multilingual support
 - VLM verified all 5 views score 7-9/10 for beauty/premium feel
 - Screenshots saved to /home/z/my-project/download/screenshots/v16-*.png
+
+---
+Task ID: expand-tours-and-custom-package
+Agent: Super Z (main)
+Task: Add trekking packages for ALL Nepal tourist destinations with full details + images + custom package builder
+
+Work Log:
+- User asked to add trekking packages for all Nepal tourist destinations with full details and images, plus a custom package feature where customers can choose where they want to visit and send as a message
+- Used z-ai image-search skill to find 16 real Nepal trekking images (one per destination): Everest, Annapurna, Mustang, Langtang, Manaslu, Dolpo, Gokyo, Mera Peak, Island Peak, Kanchenjunga, Helambu, Poon Hill, Tsum Valley, Rara Lake, Khopra Ridge, Kathmandu Valley — all images hosted on stable OSS URLs
+- Expanded TOURS array from 6 to 16 packages covering ALL major Nepal tourist destinations:
+  1. Everest Base Camp Trek (14 days, 5545m, strenuous, $1299)
+  2. Annapurna Circuit Trek (21 days, 5416m, strenuous, $1150)
+  3. Upper Mustang Trek (18 days, 3800m, moderate, $1890)
+  4. Langtang Valley Trek (10 days, 4984m, easy, $850)
+  5. Manaslu Circuit Trek (17 days, 5106m, challenging, $1350)
+  6. Upper Dolpo Trek (22 days, 5360m, strenuous, $2950)
+  7. Gokyo Lakes Trek (12 days, 5357m, challenging, $1450)
+  8. Mera Peak Climbing (16 days, 6476m, strenuous, $2150)
+  9. Island Peak Climbing (14 days, 6189m, challenging, $1850)
+  10. Kanchenjunga Trek (24 days, 5160m, strenuous, $2450)
+  11. Helambu Trek (7 days, 3650m, easy, $650)
+  12. Ghorepani Poon Hill Trek (5 days, 3210m, easy, $450)
+  13. Tsum Valley Trek (15 days, 3700m, moderate, $1650)
+  14. Rara Lake Trek (12 days, 2990m, moderate, $1550)
+  15. Khopra Ridge Trek (9 days, 3640m, easy, $750)
+  16. Kathmandu Valley Cultural Tour (4 days, 1400m, easy, $350)
+- Each tour package now includes: title, days, difficulty, price, oldPrice (for discount calc), country, altitude, rating, region, season, groupSize, image URL, gradient, description, highlights (4 bullet points per tour)
+- Redesigned tour cards with premium cinematic style:
+  * Real image (h-56) with hover zoom (group-hover:scale-110)
+  * Discount badge (auto-calculated %, animated gradient)
+  * Country badge + star rating on image
+  * Title + region overlay on image
+  * 3-column stat grid (days/altitude/difficulty)
+  * Description with line-clamp-2
+  * Highlights as small gold pills
+  * Season + group size info
+  * Old price (strikethrough) + new price (golden shimmer) + Book Now button
+- Added region filter tabs (All, Everest, Annapurna, Langtang, Manaslu, Mustang, Dolpo, Kanchenjunga, Far West, Kathmandu Valley) so users can filter by region
+- Built CUSTOM PACKAGE BUILDER section with 4-step form:
+  * Step 1: Multi-select checkboxes for all 16 destinations (with selection counter)
+  * Step 2: Trip details (start date, duration, travelers, budget range)
+  * Step 3: Contact info (name, email, phone, nationality)
+  * Step 4: Custom message textarea (wishes, fitness level, dietary needs, special interests, accessibility)
+  * Submit button posts to /api/custom-package
+  * Success/error message display
+- Created /home/z/my-project/src/app/api/custom-package/route.ts API:
+  * POST: validates destinations + name + email, generates ref (CP-YYYYMMDD-XXXXX), saves to database as a booking with paymentMethod='custom-inquiry', returns ref
+  * GET: retrieves inquiries by ref or lists all custom inquiries
+- Added state variables: tourFilter, customDestinations (string[]), customTrip (object with all fields), customSubmitting, customResult
+- Added submitCustomPackage useCallback function that POSTs to API, handles success/error, resets form on success
+- Verified via agent-browser: 16 tour cards rendering with all titles, 16 checkboxes in custom package section
+- Tested custom package API with curl: returns success with ref CP-20260619-PO63I
+- VLM verification: real trekking images showing, full details visible (days, altitude, difficulty, price, discount badge, highlights), beauty rated 8-9/10
+
+Stage Summary:
+- TOURS expanded from 6 to 16 packages covering ALL major Nepal tourist destinations
+- Each package has real image + full details (days, altitude, difficulty, price, discount, season, group size, highlights, region)
+- Premium cinematic card design with image hover zoom, discount badges, golden shimmer prices
+- Region filter tabs added
+- Custom Package Builder section added with 4-step form (destinations, trip details, contact info, custom message)
+- Custom package API endpoint created and tested working (returns reference number, saves to database)
+- Customers can now select any combination of destinations + write a custom message about their wishes
+- All 16 tour packages verified rendering with images via agent-browser DOM inspection
+- Screenshots saved to /home/z/my-project/download/screenshots/v17-*.png

@@ -8,12 +8,166 @@ import { useLang, LANGUAGES } from '@/lib/i18n';
 const NAV_LINKS = ['Experiences', 'Trekking', 'About', 'Stories', 'Contact'];
 
 const TOURS = [
-  { title: 'Everest Base Camp Trek', days: 14, difficulty: 'strenuous' as const, price: 1299, country: 'Nepal', altitude: '5,545m', rating: 5, gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50', desc: 'Join the adventure of a lifetime with the Everest Base Camp Trek. Trek through Sagarmatha National Park, experience genuine Sherpa hospitality, and stand at the foot of the world\'s tallest mountain.', region: 'Everest Region' },
-  { title: 'Annapurna Circuit Trek', days: 21, difficulty: 'strenuous' as const, price: 1150, country: 'Nepal', altitude: '5,416m', rating: 5, gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50', desc: 'The world\'s most well-known trek through beautiful landscapes, Thorong-La Pass, and Muktinath\'s holiest pilgrimage site. Cross the highest pass at 5,416m with breathtaking mountain scenery.', region: 'Annapurna Region' },
-  { title: 'Upper Mustang Trek', days: 18, difficulty: 'moderate' as const, price: 1890, country: 'Nepal', altitude: '3,800m', rating: 5, gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50', desc: 'A life-changing adventure to the Last Forbidden Kingdom, closed until 1992. Explore dramatic landscapes, ancient monasteries, sky caves, and the walled city of Lo Manthang.', region: 'Mustang Region' },
-  { title: 'Langtang Valley Trek', days: 10, difficulty: 'easy' as const, price: 850, country: 'Nepal', altitude: '4,984m', rating: 4, gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50', desc: 'A beautiful valley trek north of Kathmandu, offering stunning glacier views, Tamang culture, and diverse wildlife including red pandas. Perfect for beginners seeking Himalayan beauty.', region: 'Langtang Region' },
-  { title: 'Manaslu Circuit Trek', days: 17, difficulty: 'challenging' as const, price: 1350, country: 'Nepal', altitude: '5,106m', rating: 5, gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50', desc: 'A remote and wild circuit around the 8th highest mountain. Cross the Larkya La Pass, experience untouched Tibetan-influenced villages, and trek through pristine valleys far from the crowds.', region: 'Manaslu Region' },
-  { title: 'Upper Dolpo Trek', days: 22, difficulty: 'strenuous' as const, price: 2950, country: 'Nepal', altitude: '5,360m', rating: 5, gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50', desc: 'One of Nepal\'s most remote and restricted trekking regions. Explore the mystical Phoksundo Lake, ancient Bon monasteries, and a landscape that remains untouched by modern civilization.', region: 'Dolpo Region' },
+  {
+    title: 'Everest Base Camp Trek',
+    days: 14, difficulty: 'strenuous' as const, price: 1299, oldPrice: 1599,
+    country: 'Nepal', altitude: '5,545m', rating: 5, region: 'Everest Region',
+    season: 'Mar-May, Sep-Nov', groupSize: '2-12',
+    image: 'https://sfile.chatglm.cn/images-ppt/931b93f13c50.jpg',
+    gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50',
+    desc: 'Join the adventure of a lifetime with the Everest Base Camp Trek. Trek through Sagarmatha National Park, experience genuine Sherpa hospitality, and stand at the foot of the world\'s tallest mountain.',
+    highlights: ['Sagarmatha National Park', 'Sherpa villages & monasteries', 'Kala Patthar sunrise viewpoint', 'Base Camp at 5,364m'],
+  },
+  {
+    title: 'Annapurna Circuit Trek',
+    days: 21, difficulty: 'strenuous' as const, price: 1150, oldPrice: 1399,
+    country: 'Nepal', altitude: '5,416m', rating: 5, region: 'Annapurna Region',
+    season: 'Mar-May, Oct-Nov', groupSize: '2-15',
+    image: 'https://sfile.chatglm.cn/images-ppt/beb25e4341d0.jpg',
+    gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50',
+    desc: 'The world\'s most well-known trek through beautiful landscapes, Thorong-La Pass, and Muktinath\'s holiest pilgrimage site. Cross the highest pass at 5,416m with breathtaking mountain scenery.',
+    highlights: ['Thorong La Pass (5,416m)', 'Muktinath temple', 'Apple orchards of Marpha', 'Hot springs at Tatopani'],
+  },
+  {
+    title: 'Upper Mustang Trek',
+    days: 18, difficulty: 'moderate' as const, price: 1890, oldPrice: 2199,
+    country: 'Nepal', altitude: '3,800m', rating: 5, region: 'Mustang Region',
+    season: 'Jun-Sep', groupSize: '2-10',
+    image: 'https://sfile.chatglm.cn/images-ppt/eccfdc1f7215.jpg',
+    gradient: 'from-yellow-700/50 via-amber-700/40 to-orange-800/50',
+    desc: 'A life-changing adventure to the Last Forbidden Kingdom, closed until 1992. Explore dramatic landscapes, ancient monasteries, sky caves, and the walled city of Lo Manthang.',
+    highlights: ['Lo Manthang walled city', 'Ancient sky caves', 'Century-old monasteries', 'Tibetan Buddhist culture'],
+  },
+  {
+    title: 'Langtang Valley Trek',
+    days: 10, difficulty: 'easy' as const, price: 850, oldPrice: 999,
+    country: 'Nepal', altitude: '4,984m', rating: 4, region: 'Langtang Region',
+    season: 'Mar-May, Oct-Nov', groupSize: '2-16',
+    image: 'https://sfile.chatglm.cn/images-ppt/bd16c81f7a2f.jpg',
+    gradient: 'from-green-700/50 via-emerald-700/40 to-teal-800/50',
+    desc: 'A beautiful valley trek north of Kathmandu, offering stunning glacier views, Tamang culture, and diverse wildlife including red pandas. Perfect for beginners seeking Himalayan beauty.',
+    highlights: ['Langtang Glacier', 'Tamang heritage villages', 'Red panda habitat', 'Kyanjin Gompa monastery'],
+  },
+  {
+    title: 'Manaslu Circuit Trek',
+    days: 17, difficulty: 'challenging' as const, price: 1350, oldPrice: 1599,
+    country: 'Nepal', altitude: '5,106m', rating: 5, region: 'Manaslu Region',
+    season: 'Mar-May, Sep-Nov', groupSize: '2-12',
+    image: 'https://sfile.chatglm.cn/images-ppt/eddc45d8a60a.jpg',
+    gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50',
+    desc: 'A remote and wild circuit around the 8th highest mountain. Cross the Larkya La Pass, experience untouched Tibetan-influenced villages, and trek through pristine valleys far from the crowds.',
+    highlights: ['Larkya La Pass (5,106m)', 'Tibetan-influenced villages', 'Manaslu Conservation Area', 'Off-the-beaten-path experience'],
+  },
+  {
+    title: 'Upper Dolpo Trek',
+    days: 22, difficulty: 'strenuous' as const, price: 2950, oldPrice: 3299,
+    country: 'Nepal', altitude: '5,360m', rating: 5, region: 'Dolpo Region',
+    season: 'May-Sep', groupSize: '2-8',
+    image: 'https://sfile.chatglm.cn/images-ppt/1df7a0c87620.jpg',
+    gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50',
+    desc: 'One of Nepal\'s most remote and restricted trekking regions. Explore the mystical Phoksundo Lake, ancient Bon monasteries, and a landscape that remains untouched by modern civilization.',
+    highlights: ['Phoksundo Lake (turquoise jewel)', 'Ancient Bon monasteries', 'Kang La Pass (5,360m)', 'Caravans of yak and sheep'],
+  },
+  {
+    title: 'Gokyo Lakes Trek',
+    days: 12, difficulty: 'challenging' as const, price: 1450, oldPrice: 1699,
+    country: 'Nepal', altitude: '5,357m', rating: 5, region: 'Everest Region',
+    season: 'Mar-May, Sep-Nov', groupSize: '2-12',
+    image: 'https://sfile.chatglm.cn/images-ppt/4b0e35093d66.jpg',
+    gradient: 'from-cyan-700/50 via-blue-700/40 to-indigo-800/50',
+    desc: 'Trek to the sacred turquoise Gokyo Lakes and climb Gokyo Ri for one of the most spectacular mountain panoramas in the world, including four of the 8000m peaks.',
+    highlights: ['Six sacred Gokyo Lakes', 'Gokyo Ri summit (5,357m)', 'Ngozumpa Glacier', 'Panorama of 4 eight-thousanders'],
+  },
+  {
+    title: 'Mera Peak Climbing',
+    days: 16, difficulty: 'strenuous' as const, price: 2150, oldPrice: 2499,
+    country: 'Nepal', altitude: '6,476m', rating: 5, region: 'Everest Region',
+    season: 'Apr-May, Oct-Nov', groupSize: '2-8',
+    image: 'https://sfile.chatglm.cn/images-ppt/bb8056ee082e.jpeg',
+    gradient: 'from-slate-700/50 via-zinc-700/40 to-stone-800/50',
+    desc: 'Nepal\'s highest trekking peak at 6,476m. A challenging but non-technical climb offering breathtaking views of five 8000m peaks including Everest, Kanchenjunga, and Makalu from the summit.',
+    highlights: ['Summit at 6,476m', 'Views of 5 eight-thousanders', 'Hinku Valley wilderness', 'Basic mountaineering experience'],
+  },
+  {
+    title: 'Island Peak Climbing',
+    days: 14, difficulty: 'challenging' as const, price: 1850, oldPrice: 2150,
+    country: 'Nepal', altitude: '6,189m', rating: 5, region: 'Everest Region',
+    season: 'Apr-May, Oct-Nov', groupSize: '2-10',
+    image: 'https://sfile.chatglm.cn/images-ppt/693b17c880a1.jpg',
+    gradient: 'from-sky-700/50 via-cyan-700/40 to-blue-800/50',
+    desc: 'Also known as Imja Tse, Island Peak is the most popular trekking peak in Nepal. Combined with Everest Base Camp trek, it offers a perfect introduction to Himalayan mountaineering.',
+    highlights: ['Summit at 6,189m', 'Combined with EBC trek', 'Crevassed glacier travel', 'Stunning Lhotse views'],
+  },
+  {
+    title: 'Kanchenjunga Trek',
+    days: 24, difficulty: 'strenuous' as const, price: 2450, oldPrice: 2799,
+    country: 'Nepal', altitude: '5,160m', rating: 5, region: 'Kanchenjunga Region',
+    season: 'Mar-May, Sep-Nov', groupSize: '2-8',
+    image: 'https://sfile.chatglm.cn/images-ppt/72069db765db.jpg',
+    gradient: 'from-emerald-700/50 via-green-700/40 to-teal-800/50',
+    desc: 'A remote wilderness trek to the base of the world\'s third-highest mountain. Experience incredible biodiversity, pristine forests, and the rich culture of eastern Nepal far from tourist crowds.',
+    highlights: ['3rd highest mountain base camp', 'Kanchenjunga Conservation Area', 'Rich biodiversity & wildlife', 'Remote eastern Nepal culture'],
+  },
+  {
+    title: 'Helambu Trek',
+    days: 7, difficulty: 'easy' as const, price: 650, oldPrice: 799,
+    country: 'Nepal', altitude: '3,650m', rating: 4, region: 'Langtang Region',
+    season: 'Mar-May, Oct-Nov', groupSize: '2-16',
+    image: 'https://sfile.chatglm.cn/images-ppt/7cedbd4edb89.jpg',
+    gradient: 'from-lime-700/50 via-green-700/40 to-emerald-800/50',
+    desc: 'A short and scenic trek near Kathmandu perfect for beginners and families. Experience Hyolmo culture, terraced hillsides, rhododendron forests, and stunning mountain views without high altitude.',
+    highlights: ['Perfect for beginners & families', 'Hyolmo culture & villages', 'Rhododendron forests', 'Close to Kathmandu'],
+  },
+  {
+    title: 'Ghorepani Poon Hill Trek',
+    days: 5, difficulty: 'easy' as const, price: 450, oldPrice: 599,
+    country: 'Nepal', altitude: '3,210m', rating: 5, region: 'Annapurna Region',
+    season: 'Year-round', groupSize: '2-20',
+    image: 'https://sfile.chatglm.cn/images-ppt/f49c8ede96b2.jpg',
+    gradient: 'from-orange-700/50 via-amber-700/40 to-yellow-800/50',
+    desc: 'The classic short trek in Annapurna offering the most spectacular sunrise view over the Dhaulagiri and Annapurna ranges from Poon Hill. Ideal for those with limited time.',
+    highlights: ['Poon Hill sunrise (3,210m)', 'Dhaulagiri & Annapurna panorama', 'Gurung villages & culture', 'Best short trek in Nepal'],
+  },
+  {
+    title: 'Tsum Valley Trek',
+    days: 15, difficulty: 'moderate' as const, price: 1650, oldPrice: 1899,
+    country: 'Nepal', altitude: '3,700m', rating: 5, region: 'Manaslu Region',
+    season: 'Mar-May, Sep-Nov', groupSize: '2-10',
+    image: 'https://sfile.chatglm.cn/images-ppt/17598ed382b6.jpg',
+    gradient: 'from-violet-700/50 via-purple-700/40 to-fuchsia-800/50',
+    desc: 'Known as the "Hidden Valley," Tsum Valley is a sacred Himalayan pilgrimage valley with ancient Buddhist heritage, monasteries, and unique Tibetan culture unchanged for centuries.',
+    highlights: ['Sacred hidden valley', 'Mu Gompa monastery', 'Ancient Buddhist heritage', 'Unique Tsumba culture'],
+  },
+  {
+    title: 'Rara Lake Trek',
+    days: 12, difficulty: 'moderate' as const, price: 1550, oldPrice: 1799,
+    country: 'Nepal', altitude: '2,990m', rating: 5, region: 'Far West Nepal',
+    season: 'Apr-Jun, Sep-Oct', groupSize: '2-10',
+    image: 'https://sfile.chatglm.cn/images-ppt/3238c3c3cb05.jpg',
+    gradient: 'from-blue-700/50 via-sky-700/40 to-cyan-800/50',
+    desc: 'Trek to Nepal\'s largest lake, surrounded by pine forests and snow-capped peaks. Rara Lake\'s pristine turquoise waters and rich wildlife make this a true off-the-beaten-path gem.',
+    highlights: ['Nepal\'s largest lake', 'Rara National Park', 'Rare wildlife & birds', 'Pristine turquoise waters'],
+  },
+  {
+    title: 'Khopra Ridge Trek',
+    days: 9, difficulty: 'easy' as const, price: 750, oldPrice: 899,
+    country: 'Nepal', altitude: '3,640m', rating: 5, region: 'Annapurna Region',
+    season: 'Mar-May, Oct-Nov', groupSize: '2-14',
+    image: 'https://sfile.chatglm.cn/images-ppt/347203ac82e5.jpg',
+    gradient: 'from-teal-700/50 via-cyan-700/40 to-blue-800/50',
+    desc: 'A community-based trek offering stunning views of Annapurna and Dhaulagiri from Khopra Ridge. Stay in community lodges, visit sacred Kaire Lake, and support local communities.',
+    highlights: ['Khopra Ridge viewpoint', 'Sacred Kaire Lake', 'Community-based lodges', 'Annapurna & Dhaulagiri views'],
+  },
+  {
+    title: 'Kathmandu Valley Cultural Tour',
+    days: 4, difficulty: 'easy' as const, price: 350, oldPrice: 450,
+    country: 'Nepal', altitude: '1,400m', rating: 5, region: 'Kathmandu Valley',
+    season: 'Year-round', groupSize: '1-20',
+    image: 'https://sfile.chatglm.cn/images-ppt/56d4ad1920e0.jpg',
+    gradient: 'from-rose-700/50 via-pink-700/40 to-red-800/50',
+    desc: 'Explore 7 UNESCO World Heritage sites in Kathmandu Valley including Pashupatinath, Boudhanath, Swayambhunath, and the Durbar Squares. A cultural immersion into Nepal\'s rich heritage.',
+    highlights: ['7 UNESCO World Heritage sites', 'Pashupatinath & Boudhanath', 'Swayambhunath (Monkey Temple)', 'Ancient royal palaces'],
+  },
 ];
 
 const DESTINATIONS = [
@@ -209,6 +363,64 @@ export default function HimalayanExplorer() {
   const [currency, setCurrency] = useState('USD');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+
+  /* Tour filter + Custom package states */
+  const [tourFilter, setTourFilter] = useState('All');
+  const [customDestinations, setCustomDestinations] = useState<string[]>([]);
+  const [customTrip, setCustomTrip] = useState({
+    startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    duration: 14,
+    travelers: 2,
+    budget: '1000-2000',
+    name: '',
+    email: '',
+    phone: '',
+    nationality: '',
+    message: '',
+  });
+  const [customSubmitting, setCustomSubmitting] = useState(false);
+  const [customResult, setCustomResult] = useState<string | null>(null);
+
+  /* Submit custom package to API */
+  const submitCustomPackage = useCallback(async () => {
+    if (customDestinations.length === 0 || !customTrip.name || !customTrip.email) return;
+    setCustomSubmitting(true);
+    setCustomResult(null);
+    try {
+      const res = await fetch('/api/custom-package', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          destinations: customDestinations,
+          startDate: customTrip.startDate,
+          duration: customTrip.duration,
+          travelers: customTrip.travelers,
+          budget: customTrip.budget,
+          name: customTrip.name,
+          email: customTrip.email,
+          phone: customTrip.phone,
+          nationality: customTrip.nationality,
+          message: customTrip.message,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCustomResult(`Request sent! Reference: ${data.ref}. Our team will contact you within 24 hours.`);
+        setCustomDestinations([]);
+        setCustomTrip({
+          startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          duration: 14, travelers: 2, budget: '1000-2000',
+          name: '', email: '', phone: '', nationality: '', message: '',
+        });
+      } else {
+        setCustomResult('Something went wrong. Please try again or contact us directly.');
+      }
+    } catch {
+      setCustomResult('Network error. Please check your connection and try again.');
+    } finally {
+      setCustomSubmitting(false);
+    }
+  }, [customDestinations, customTrip]);
 
   /* Tool states */
   const [budgetDest, setBudgetDest] = useState('nepal');
@@ -826,46 +1038,308 @@ export default function HimalayanExplorer() {
       <section id="destinations" className="py-16 sm:py-20 section-aurora-wash">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 reveal">
-            <span className="category-pill pill-rose text-readable"><span className="glow-dot mr-2" />Trekking Holiday</span>
-            <h2 className="font-display text-readable-strong text-3xl sm:text-4xl font-bold mt-4 text-3d-depth">Popular <span className="gradient-text-shimmer">Trekking Expeditions</span></h2>
-            <p className="text-readable text-white/60 mt-2 max-w-lg mx-auto">We offer various treks and activities tailored specifically for each individual or group&apos;s needs — from ancient monasteries to high mountain passes</p>
+            <span className="pill-cinematic"><span className="glow-dot mr-2" />{t('section.trekking.pill')}</span>
+            <h2 className="font-cinematic text-readable-strong text-4xl sm:text-5xl font-bold mt-6 mb-3">
+              {t('section.trekking.title1')} <span className="text-golden-shimmer italic">{t('section.trekking.title2')}</span>
+            </h2>
+            <p className="text-readable text-white/60 mt-2 max-w-2xl mx-auto">{t('section.trekking.subtitle')}</p>
+            <div className="divider-golden" />
           </div>
+
+          {/* Filter tabs for regions */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10 reveal">
+            {['All', 'Everest Region', 'Annapurna Region', 'Langtang Region', 'Manaslu Region', 'Mustang Region', 'Dolpo Region', 'Kanchenjunga Region', 'Far West Nepal', 'Kathmandu Valley'].map((region) => (
+              <button
+                key={region}
+                onClick={() => setTourFilter(region)}
+                className={`px-4 py-1.5 rounded-full text-xs font-display font-medium transition-all ${
+                  tourFilter === region
+                    ? 'bg-gradient-to-r from-himalaya-gold to-himalaya-orange text-black'
+                    : 'glass-card-static text-white/60 hover:text-white'
+                }`}
+              >
+                {region}
+              </button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TOURS.map((tour) => (
-              <div key={tour.title} className="glass-card holo-card overflow-hidden reveal-scale">
-                <div className={`relative h-44 bg-gradient-to-br ${tour.gradient} flex items-end p-4`} style={{ opacity: 0.65 }}>
-                  <MountainSVG className="absolute inset-0 w-full h-full opacity-30" />
-                  <span className="absolute top-3 right-3 text-readable-strong text-sm font-bold text-himalaya-gold bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">${tour.price.toLocaleString()}</span>
-                  <span className="absolute top-3 left-3 text-readable text-xs text-white bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded">{tour.country}</span>
+            {TOURS.filter((tour) => tourFilter === 'All' || tour.region === tourFilter).map((tour) => {
+              const discount = Math.round(((tour.oldPrice - tour.price) / tour.oldPrice) * 100);
+              return (
+              <div key={tour.title} className="card-premium holo-sheen overflow-hidden reveal-fade-up group">
+                {/* Image with overlay */}
+                <div className="relative h-56 overflow-hidden">
+                  <img
+                    src={tour.image}
+                    alt={tour.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  {/* Discount badge */}
+                  {discount > 0 && (
+                    <span className="discount-badge">-{discount}%</span>
+                  )}
+                  {/* Country badge */}
+                  <span className="absolute top-3 left-3 text-xs text-white bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full font-display">{tour.country}</span>
+                  {/* Rating */}
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full">
+                    <svg className="w-3 h-3 text-himalaya-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.4-6.3-4.6-6.3 4.6L7.9 14 2 9.4h7.6z"/></svg>
+                    <span className="text-xs text-white font-display">{tour.rating}.0</span>
+                  </div>
+                  {/* Title on image */}
+                  <div className="absolute bottom-3 left-3 right-12">
+                    <h3 className="text-readable-strong font-cinematic text-lg font-bold text-white leading-tight">{tour.title}</h3>
+                    <p className="text-readable text-xs text-white/70 mt-0.5">{tour.region}</p>
+                  </div>
                 </div>
-                <div className="p-4 sm:p-5">
-                  <h3 className="text-readable-strong font-semibold text-base mb-2">{tour.title}</h3>
+
+                <div className="p-5">
+                  {/* Quick stats row */}
+                  <div className="grid grid-cols-3 gap-2 mb-4 text-center">
+                    <div className="bg-white/5 rounded-lg py-2">
+                      <div className="text-xs text-white/40">Days</div>
+                      <div className="font-cinematic font-bold text-golden-shimmer text-lg">{tour.days}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-lg py-2">
+                      <div className="text-xs text-white/40">Altitude</div>
+                      <div className="font-display font-bold text-white text-sm">{tour.altitude}</div>
+                    </div>
+                    <div className="bg-white/5 rounded-lg py-2">
+                      <div className="text-xs text-white/40">Difficulty</div>
+                      <div className={`font-display font-bold text-xs uppercase difficulty-${tour.difficulty}`}>{tour.difficulty}</div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
                   <p className="text-readable text-xs text-white/60 leading-relaxed mb-3 line-clamp-2">{tour.desc}</p>
-                  <div className="flex items-center gap-3 text-xs text-white/55 mb-3">
-                    <span className="flex items-center gap-1 text-readable">
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                      {tour.days} Days
-                    </span>
-                    <span className="flex items-center gap-1 text-readable">
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
-                      {tour.altitude}
-                    </span>
-                    <span className="text-readable text-white/40">{tour.region}</span>
+
+                  {/* Highlights */}
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {tour.highlights.slice(0, 2).map((h) => (
+                      <span key={h} className="text-[10px] px-2 py-0.5 rounded-full bg-himalaya-gold/10 text-himalaya-gold/90 border border-himalaya-gold/20">{h}</span>
+                    ))}
+                    {tour.highlights.length > 2 && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-white/50">+{tour.highlights.length - 2} more</span>
+                    )}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xs px-2 py-0.5 rounded font-medium difficulty-${tour.difficulty}`}>{tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1)}</span>
-                    <StarRating count={tour.rating} />
+
+                  {/* Season + Group size */}
+                  <div className="flex items-center gap-3 text-xs text-white/50 mb-4">
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                      {tour.season}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                      {tour.groupSize}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-3">
-                    <button onClick={() => openCheckout(tour)} className="text-xs font-semibold bg-himalaya-gold text-black px-3 py-1.5 rounded-lg hover:bg-himalaya-gold/90 transition-colors">Book Now</button>
-                    <a href="#" className="text-readable text-xs text-himalaya-gold hover:text-himalaya-gold/80">View Details →</a>
+
+                  {/* Price + CTA */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                    <div>
+                      <div className="text-xs text-white/40 line-through">${tour.oldPrice.toLocaleString()}</div>
+                      <div className="font-cinematic text-2xl font-bold text-golden-shimmer">${tour.price.toLocaleString()}</div>
+                    </div>
+                    <button onClick={() => openCheckout(tour)} className="btn-cinematic !text-xs !py-2 !px-4">
+                      {t('tour.bookNow')}
+                    </button>
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="text-center mt-10 reveal">
-            <button className="btn-outline">View All Expeditions</button>
+            <button className="btn-outline-cinematic">{t('section.trekking.viewAll')}</button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ CUSTOM PACKAGE BUILDER ═══════════ */}
+      <section id="custom-package" className="py-20 section-wash-aurora relative overflow-hidden">
+        <div className="aurora-orb" style={{ top: '10%', left: '15%', width: '450px', height: '450px', background: 'radial-gradient(circle, #d4a853, transparent 70%)' }} />
+        <div className="aurora-orb" style={{ bottom: '10%', right: '15%', width: '420px', height: '420px', background: 'radial-gradient(circle, #7c3aed, transparent 70%)', animationDelay: '5s' }} />
+        <div className="max-w-5xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-10 reveal-fade-up">
+            <span className="pill-cinematic mb-6">✦ Custom Package</span>
+            <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
+              Build Your <span className="text-golden-shimmer italic">Dream Adventure</span>
+            </h2>
+            <p className="text-readable text-white/60 max-w-2xl mx-auto">
+              Can&apos;t find the perfect package? Create your own custom itinerary. Select the destinations you want to visit, tell us your preferences, and our team will craft a personalized trek just for you.
+            </p>
+            <div className="divider-golden" />
+          </div>
+
+          <div className="card-premium p-6 sm:p-8 reveal-fade-up">
+            {/* Step 1: Select destinations */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">1</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Select Destinations You Want to Visit</h3>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {TOURS.map((tour) => (
+                  <label
+                    key={tour.title}
+                    className={`flex items-center gap-2 p-2.5 rounded-lg cursor-pointer transition-all border ${
+                      customDestinations.includes(tour.title)
+                        ? 'bg-himalaya-gold/15 border-himalaya-gold/50 text-white'
+                        : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={customDestinations.includes(tour.title)}
+                      onChange={() => {
+                        setCustomDestinations((prev) =>
+                          prev.includes(tour.title)
+                            ? prev.filter((d) => d !== tour.title)
+                            : [...prev, tour.title]
+                        );
+                      }}
+                      className="w-4 h-4 accent-himalaya-gold"
+                    />
+                    <span className="text-xs font-display leading-tight">{tour.title}</span>
+                  </label>
+                ))}
+              </div>
+              {customDestinations.length > 0 && (
+                <p className="text-xs text-himalaya-gold mt-2 font-display">
+                  ✓ {customDestinations.length} destination{customDestinations.length > 1 ? 's' : ''} selected
+                </p>
+              )}
+            </div>
+
+            {/* Step 2: Trip details */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">2</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Trip Details</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                  <label className="text-xs text-white/50 mb-1 block font-display">Preferred Start Date</label>
+                  <input
+                    type="date"
+                    value={customTrip.startDate}
+                    onChange={(e) => setCustomTrip({...customTrip, startDate: e.target.value})}
+                    className="input-cinematic !py-2 !text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 mb-1 block font-display">Duration (days)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={customTrip.duration}
+                    onChange={(e) => setCustomTrip({...customTrip, duration: Number(e.target.value)})}
+                    className="input-cinematic !py-2 !text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 mb-1 block font-display">Travelers</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={customTrip.travelers}
+                    onChange={(e) => setCustomTrip({...customTrip, travelers: Number(e.target.value)})}
+                    className="input-cinematic !py-2 !text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 mb-1 block font-display">Budget per Person (USD)</label>
+                  <select
+                    value={customTrip.budget}
+                    onChange={(e) => setCustomTrip({...customTrip, budget: e.target.value})}
+                    className="input-cinematic !py-2 !text-sm"
+                  >
+                    <option value="500-1000">$500 - $1,000</option>
+                    <option value="1000-2000">$1,000 - $2,000</option>
+                    <option value="2000-3000">$2,000 - $3,000</option>
+                    <option value="3000+">$3,000+</option>
+                    <option value="flexible">Flexible</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3: Contact info */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">3</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Your Contact Information</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <input
+                  type="text"
+                  placeholder="Full Name *"
+                  value={customTrip.name}
+                  onChange={(e) => setCustomTrip({...customTrip, name: e.target.value})}
+                  className="input-cinematic !py-2.5"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address *"
+                  value={customTrip.email}
+                  onChange={(e) => setCustomTrip({...customTrip, email: e.target.value})}
+                  className="input-cinematic !py-2.5"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number (with country code)"
+                  value={customTrip.phone}
+                  onChange={(e) => setCustomTrip({...customTrip, phone: e.target.value})}
+                  className="input-cinematic !py-2.5"
+                />
+                <input
+                  type="text"
+                  placeholder="Nationality"
+                  value={customTrip.nationality}
+                  onChange={(e) => setCustomTrip({...customTrip, nationality: e.target.value})}
+                  className="input-cinematic !py-2.5"
+                />
+              </div>
+            </div>
+
+            {/* Step 4: Custom message */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black text-sm">4</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Your Wishes & Special Requests</h3>
+              </div>
+              <textarea
+                placeholder="Tell us what you want to experience, your fitness level, dietary needs, special interests (photography, culture, wildlife), accessibility requirements, or anything else you'd like us to know..."
+                value={customTrip.message}
+                onChange={(e) => setCustomTrip({...customTrip, message: e.target.value})}
+                rows={5}
+                className="input-cinematic !rounded-2xl resize-none"
+              />
+            </div>
+
+            {/* Submit */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+              <p className="text-xs text-white/40 text-center sm:text-left">
+                Our team will respond within 24 hours with a personalized itinerary and quote.
+              </p>
+              <button
+                onClick={submitCustomPackage}
+                disabled={customSubmitting || customDestinations.length === 0 || !customTrip.name || !customTrip.email}
+                className="btn-cinematic disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {customSubmitting ? 'Sending...' : 'Send My Custom Request →'}
+              </button>
+            </div>
+            {customResult && (
+              <div className="mt-4 p-4 rounded-xl bg-himalaya-emerald/10 border border-himalaya-emerald/30 text-center">
+                <p className="text-himalaya-emerald font-display font-semibold">✓ {customResult}</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
