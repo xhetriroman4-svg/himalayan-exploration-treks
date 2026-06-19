@@ -457,16 +457,12 @@ export default function HimalayanExplorer() {
 
   /* Checkout states */
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [checkoutStep, setCheckoutStep] = useState<'details' | 'payment' | 'confirmation'>('details');
+  const [checkoutStep, setCheckoutStep] = useState<'details' | 'confirmation'>('details');
   const [selectedTour, setSelectedTour] = useState<typeof TOURS[0] | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'esewa' | 'bank' | 'arrival'>('esewa');
   const [bookingForm, setBookingForm] = useState({
-    fullName: '', email: '', phone: '', nationality: '',
-    startDate: '', travelers: 1,
-    emergencyContact: '', emergencyPhone: '',
-    dietaryNeeds: '', medicalConditions: '', specialRequests: '',
+    fullName: '', email: '', whatsapp: '', nationality: '', currentLocation: '', message: '',
   });
-  const [bookingResult, setBookingResult] = useState<{ bookingRef: string; amount: number } | null>(null);
+  const [bookingResult, setBookingResult] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const checkoutRef = useRef<HTMLDivElement>(null);
@@ -663,14 +659,9 @@ export default function HimalayanExplorer() {
     setCheckoutOpen(true);
     setCheckoutStep('details');
     setBookingForm({
-      fullName: '', email: '', phone: '', nationality: '',
-      startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], travelers: 1,
-      emergencyContact: '', emergencyPhone: '',
-      dietaryNeeds: '', medicalConditions: '', specialRequests: '',
+      fullName: '', email: '', whatsapp: '', nationality: '', currentLocation: '', message: '',
     });
-    setPaymentMethod('esewa');
     setBookingResult(null);
-    setAgreeTerms(false);
     document.body.style.overflow = 'hidden';
   }, []);
 
@@ -682,47 +673,45 @@ export default function HimalayanExplorer() {
     document.body.style.overflow = '';
   }, []);
 
-  /* Submit booking */
-  const submitBooking = useCallback(async () => {
-    if (!selectedTour || !agreeTerms) return;
+  /* Submit booking — sends details to WhatsApp 9841023371 */
+  const submitBooking = useCallback(() => {
+    if (!selectedTour) return;
     setIsSubmitting(true);
-    try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tourName: selectedTour.title,
-          tourDays: selectedTour.days,
-          tourRegion: selectedTour.region,
-          startDate: bookingForm.startDate,
-          travelers: bookingForm.travelers,
-          fullName: bookingForm.fullName,
-          email: bookingForm.email,
-          phone: bookingForm.phone,
-          nationality: bookingForm.nationality,
-          emergencyContact: bookingForm.emergencyContact,
-          emergencyPhone: bookingForm.emergencyPhone,
-          dietaryNeeds: bookingForm.dietaryNeeds,
-          medicalConditions: bookingForm.medicalConditions,
-          paymentMethod,
-          amount: selectedTour.price * bookingForm.travelers,
-          currency: 'USD',
-          specialRequests: bookingForm.specialRequests,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setBookingResult({ bookingRef: data.booking.bookingRef, amount: data.booking.amount });
-        setCheckoutStep('confirmation');
-      } else {
-        alert(data.error || 'Booking failed. Please try again.');
-      }
-    } catch {
-      alert('Network error. Please check your connection and try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [selectedTour, bookingForm, paymentMethod, agreeTerms]);
+
+    // Build the WhatsApp message with all booking details
+    const msg = `🏔️ *NEW BOOKING REQUEST* 🏔️
+━━━━━━━━━━━━━━━━━━━━
+
+🥾 *Tour:* ${selectedTour.title}
+📍 *Region:* ${selectedTour.region}
+💰 *Price:* $${selectedTour.price.toLocaleString()}
+📅 *Duration:* ${selectedTour.days} days
+⛰️ *Max Altitude:* ${selectedTour.altitude}
+⚡ *Difficulty:* ${selectedTour.difficulty}
+
+👤 *CUSTOMER DETAILS*
+━━━━━━━━━━━━━━━━━━━━
+*Name:* ${bookingForm.fullName}
+*Email:* ${bookingForm.email}
+*WhatsApp:* ${bookingForm.whatsapp}
+*Nationality:* ${bookingForm.nationality}
+*Current Location:* ${bookingForm.currentLocation}
+${bookingForm.message ? `\n💬 *Message:*\n${bookingForm.message}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━
+_Sent from himalayanexploration.com_`;
+
+    // Encode for WhatsApp URL
+    const whatsappUrl = `https://wa.me/9779841023371?text=${encodeURIComponent(msg)}`;
+
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, '_blank');
+
+    // Show confirmation
+    setBookingResult(`Your booking details have been sent to WhatsApp! We'll confirm your reservation shortly.`);
+    setCheckoutStep('confirmation');
+    setIsSubmitting(false);
+  }, [selectedTour, bookingForm]);
 
   const handleHeroMouseMove = useCallback((e: React.MouseEvent) => {
     if (!heroRef.current) return;
@@ -1366,366 +1355,133 @@ export default function HimalayanExplorer() {
         </a>
       </div>
 
-      {/* ═══════════ 25. CHECKOUT OVERLAY ═══════════ */}
+      {/* ═══════════ 25. BOOKING OVERLAY — Simplified, sends to WhatsApp ═══════════ */}
       {checkoutOpen && selectedTour && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" ref={checkoutRef}>
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={(e) => { if (e.target === e.currentTarget) closeCheckout(); }} />
 
           {/* Modal */}
-          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-card-strong rounded-2xl">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto glass-card-strong rounded-2xl">
             {/* Close button */}
-            <button onClick={closeCheckout} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/90 hover:text-white hover:bg-white/20 transition-colors">
+            <button onClick={closeCheckout} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
 
-            {/* Header */}
-            <div className="p-6 pb-0">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-himalaya-gold/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-himalaya-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold">Book Your Trek</h2>
-                  <p className="text-xs text-white/85">Complete your booking in 3 easy steps</p>
-                </div>
-              </div>
-
-              {/* Progress Steps */}
-              <div className="flex items-center gap-2 mb-6">
-                {[
-                  { key: 'details', label: '1. Traveler Details', num: 1 },
-                  { key: 'payment', label: '2. Payment Method', num: 2 },
-                  { key: 'confirmation', label: '3. Confirmation', num: 3 },
-                ].map((step, i) => (
-                  <div key={step.key} className="flex items-center gap-2 flex-1">
-                    <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                      checkoutStep === step.key
-                        ? 'bg-himalaya-gold/20 text-himalaya-gold border border-himalaya-gold/30'
-                        : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1)
-                          ? 'bg-himalaya-emerald/10 text-himalaya-emerald border border-himalaya-emerald/20'
-                          : 'bg-white/5 text-white/80 border border-white/5'
-                    }`}>
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold" style={{
-                        backgroundColor: checkoutStep === step.key ? '#d4a853' : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '#10b981' : 'rgba(255,255,255,0.1)',
-                        color: checkoutStep === step.key ? '#000' : (checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '#000' : 'rgba(255,255,255,0.3)',
-                      }}>
-                        {(checkoutStep === 'confirmation' && step.num < 3) || (checkoutStep === 'payment' && step.num === 1) ? '✓' : step.num}
-                      </span>
-                      <span className="hidden sm:inline">{step.label}</span>
-                    </div>
-                    {i < 2 && <div className="w-4 h-px bg-white/10 flex-shrink-0" />}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Tour Summary Bar */}
-            <div className="mx-6 mb-4 glass-card-static p-4 rounded-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${selectedTour.gradient} flex items-center justify-center flex-shrink-0`}>
-                    <svg className="w-6 h-6 text-white/85" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2L2 22h20L12 2z"/></svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-sm">{selectedTour.title}</h3>
-                    <div className="flex items-center gap-2 text-xs text-white/85">
-                      <span>{selectedTour.days} Days</span>
-                      <span>·</span>
-                      <span>{selectedTour.altitude}</span>
-                      <span>·</span>
-                      <span>{selectedTour.region}</span>
-                    </div>
-                  </div>
+            <div className="p-6 pb-4 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                  <img src={selectedTour.image} alt={selectedTour.title} className="w-full h-full object-cover" />
                 </div>
-                <div className="text-right sm:text-right">
-                  <div className="text-lg font-bold text-himalaya-gold">${selectedTour.price.toLocaleString()}</div>
-                  <div className="text-[10px] text-white/80">per person</div>
+                <div className="flex-1">
+                  <h2 className="font-cinematic text-lg font-bold text-white">{selectedTour.title}</h2>
+                  <div className="flex items-center gap-2 text-xs text-white">
+                    <span>{selectedTour.days} Days</span>
+                    <span>·</span>
+                    <span>{selectedTour.altitude}</span>
+                    <span>·</span>
+                    <span className="font-cinematic text-golden-shimmer font-bold">${selectedTour.price.toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="px-6 pb-6">
-              {/* ──── STEP 1: TRAVELER DETAILS ──── */}
+            <div className="p-6">
               {checkoutStep === 'details' && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-white/85 mb-2">Traveler Information</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Full Name *</label>
-                      <input type="text" value={bookingForm.fullName} onChange={(e) => setBookingForm(p => ({ ...p, fullName: e.target.value }))} className="form-input w-full" placeholder="Your full name" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Email Address *</label>
-                      <input type="email" value={bookingForm.email} onChange={(e) => setBookingForm(p => ({ ...p, email: e.target.value }))} className="form-input w-full" placeholder="you@example.com" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Phone Number *</label>
-                      <input type="tel" value={bookingForm.phone} onChange={(e) => setBookingForm(p => ({ ...p, phone: e.target.value }))} className="form-input w-full" placeholder="+977 98XXXXXXXX" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Nationality *</label>
-                      <input type="text" value={bookingForm.nationality} onChange={(e) => setBookingForm(p => ({ ...p, nationality: e.target.value }))} className="form-input w-full" placeholder="e.g., Nepali, American" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Preferred Start Date *</label>
-                      <input type="date" value={bookingForm.startDate} onChange={(e) => setBookingForm(p => ({ ...p, startDate: e.target.value }))} className="form-input w-full" min={new Date().toISOString().split('T')[0]} />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Number of Travelers *</label>
-                      <select value={bookingForm.travelers} onChange={(e) => setBookingForm(p => ({ ...p, travelers: Number(e.target.value) }))} className="form-select w-full">
-                        {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n} Traveler{n > 1 ? 's' : ''}</option>)}
-                      </select>
-                    </div>
+                  <div className="text-center mb-2">
+                    <h3 className="font-cinematic text-xl font-bold text-white mb-1">Book This Trek</h3>
+                    <p className="text-xs text-white">Fill in your details — we&apos;ll confirm via WhatsApp.</p>
                   </div>
 
-                  <h3 className="text-sm font-semibold text-white/85 mt-4 mb-2">Emergency & Health</h3>
+                  <div>
+                    <label className="text-sm text-white font-display mb-1 block">Full Name *</label>
+                    <input
+                      type="text"
+                      value={bookingForm.fullName}
+                      onChange={(e) => setBookingForm(p => ({ ...p, fullName: e.target.value }))}
+                      className="form-input w-full"
+                      placeholder="Your full name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-white font-display mb-1 block">Email Address *</label>
+                    <input
+                      type="email"
+                      value={bookingForm.email}
+                      onChange={(e) => setBookingForm(p => ({ ...p, email: e.target.value }))}
+                      className="form-input w-full"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-white font-display mb-1 block">WhatsApp Number *</label>
+                    <input
+                      type="tel"
+                      value={bookingForm.whatsapp}
+                      onChange={(e) => setBookingForm(p => ({ ...p, whatsapp: e.target.value }))}
+                      className="form-input w-full"
+                      placeholder="+977 98XXXXXXXX"
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-white/80 mb-1 block">Emergency Contact Name</label>
-                      <input type="text" value={bookingForm.emergencyContact} onChange={(e) => setBookingForm(p => ({ ...p, emergencyContact: e.target.value }))} className="form-input w-full" placeholder="Contact person name" />
+                      <label className="text-sm text-white font-display mb-1 block">Nationality *</label>
+                      <input
+                        type="text"
+                        value={bookingForm.nationality}
+                        onChange={(e) => setBookingForm(p => ({ ...p, nationality: e.target.value }))}
+                        className="form-input w-full"
+                        placeholder="e.g., Nepali"
+                      />
                     </div>
                     <div>
-                      <label className="text-xs text-white/80 mb-1 block">Emergency Contact Phone</label>
-                      <input type="tel" value={bookingForm.emergencyPhone} onChange={(e) => setBookingForm(p => ({ ...p, emergencyPhone: e.target.value }))} className="form-input w-full" placeholder="+1 555 000 0000" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Dietary Requirements</label>
-                      <input type="text" value={bookingForm.dietaryNeeds} onChange={(e) => setBookingForm(p => ({ ...p, dietaryNeeds: e.target.value }))} className="form-input w-full" placeholder="Vegetarian, vegan, allergies..." />
-                    </div>
-                    <div>
-                      <label className="text-xs text-white/80 mb-1 block">Medical Conditions</label>
-                      <input type="text" value={bookingForm.medicalConditions} onChange={(e) => setBookingForm(p => ({ ...p, medicalConditions: e.target.value }))} className="form-input w-full" placeholder="Any relevant medical conditions" />
+                      <label className="text-sm text-white font-display mb-1 block">Current Location *</label>
+                      <input
+                        type="text"
+                        value={bookingForm.currentLocation}
+                        onChange={(e) => setBookingForm(p => ({ ...p, currentLocation: e.target.value }))}
+                        className="form-input w-full"
+                        placeholder="City, Country"
+                      />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs text-white/80 mb-1 block">Special Requests</label>
-                    <textarea value={bookingForm.specialRequests} onChange={(e) => setBookingForm(p => ({ ...p, specialRequests: e.target.value }))} className="form-input w-full" rows={2} placeholder="Anything else you'd like us to know..." />
-                  </div>
-
-                  <div className="flex justify-end pt-2">
-                    <button
-                      onClick={() => {
-                        if (!bookingForm.fullName || !bookingForm.email || !bookingForm.phone || !bookingForm.nationality || !bookingForm.startDate) {
-                          alert('Please fill in all required fields.');
-                          return;
-                        }
-                        setCheckoutStep('payment');
-                      }}
-                      className="btn-primary"
-                    >
-                      Continue to Payment →
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* ──── STEP 2: PAYMENT METHOD ──── */}
-              {checkoutStep === 'payment' && (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-white/85 mb-3">Choose Payment Method</h3>
-
-                  {/* eSewa */}
-                  <div
-                    onClick={() => setPaymentMethod('esewa')}
-                    className={`relative p-4 rounded-xl cursor-pointer transition-all border ${
-                      paymentMethod === 'esewa'
-                        ? 'bg-[#60BB46]/10 border-[#60BB46]/40 ring-1 ring-[#60BB46]/30'
-                        : 'bg-white/3 border-white/8 hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-[#60BB46]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-[#60BB46] font-bold text-xs">eS</span>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-sm">eSewa</h4>
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            paymentMethod === 'esewa' ? 'border-[#60BB46]' : 'border-white/20'
-                          }`}>
-                            {paymentMethod === 'esewa' && <div className="w-2 h-2 rounded-full bg-[#60BB46]" />}
-                          </div>
-                        </div>
-                        <p className="text-xs text-white/85 mt-1">Nepal&apos;s most popular digital wallet. Pay instantly using your eSewa account. Secure and fast payment with real-time confirmation.</p>
-                        {paymentMethod === 'esewa' && (
-                          <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
-                            <p className="text-xs text-white/90">After clicking &quot;Pay Now&quot;, you&apos;ll be redirected to eSewa&apos;s secure payment page to complete your transaction.</p>
-                            <div className="flex items-center gap-2 text-[10px] text-white/80">
-                              <span className="px-1.5 py-0.5 bg-[#60BB46]/10 text-[#60BB46] rounded">Verified Merchant</span>
-                              <span>SSL Encrypted</span>
-                              <span>Instant Confirmation</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bank Transfer */}
-                  <div
-                    onClick={() => setPaymentMethod('bank')}
-                    className={`relative p-4 rounded-xl cursor-pointer transition-all border ${
-                      paymentMethod === 'bank'
-                        ? 'bg-himalaya-blue/10 border-himalaya-blue/40 ring-1 ring-himalaya-blue/30'
-                        : 'bg-white/3 border-white/8 hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-himalaya-blue/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-5 h-5 text-himalaya-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-sm">Bank Transfer</h4>
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            paymentMethod === 'bank' ? 'border-himalaya-blue' : 'border-white/20'
-                          }`}>
-                            {paymentMethod === 'bank' && <div className="w-2 h-2 rounded-full bg-himalaya-blue" />}
-                          </div>
-                        </div>
-                        <p className="text-xs text-white/85 mt-1">Transfer directly to our bank account. Your booking will be confirmed once we verify the payment (usually within 24 hours).</p>
-                        {paymentMethod === 'bank' && (
-                          <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
-                            <h5 className="text-xs font-semibold text-himalaya-blue">Bank Account Details</h5>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/90">
-                              <div><span className="text-white/80">Bank:</span> Nepal Investment Mega Bank</div>
-                              <div><span className="text-white/80">Account Name:</span> Himalayan Exploration Treks</div>
-                              <div><span className="text-white/80">Account No:</span> 012010502XXXXX</div>
-                              <div><span className="text-white/80">SWIFT Code:</span> NIMBNPKA</div>
-                              <div className="sm:col-span-2"><span className="text-white/80">Branch:</span> Khusibu-17, Kathmandu, Nepal</div>
-                            </div>
-                            <p className="text-[10px] text-himalaya-gold/60 mt-1">Please include your booking reference as the payment reference. Send a screenshot of the transfer to lama@himalayanexploration.com</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Pay on Arrival */}
-                  <div
-                    onClick={() => setPaymentMethod('arrival')}
-                    className={`relative p-4 rounded-xl cursor-pointer transition-all border ${
-                      paymentMethod === 'arrival'
-                        ? 'bg-himalaya-orange/10 border-himalaya-orange/40 ring-1 ring-himalaya-orange/30'
-                        : 'bg-white/3 border-white/8 hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-himalaya-orange/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg className="w-5 h-5 text-himalaya-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <path d="M12 2l8 4v6c0 5.25-3.5 9.74-8 11-4.5-1.26-8-5.75-8-11V6l8-4z"/><path d="M9 12l2 2 4-4"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold text-sm">Pay on Arrival</h4>
-                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                            paymentMethod === 'arrival' ? 'border-himalaya-orange' : 'border-white/20'
-                          }`}>
-                            {paymentMethod === 'arrival' && <div className="w-2 h-2 rounded-full bg-himalaya-orange" />}
-                          </div>
-                        </div>
-                        <p className="text-xs text-white/85 mt-1">Pay when you arrive in Kathmandu. A 30% deposit is required upon arrival, with the full balance due before the trek begins.</p>
-                        {paymentMethod === 'arrival' && (
-                          <div className="mt-3 glass-card-static p-3 rounded-lg space-y-2">
-                            <div className="flex items-center gap-2 text-xs">
-                              <span className="px-1.5 py-0.5 bg-himalaya-orange/10 text-himalaya-orange rounded text-[10px]">Popular Option</span>
-                              <span className="text-white/85">No advance payment required</span>
-                            </div>
-                            <p className="text-[10px] text-white/80">• 30% deposit payable on arrival in Kathmandu</p>
-                            <p className="text-[10px] text-white/80">• Remaining 70% before trek departure</p>
-                            <p className="text-[10px] text-white/80">• Accepted: Cash (USD/NPR), Credit Card (+3.5% surcharge)</p>
-                            <p className="text-[10px] text-himalaya-gold/60 mt-1">Your booking is confirmed immediately, subject to availability.</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Order Summary */}
-                  <div className="glass-card-static p-4 rounded-xl mt-4">
-                    <h4 className="text-sm font-semibold mb-3">Order Summary</h4>
-                    <div className="space-y-2 text-xs">
-                      <div className="flex justify-between text-white/90">
-                        <span>{selectedTour.title} × {bookingForm.travelers} traveler{bookingForm.travelers > 1 ? 's' : ''}</span>
-                        <span>${(selectedTour.price * bookingForm.travelers).toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between text-white/90">
-                        <span>TIMS & Conservation Permits</span>
-                        <span className="text-himalaya-emerald">Included</span>
-                      </div>
-                      <div className="flex justify-between text-white/90">
-                        <span>Guide & Porter Services</span>
-                        <span className="text-himalaya-emerald">Included</span>
-                      </div>
-                      <div className="flex justify-between text-white/90">
-                        <span>Emergency Evacuation Arrangement</span>
-                        <span className="text-himalaya-emerald">Included</span>
-                      </div>
-                      {paymentMethod === 'bank' && (
-                        <div className="flex justify-between text-white/90">
-                          <span>Bank Transfer Fee</span>
-                          <span className="text-himalaya-emerald">Free</span>
-                        </div>
-                      )}
-                      {paymentMethod === 'arrival' && (
-                        <div className="flex justify-between text-himalaya-orange/70">
-                          <span>Deposit on Arrival (30%)</span>
-                          <span>${Math.round(selectedTour.price * bookingForm.travelers * 0.3).toLocaleString()}</span>
-                        </div>
-                      )}
-                      <div className="border-t border-white/10 pt-2 flex justify-between font-semibold text-sm">
-                        <span>Total Amount</span>
-                        <span className="text-himalaya-gold">${(selectedTour.price * bookingForm.travelers).toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Terms */}
-                  <label className="flex items-start gap-2 cursor-pointer mt-2">
-                    <input
-                      type="checkbox"
-                      checked={agreeTerms}
-                      onChange={(e) => setAgreeTerms(e.target.checked)}
-                      className="custom-checkbox mt-0.5"
+                    <label className="text-sm text-white font-display mb-1 block">Message <span className="text-white">(optional)</span></label>
+                    <textarea
+                      value={bookingForm.message}
+                      onChange={(e) => setBookingForm(p => ({ ...p, message: e.target.value }))}
+                      className="form-input w-full"
+                      rows={3}
+                      placeholder="Any questions or special requests..."
                     />
-                    <span className="text-xs text-white/85 leading-relaxed">
-                      I agree to the <a href="#" className="text-himalaya-gold underline">Terms & Conditions</a> and <a href="#" className="text-himalaya-gold underline">Privacy Policy</a>. I understand that cancellation policies apply as outlined on the website.
-                    </span>
-                  </label>
-
-                  <div className="flex justify-between pt-2">
-                    <button onClick={() => setCheckoutStep('details')} className="btn-outline text-xs">← Back to Details</button>
-                    <button
-                      onClick={submitBooking}
-                      disabled={!agreeTerms || isSubmitting}
-                      className={`btn-primary flex items-center gap-2 ${(!agreeTerms || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="31.4 31.4" strokeLinecap="round"/></svg>
-                          Processing...
-                        </>
-                      ) : paymentMethod === 'esewa' ? (
-                        <>
-                          <span className="w-4 h-4 rounded bg-[#60BB46] flex items-center justify-center text-[8px] font-bold text-black">eS</span>
-                          Pay with eSewa
-                        </>
-                      ) : paymentMethod === 'bank' ? (
-                        'Confirm Bank Transfer'
-                      ) : (
-                        'Confirm Booking'
-                      )}
-                    </button>
                   </div>
+
+                  <button
+                    onClick={() => {
+                      if (!bookingForm.fullName || !bookingForm.email || !bookingForm.whatsapp || !bookingForm.nationality || !bookingForm.currentLocation) {
+                        alert('Please fill in all required fields.');
+                        return;
+                      }
+                      submitBooking();
+                    }}
+                    disabled={isSubmitting}
+                    className="btn-cinematic w-full disabled:opacity-50"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Booking via WhatsApp →'}
+                  </button>
+
+                  <p className="text-xs text-white text-center">
+                    Your details will be sent to our WhatsApp (<span className="text-himalaya-gold">+977 9841023371</span>) for confirmation.
+                  </p>
                 </div>
               )}
 
-              {/* ──── STEP 3: CONFIRMATION ──── */}
               {checkoutStep === 'confirmation' && bookingResult && (
                 <div className="text-center py-4">
                   {/* Success animation */}
@@ -1735,86 +1491,38 @@ export default function HimalayanExplorer() {
                     </svg>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-2">Booking Confirmed!</h3>
-                  <p className="text-sm text-white/90 mb-6">Your trek booking has been successfully submitted. A confirmation email has been sent to <span className="text-himalaya-gold">{bookingForm.email}</span></p>
+                  <h3 className="font-cinematic text-2xl font-bold text-white mb-2">Booking Sent!</h3>
+                  <p className="text-sm text-white mb-6">{bookingResult}</p>
 
-                  {/* Booking Reference */}
-                  <div className="glass-card-static p-5 rounded-xl mb-6 max-w-sm mx-auto">
-                    <div className="text-[10px] text-white/80 uppercase tracking-widest mb-1">Booking Reference</div>
-                    <div className="text-2xl font-bold text-himalaya-gold font-mono tracking-wider">{bookingResult.bookingRef}</div>
-                    <div className="text-xs text-white/85 mt-2">Save this reference for future inquiries</div>
-                  </div>
-
-                  {/* Booking details */}
-                  <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto">
-                    <h4 className="text-xs font-semibold text-white/90 mb-3 uppercase tracking-wider">Booking Details</h4>
-                    <div className="space-y-2 text-xs">
-                      <div className="flex justify-between">
-                        <span className="text-white/85">Trek</span>
-                        <span>{selectedTour.title}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-white/85">Date</span>
-                        <span>{bookingForm.startDate}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-white/85">Travelers</span>
-                        <span>{bookingForm.travelers}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-white/85">Payment Method</span>
-                        <span className="capitalize">{paymentMethod === 'esewa' ? 'eSewa' : paymentMethod === 'bank' ? 'Bank Transfer' : 'Pay on Arrival'}</span>
-                      </div>
-                      <div className="border-t border-white/10 pt-2 flex justify-between font-semibold text-sm">
-                        <span>Total</span>
-                        <span className="text-himalaya-gold">${bookingResult.amount.toLocaleString()}</span>
-                      </div>
+                  <div className="glass-card-static p-4 rounded-xl mb-6 max-w-sm mx-auto">
+                    <div className="text-xs text-white mb-2">Your booking details for:</div>
+                    <div className="font-cinematic text-lg font-bold text-himalaya-gold mb-2">{selectedTour.title}</div>
+                    <div className="text-xs text-white space-y-1 text-left">
+                      <div>👤 {bookingForm.fullName}</div>
+                      <div>✉️ {bookingForm.email}</div>
+                      <div>💬 {bookingForm.whatsapp}</div>
+                      <div>🌍 {bookingForm.nationality}</div>
+                      <div>📍 {bookingForm.currentLocation}</div>
                     </div>
                   </div>
 
-                  {/* Next steps based on payment method */}
-                  {paymentMethod === 'esewa' && (
-                    <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-[#60BB46]/20">
-                      <h4 className="text-xs font-semibold text-[#60BB46] mb-2">eSewa Payment Instructions</h4>
-                      <div className="space-y-1 text-xs text-white/85">
-                        <p>1. You will receive an email with a secure eSewa payment link</p>
-                        <p>2. Click the link and log in to your eSewa account</p>
-                        <p>3. Confirm the payment amount of <span className="text-himalaya-gold">${bookingResult.amount.toLocaleString()}</span></p>
-                        <p>4. Your booking status will update to &quot;Paid&quot; automatically</p>
-                      </div>
-                    </div>
-                  )}
-                  {paymentMethod === 'bank' && (
-                    <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-himalaya-blue/20">
-                      <h4 className="text-xs font-semibold text-himalaya-blue mb-2">Bank Transfer Instructions</h4>
-                      <div className="space-y-1 text-xs text-white/85">
-                        <p>1. Transfer <span className="text-himalaya-gold">${bookingResult.amount.toLocaleString()}</span> to our bank account</p>
-                        <p>2. Use reference: <span className="text-himalaya-gold font-mono">{bookingResult.bookingRef}</span></p>
-                        <p>3. Email the transfer receipt to lama@himalayanexploration.com</p>
-                        <p>4. Booking confirmed within 24 hours of verification</p>
-                      </div>
-                    </div>
-                  )}
-                  {paymentMethod === 'arrival' && (
-                    <div className="glass-card-static p-4 rounded-xl text-left mb-6 max-w-md mx-auto border border-himalaya-orange/20">
-                      <h4 className="text-xs font-semibold text-himalaya-orange mb-2">Pay on Arrival Information</h4>
-                      <div className="space-y-1 text-xs text-white/85">
-                        <p>1. Your booking is <span className="text-himalaya-emerald">confirmed</span> — no advance payment needed</p>
-                        <p>2. Pay 30% deposit (${Math.round(bookingResult.amount * 0.3).toLocaleString()}) upon arrival in Kathmandu</p>
-                        <p>3. Remaining 70% (${Math.round(bookingResult.amount * 0.7).toLocaleString()}) before trek departure</p>
-                        <p>4. We accept Cash (USD/NPR) and Credit Cards</p>
-                      </div>
-                    </div>
-                  )}
+                  <p className="text-xs text-white mb-6">
+                    If WhatsApp didn&apos;t open automatically, click below:
+                  </p>
 
-                  {/* Contact info */}
-                  <div className="text-xs text-white/80 mb-6">
-                    Questions? Contact us at <span className="text-himalaya-gold">lama@himalayanexploration.com</span> or <span className="text-himalaya-gold">+977-9851-188161</span>
-                  </div>
+                  <a
+                    href={`https://wa.me/9779841023371?text=${encodeURIComponent(`🏔️ BOOKING REQUEST\n\nTour: ${selectedTour.title}\nName: ${bookingForm.fullName}\nEmail: ${bookingForm.email}\nWhatsApp: ${bookingForm.whatsapp}\nNationality: ${bookingForm.nationality}\nLocation: ${bookingForm.currentLocation}\n${bookingForm.message ? 'Message: ' + bookingForm.message : ''}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-cinematic inline-block"
+                  >
+                    Open WhatsApp Manually
+                  </a>
 
-                  <div className="flex justify-center gap-3">
-                    <button onClick={closeCheckout} className="btn-outline">Close</button>
-                    <button onClick={() => { navigator.clipboard.writeText(bookingResult.bookingRef); }} className="btn-primary text-xs">Copy Booking Ref</button>
+                  <div className="mt-4">
+                    <button onClick={closeCheckout} className="text-sm text-white hover:text-himalaya-gold transition-colors">
+                      Close
+                    </button>
                   </div>
                 </div>
               )}
@@ -1822,6 +1530,7 @@ export default function HimalayanExplorer() {
           </div>
         </div>
       )}
+
     </main>
   );
 }

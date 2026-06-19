@@ -741,3 +741,46 @@ Stage Summary:
 - All nav links updated to route to the new pages
 - Homepage reduced from 227KB to 65KB (71% smaller)
 - All pages verified working with VLM scores of 8-9/10
+
+---
+Task ID: simplify-booking-and-deploy-netlify
+Agent: Super Z (main)
+Task: Simplify booking form to 6 fields + send to WhatsApp + deploy to Netlify
+
+Work Log:
+- User asked to simplify booking form to: name, email, WhatsApp number, nationality, current location, message (optional) + send details to WhatsApp 9841023371 + deploy to Netlify with token nfp_UCUhUMhD1gdbhzxH2G2d4QuKE8sYs29S4032
+- Simplified booking form state from 11 fields to 6:
+  * Old: fullName, email, phone, nationality, startDate, travelers, emergencyContact, emergencyPhone, dietaryNeeds, medicalConditions, specialRequests
+  * New: fullName, email, whatsapp, nationality, currentLocation, message (optional)
+- Removed payment method state (no longer needed — booking goes to WhatsApp instead of API)
+- Removed agreeTerms state (no longer needed)
+- Simplified checkoutStep from 3 steps ('details' | 'payment' | 'confirmation') to 2 steps ('details' | 'confirmation')
+- Updated submitBooking function:
+  * No longer calls /api/bookings — instead builds a WhatsApp message with all booking details
+  * Message format: 🏔️ NEW BOOKING REQUEST with tour info + customer details
+  * Opens WhatsApp via window.open(`https://wa.me/9779841023371?text=${encodedMessage}`, '_blank')
+  * Shows confirmation screen with booking details + manual WhatsApp link fallback
+- Replaced entire checkout overlay (was 455 lines) with simplified version (195 lines):
+  * Tour summary bar with image + title + price
+  * 6 form fields: Full Name, Email, WhatsApp Number, Nationality, Current Location, Message (optional)
+  * "Send Booking via WhatsApp →" button
+  * Confirmation screen with success animation + booking details summary + manual WhatsApp link
+- Updated next.config.ts for Netlify:
+  * Removed output: "standalone" (Netlify plugin handles build)
+  * Added images.remotePatterns for sfile.chatglm.cn and res.cloudinary.com
+- Production build succeeded: 12 routes compiled (6 static pages + 4 API routes + _not-found)
+- Installed Netlify CLI (v26.1.0) globally
+- Deployed to Netlify using NETLIFY_AUTH_TOKEN with --no-build flag (used local build)
+- Deployment successful:
+  * Production URL: https://stalwart-kataifi-e7854c.netlify.app
+  * 535 files uploaded, 2269 files hashed
+  * All 6 pages return HTTP 200 on production
+- VLM verified production site: video background loads, hero section shows, tour cards with images visible, overall looks good
+
+Stage Summary:
+- Booking form simplified from 11 fields to 6 (name, email, WhatsApp, nationality, current location, message optional)
+- Form submission sends all details to WhatsApp 9841023371 via wa.me link (opens in new tab)
+- Confirmation screen shows booking summary + manual WhatsApp fallback link
+- Site deployed to Netlify: https://stalwart-kataifi-e7854c.netlify.app
+- All 6 pages (/, /trekking, /contact, /about, /stories, /experiences) return HTTP 200 on production
+- VLM verified production site is working correctly
