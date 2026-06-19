@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useLang, LANGUAGES } from '@/lib/i18n';
 
 /* ──────────── DATA ──────────── */
 
@@ -183,6 +184,9 @@ function TrustIcon({ type }: { type: string }) {
 /* ──────────── MAIN COMPONENT ──────────── */
 
 export default function HimalayanExplorer() {
+  /* Language context */
+  const { t, lang, setLang } = useLang();
+
   /* State */
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -203,7 +207,6 @@ export default function HimalayanExplorer() {
   const [statsValues, setStatsValues] = useState([0, 0, 0, 0]);
   const [wishlistCount] = useState(3);
   const [currency, setCurrency] = useState('USD');
-  const [language, setLanguage] = useState('EN');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
@@ -331,12 +334,13 @@ export default function HimalayanExplorer() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            entry.target.classList.add('is-visible');
           }
         });
       },
       { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
-    document.querySelectorAll('.reveal, .reveal-scale').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.reveal, .reveal-scale, .reveal-fade-up, .reveal-fade-scale, .reveal-slide-left, .reveal-slide-right').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -541,7 +545,10 @@ export default function HimalayanExplorer() {
         aria-hidden
       />
 
-      {/* ═══════════ 1. NAVIGATION ═══════════ */}
+      {/* ═══════════ SCROLL PROGRESS BAR (golden cinematic) ═══════════ */}
+      <div className="scroll-progress-cinematic" style={{ width: `${scrollProgress}%` }} aria-hidden />
+
+      {/* ═══════════ 1. NAVIGATION — Premium Cinematic ═══════════ */}
       <nav className={`fixed top-0 left-0 right-0 z-50 nav-blur ${scrolled ? 'nav-scrolled' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-18">
@@ -552,13 +559,19 @@ export default function HimalayanExplorer() {
                 <path d="M16 4L22 16L16 14L10 16L16 4z" fill="#f0d68a" opacity="0.6"/>
                 <path d="M12 28L18 18L24 28" fill="#a07830" opacity="0.3"/>
               </svg>
-              <span className="text-lg font-bold tracking-tight">Himalayan <span className="gradient-text">Exploration</span></span>
+              <span className="font-cinematic text-lg font-bold tracking-tight">Himalayan <span className="text-golden-shimmer">Exploration</span></span>
             </div>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-6">
-              {NAV_LINKS.map((link) => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="nav-link-rainbow text-sm text-white/50 hover:text-white transition-colors">{link}</a>
+            <div className="hidden md:flex items-center gap-7">
+              {[
+                { label: t('nav.experiences'), href: '#experiences' },
+                { label: t('nav.trekking'), href: '#destinations' },
+                { label: t('nav.about'), href: '#about' },
+                { label: t('nav.stories'), href: '#stories' },
+                { label: t('nav.contact'), href: '#contact' },
+              ].map((link) => (
+                <a key={link.href} href={link.href} className="nav-link-rainbow text-sm text-white/60 hover:text-white transition-colors font-display">{link.label}</a>
               ))}
             </div>
 
@@ -566,7 +579,7 @@ export default function HimalayanExplorer() {
             <div className="hidden md:flex items-center gap-3">
               {/* Currency */}
               <div className="relative">
-                <button onClick={() => { setShowCurrencyDropdown(!showCurrencyDropdown); setShowLanguageDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
+                <button onClick={() => { setShowCurrencyDropdown(!showCurrencyDropdown); setShowLanguageDropdown(false); }} className="lang-switcher !text-xs !py-1.5">
                   {currency} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
                 </button>
                 {showCurrencyDropdown && (
@@ -577,15 +590,20 @@ export default function HimalayanExplorer() {
                   </div>
                 )}
               </div>
-              {/* Language */}
+              {/* Language Switcher (uses i18n context) */}
               <div className="relative">
-                <button onClick={() => { setShowLanguageDropdown(!showLanguageDropdown); setShowCurrencyDropdown(false); }} className="text-xs text-white/50 hover:text-himalaya-gold transition-colors flex items-center gap-1 px-2 py-1 rounded border border-white/5">
-                  {language} <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+                <button onClick={() => setShowLanguageDropdown(!showLanguageDropdown)} className="lang-switcher">
+                  <span>{LANGUAGES.find(l => l.code === lang)?.flag}</span>
+                  <span>{lang}</span>
+                  <svg className="w-3 h-3" viewBox="0 0 12 12"><path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
                 </button>
                 {showLanguageDropdown && (
-                  <div className="absolute top-full right-0 mt-1 glass-card-static p-1 min-w-[80px] z-50">
-                    {[['EN','English'],['FR','Français'],['DE','Deutsch'],['NE','नेपाली']].map(([code, label]) => (
-                      <button key={code} onClick={() => { setLanguage(code); setShowLanguageDropdown(false); }} className={`block w-full text-left px-3 py-1.5 text-xs rounded transition-colors ${language === code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</button>
+                  <div className="absolute top-full right-0 mt-1 glass-card-strong p-1 min-w-[140px] z-50">
+                    {LANGUAGES.map((l) => (
+                      <button key={l.code} onClick={() => { setLang(l.code); setShowLanguageDropdown(false); }} className={`flex items-center gap-2 w-full text-left px-3 py-2 text-xs rounded transition-colors ${lang === l.code ? 'text-himalaya-gold bg-himalaya-gold/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>
+                        <span>{l.flag}</span>
+                        <span>{l.label}</span>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -599,8 +617,8 @@ export default function HimalayanExplorer() {
               <button className="p-2 text-white/50 hover:text-himalaya-gold transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 00-16 0"/></svg>
               </button>
-              {/* CTA */}
-              <button className="btn-primary btn-neon-glow text-xs !py-2 !px-4">Book Expedition</button>
+              {/* CTA - cinematic */}
+              <button className="btn-cinematic !text-xs !py-2 !px-4">{t('nav.book')}</button>
             </div>
 
             {/* Mobile hamburger */}
@@ -615,52 +633,72 @@ export default function HimalayanExplorer() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden glass-card-strong border-t border-white/5 p-4 space-y-3">
-            {NAV_LINKS.map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-himalaya-gold py-2 transition-colors">{link}</a>
+            {[
+              { label: t('nav.experiences'), href: '#experiences' },
+              { label: t('nav.trekking'), href: '#destinations' },
+              { label: t('nav.about'), href: '#about' },
+              { label: t('nav.stories'), href: '#stories' },
+              { label: t('nav.contact'), href: '#contact' },
+            ].map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="block text-sm text-white/60 hover:text-himalaya-gold py-2 transition-colors">{link.label}</a>
             ))}
-            <div className="flex gap-2 pt-2 border-t border-white/5">
-              {['USD','EUR','GBP','INR'].map((c) => (
-                <button key={c} onClick={() => setCurrency(c)} className={`text-xs px-3 py-1 rounded ${currency === c ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/40'}`}>{c}</button>
+            <div className="flex gap-2 pt-2 border-t border-white/5 flex-wrap">
+              {LANGUAGES.map((l) => (
+                <button key={l.code} onClick={() => setLang(l.code)} className={`text-xs px-3 py-1.5 rounded ${lang === l.code ? 'bg-himalaya-gold/20 text-himalaya-gold' : 'text-white/40'}`}>{l.flag} {l.code}</button>
               ))}
             </div>
-            <button className="btn-primary w-full text-sm">Book Expedition</button>
+            <button className="btn-cinematic w-full !text-sm">{t('nav.book')}</button>
           </div>
         )}
       </nav>
 
-      {/* ═══════════ 2. HERO SECTION ═══════════ */}
+      {/* ═══════════ 2. HERO SECTION — Premium Cinematic ═══════════ */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* CLEAN: No decorative 3D elements, no particles, no sparkles, no mountains, no orbs.
-            Just the video background (mounted globally in layout.tsx) showing through. */}
+        {/* Aurora glow orbs for cinematic depth (positioned, not animated to distraction) */}
+        <div className="aurora-orb" style={{ top: '15%', left: '10%', width: '400px', height: '400px', background: 'radial-gradient(circle, #d4a853, transparent 70%)' }} />
+        <div className="aurora-orb" style={{ bottom: '15%', right: '10%', width: '380px', height: '380px', background: 'radial-gradient(circle, #7c3aed, transparent 70%)', animationDelay: '4s' }} />
+        <div className="aurora-orb" style={{ top: '40%', right: '30%', width: '320px', height: '320px', background: 'radial-gradient(circle, #2dd4bf, transparent 70%)', animationDelay: '8s' }} />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
-          <div className="reveal">
-            <span className="category-pill mb-6 inline-flex"><span className="glow-dot mr-2" />Adventure Travel Packages That Deliver Amazing Adventures</span>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
+          {/* Cinematic eyebrow pill */}
+          <div className="reveal-fade-up">
+            <span className="pill-cinematic mb-8">{t('hero.pill')}</span>
           </div>
-          <h1 className="reveal font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 mb-6 text-readable-strong">
-            Discover Nepal&apos;s{' '}
-            <span className="gradient-text-shimmer">Breathtaking Landscapes</span>
+
+          {/* Oversized cinematic headline with Playfair Display + golden shimmer */}
+          <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-strong">
+            <span className="block text-white/95">{t('hero.title1')}</span>
+            <span className="block text-golden-shimmer italic">{t('hero.title2')}</span>
           </h1>
-          <p className="reveal text-readable text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-8">
-            At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
+
+          {/* Subtitle */}
+          <p className="reveal-fade-up text-readable text-lg sm:text-xl text-white/75 max-w-3xl mx-auto mb-10 leading-relaxed">
+            {t('hero.subtitle')}
           </p>
-          <div className="reveal flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <a href="#destinations" className="btn-primary btn-neon-glow text-center">Explore Expeditions</a>
-            <button className="btn-outline btn-neon-glow flex items-center justify-center gap-2">
+
+          {/* Cinematic CTAs */}
+          <div className="reveal-fade-up flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <a href="#destinations" className="btn-cinematic magnetic">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              {t('hero.cta1')}
+            </a>
+            <button className="btn-outline-cinematic magnetic flex items-center justify-center gap-2">
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
-              Watch Documentary
+              {t('hero.cta2')}
             </button>
           </div>
-          <div className="reveal flex flex-wrap justify-center gap-6 sm:gap-10 text-sm">
+
+          {/* Cinematic stat row with Playfair numbers */}
+          <div className="reveal-fade-up flex flex-wrap justify-center gap-8 sm:gap-16 pt-8 border-t border-white/10">
             {[
-              ['8,849m', 'Highest Peak'],
-              ['50+', 'Destinations'],
-              ['300+', 'Tours'],
-              ['Since 2013', 'Experience'],
+              ['8,849m', t('hero.stat.peak')],
+              ['50+', t('hero.stat.dest')],
+              ['300+', t('hero.stat.tours')],
+              [t('common.since'), t('hero.stat.exp')],
             ].map(([val, label]) => (
               <div key={label} className="text-center">
-                <div className="text-readable-strong text-xl font-bold gradient-text-shimmer font-display">{val}</div>
-                <div className="text-readable text-white/60 text-xs mt-0.5">{label}</div>
+                <div className="stat-counter-cinematic text-readable-strong">{val}</div>
+                <div className="eyebrow mt-2 text-white/50">{label}</div>
               </div>
             ))}
           </div>
@@ -668,7 +706,7 @@ export default function HimalayanExplorer() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-gentle">
-          <svg className="w-6 h-6 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          <svg className="w-6 h-6 text-himalaya-gold/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         </div>
       </section>
 
@@ -1695,9 +1733,242 @@ export default function HimalayanExplorer() {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Reach <span className="gradient-text-aurora">New Heights</span>?</h2>
           <p className="text-white/40 mb-8 max-w-lg mx-auto">Your trip with our team means a lot to us. Whether it&apos;s cultural exploration or extreme adventure such as trekking to Everest Base Camp, we can help create a great trip plan according to your requirements.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-primary" onClick={() => openCheckout(TOURS[0])}>Start Your Journey</button>
-            <button className="btn-outline">Talk to an Expert</button>
+            <button className="btn-cinematic" onClick={() => openCheckout(TOURS[0])}>Start Your Journey</button>
+            <button className="btn-outline-cinematic">Talk to an Expert</button>
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 1: TRUST BADGES MARQUEE ═══════════ */}
+      <section className="py-10 border-y border-white/5 section-wash-gold">
+        <div className="max-w-7xl mx-auto px-4 text-center mb-6">
+          <p className="eyebrow">{t('trust.title')}</p>
+          <p className="text-readable text-xs text-white/40 mt-2">{t('trust.subtitle')}</p>
+        </div>
+        <div className="marquee-cinematic">
+          <div className="marquee-cinematic-track">
+            {[...Array(2)].map((_, dup) => (
+              <div key={dup} className="flex items-center gap-16 px-8">
+                {[
+                  { name: 'Lonely Planet', sub: 'Featured' },
+                  { name: 'TripAdvisor', sub: '5-Star Rated' },
+                  { name: 'TAAN', sub: 'Member Since 2013' },
+                  { name: 'NMA', sub: 'Certified' },
+                  { name: 'TourRadar', sub: 'Top Operator' },
+                  { name: 'Lonely Planet', sub: 'Recommended' },
+                  { name: 'National Geographic', sub: 'Featured' },
+                  { name: 'BBC Travel', sub: 'Featured' },
+                ].map((badge, i) => (
+                  <div key={`${dup}-${i}`} className="flex flex-col items-center gap-1 flex-shrink-0">
+                    <div className="font-cinematic text-2xl font-bold text-golden-shimmer">{badge.name}</div>
+                    <div className="eyebrow text-white/40 !text-[0.6rem]">{badge.sub}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 2: LIVE COUNTDOWN TO SPRING 2026 ═══════════ */}
+      <section className="py-20 section-wash-aurora relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
+          <div className="reveal-fade-up">
+            <span className="pill-cinematic mb-6">{t('countdown.pill')}</span>
+          </div>
+          <h2 className="reveal-fade-up font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
+            {t('countdown.title1')} <span className="text-golden-shimmer italic">{t('countdown.title2')}</span>
+          </h2>
+          <p className="reveal-fade-up text-readable text-white/60 max-w-2xl mx-auto mb-12">{t('countdown.subtitle')}</p>
+          <div className="reveal-fade-up flex flex-wrap justify-center gap-4">
+            {([
+              ['days', countdown.days],
+              ['hours', countdown.hours],
+              ['minutes', countdown.minutes],
+              ['seconds', countdown.seconds],
+            ] as const).map(([unit, val]) => (
+              <div key={unit} className="countdown-digit-cinematic">
+                <div className="countdown-digit-number">{String(val).padStart(2, '0')}</div>
+                <div className="countdown-digit-label">{t(`countdown.${unit}`)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 3: TESTIMONIALS CAROUSEL ═══════════ */}
+      <section id="stories" className="py-20 section-wash-gold relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-12 reveal-fade-up">
+            <span className="pill-cinematic mb-6">{t('testimonials.pill')}</span>
+            <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
+              {t('testimonials.title1')} <span className="text-golden-shimmer italic">{t('testimonials.title2')}</span>
+            </h2>
+            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('testimonials.subtitle')}</p>
+            <div className="divider-golden" />
+          </div>
+          <div className="reveal-fade-up grid grid-cols-1 md:grid-cols-3 gap-6">
+            {TESTIMONIALS.slice(0, 3).map((tm, i) => (
+              <div key={tm.name} className="card-premium holo-sheen p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-black">
+                    {tm.initials}
+                  </div>
+                  <div>
+                    <div className="font-display font-semibold text-white">{tm.name}</div>
+                    <div className="text-xs text-white/40">{tm.trip}</div>
+                  </div>
+                </div>
+                <div className="flex gap-0.5 mb-3">
+                  {[...Array(5)].map((_, s) => (
+                    <svg key={s} className="w-4 h-4 text-himalaya-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.4-6.3-4.6-6.3 4.6L7.9 14 2 9.4h7.6z"/></svg>
+                  ))}
+                </div>
+                <p className="text-readable text-sm text-white/70 leading-relaxed line-clamp-5">"{tm.quote}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 4: INTERACTIVE NEPAL MAP ═══════════ */}
+      <section className="py-20 section-wash-aurora relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-12 reveal-fade-up">
+            <span className="pill-cinematic mb-6">{t('map.pill')}</span>
+            <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
+              {t('map.title1')} <span className="text-golden-shimmer italic">{t('map.title2')}</span>
+            </h2>
+            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('map.subtitle')}</p>
+            <div className="divider-golden" />
+          </div>
+          <div className="reveal-fade-up grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Stylized Nepal map (SVG) */}
+            <div className="relative card-premium p-6 aspect-[4/5]">
+              <svg viewBox="0 0 400 500" className="w-full h-full" fill="none">
+                <defs>
+                  <linearGradient id="nepal-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="rgba(212, 168, 83, 0.3)" />
+                    <stop offset="100%" stopColor="rgba(124, 58, 237, 0.3)" />
+                  </linearGradient>
+                </defs>
+                {/* Nepal stylized shape */}
+                <path
+                  d="M80 80 L120 60 L180 50 L240 70 L300 90 L340 130 L330 180 L300 220 L320 280 L300 340 L260 380 L240 430 L200 460 L160 440 L140 400 L100 380 L80 340 L90 280 L70 220 L80 160 Z"
+                  fill="url(#nepal-grad)"
+                  stroke="rgba(212, 168, 83, 0.6)"
+                  strokeWidth="2"
+                />
+                {/* Region dots */}
+                {[
+                  { x: 200, y: 120, name: 'Everest', color: '#d4a853' },
+                  { x: 160, y: 220, name: 'Annapurna', color: '#f97316' },
+                  { x: 130, y: 160, name: 'Manaslu', color: '#f43f5e' },
+                  { x: 240, y: 280, name: 'Mustang', color: '#7c3aed' },
+                  { x: 100, y: 280, name: 'Langtang', color: '#2dd4bf' },
+                  { x: 220, y: 380, name: 'Dolpo', color: '#4a90d9' },
+                ].map((r) => (
+                  <g key={r.name} className="map-region">
+                    <circle cx={r.x} cy={r.y} r="10" fill={r.color} opacity="0.85" />
+                    <circle cx={r.x} cy={r.y} r="18" fill="none" stroke={r.color} strokeWidth="1.5" opacity="0.5" />
+                    <text x={r.x} y={r.y - 18} textAnchor="middle" className="font-display" fontSize="11" fill="#f0f4f8" fontWeight="600">{r.name}</text>
+                  </g>
+                ))}
+              </svg>
+            </div>
+            {/* Region details */}
+            <div className="space-y-3">
+              {DESTINATIONS.slice(0, 6).map((dest, i) => (
+                <div key={dest.name} className="card-premium p-4 flex items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="font-cinematic text-lg font-bold text-white">{dest.name}</div>
+                    <div className="text-xs text-white/50">{dest.tagline}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-white/40">from</div>
+                    <div className="font-cinematic text-xl font-bold text-golden-shimmer">${dest.priceFrom}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-white/40">trips</div>
+                    <div className="font-display font-bold text-white">{dest.trips}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 5: INSTAGRAM GRID ═══════════ */}
+      <section className="py-20 section-wash-gold relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-12 reveal-fade-up">
+            <span className="pill-cinematic mb-6">{t('instagram.pill')}</span>
+            <h2 className="font-cinematic text-4xl sm:text-5xl font-bold mt-6 mb-3 text-readable-strong">
+              {t('instagram.title1')} <span className="text-golden-shimmer italic">{t('instagram.title2')}</span>
+            </h2>
+            <p className="text-readable text-white/60 max-w-2xl mx-auto">{t('instagram.subtitle')}</p>
+            <div className="divider-golden" />
+          </div>
+          <div className="reveal-fade-up grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            {[
+              { name: 'Everest Sunrise', likes: '2.4k', color: 'from-amber-500 to-orange-600' },
+              { name: 'Annapurna Base Camp', likes: '3.1k', color: 'from-rose-500 to-pink-600' },
+              { name: 'Monastery in Mustang', likes: '1.8k', color: 'from-purple-500 to-violet-600' },
+              { name: 'Thorong La Pass', likes: '2.7k', color: 'from-cyan-500 to-blue-600' },
+              { name: 'Sherpa Village', likes: '1.5k', color: 'from-emerald-500 to-teal-600' },
+              { name: 'Prayer Flags', likes: '4.2k', color: 'from-yellow-500 to-amber-600' },
+              { name: 'Gokyo Lakes', likes: '3.5k', color: 'from-blue-500 to-indigo-600' },
+              { name: 'Langtang Valley', likes: '2.1k', color: 'from-green-500 to-emerald-600' },
+              { name: 'Mera Peak Summit', likes: '2.9k', color: 'from-orange-500 to-red-600' },
+              { name: 'Boudhanath Stupa', likes: '5.1k', color: 'from-fuchsia-500 to-purple-600' },
+              { name: 'Phoksundo Lake', likes: '2.3k', color: 'from-teal-500 to-cyan-600' },
+              { name: 'Himalayan Sunset', likes: '6.7k', color: 'from-pink-500 to-rose-600' },
+            ].map((tile, i) => (
+              <div key={i} className={`ig-tile bg-gradient-to-br ${tile.color}`}>
+                <div className="ig-tile-overlay">
+                  <div className="text-xs font-display text-white/80">{tile.name}</div>
+                  <div className="flex items-center gap-1 mt-1">
+                    <svg className="w-3 h-3 text-rose-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span className="text-xs text-white/70">{tile.likes}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="#" className="btn-outline-cinematic magnetic inline-flex">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84c-3.4 0-6.16 2.76-6.16 6.16s2.76 6.16 6.16 6.16 6.16-2.76 6.16-6.16S15.4 5.84 12 5.84zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.41-10.85c-.8 0-1.44.65-1.44 1.44 0 .8.65 1.44 1.44 1.44.8 0 1.44-.65 1.44-1.44 0-.8-.65-1.44-1.44-1.44z"/></svg>
+              {t('instagram.follow')}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ NEW 6: NEWSLETTER CTA ═══════════ */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="aurora-orb" style={{ top: '20%', left: '20%', width: '500px', height: '500px', background: 'radial-gradient(circle, #d4a853, transparent 70%)' }} />
+        <div className="aurora-orb" style={{ bottom: '20%', right: '20%', width: '450px', height: '450px', background: 'radial-gradient(circle, #7c3aed, transparent 70%)', animationDelay: '6s' }} />
+        <div className="max-w-3xl mx-auto px-4 relative z-10 text-center">
+          <div className="reveal-fade-up">
+            <span className="discount-badge !relative !inline-block mb-6">10% OFF</span>
+          </div>
+          <h2 className="reveal-fade-up font-cinematic text-4xl sm:text-5xl font-bold mb-4 text-readable-strong">
+            {t('newsletter.title')}
+          </h2>
+          <p className="reveal-fade-up text-readable text-white/65 mb-8 max-w-xl mx-auto">{t('newsletter.subtitle')}</p>
+          <form className="reveal-fade-up flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder={t('newsletter.placeholder')}
+              className="input-cinematic flex-1"
+              required
+            />
+            <button type="submit" className="btn-cinematic whitespace-nowrap">
+              {t('newsletter.cta')}
+            </button>
+          </form>
+          <p className="reveal-fade-up text-xs text-white/35 mt-4">{t('newsletter.disclaimer')}</p>
         </div>
       </section>
 

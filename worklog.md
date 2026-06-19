@@ -467,3 +467,86 @@ Stage Summary:
 - Video is 8 seconds long, plays continuously, loops automatically, no audio
 - Verified playing in both desktop and mobile viewports
 - User should hard refresh (Ctrl+Shift+R) to load the new simple code
+
+---
+Task ID: beautify-premium-cinematic
+Agent: Super Z (main)
+Task: Make website very beautiful, attractive, and cool — premium cinematic + mixed vibrant + high energy + 4 languages + 6 new features
+
+Work Log:
+- User picked: Premium cinematic style + Mixed vibrant palette + High energy animations + 6 new features (testimonials, instagram, trust badges, countdown, newsletter, map) + 4 languages (EN/NE/FR/DE) + all 6 focus areas (hero, cards, typography, navigation, sections, micro-animations)
+- Added Playfair Display font (cinematic serif) alongside Inter + Space Grotesk in layout.tsx, registered as --font-cinematic CSS variable
+- Created /home/z/my-project/src/lib/i18n.tsx with:
+  * LanguageProvider context with 4 language dictionaries (EN, NE, FR, DE)
+  * 90+ translation keys covering nav, hero, sections, countdown, newsletter, instagram, map, footer
+  * useLang() hook + LANGUAGES array with flags (🇬🇧🇳🇵🇫🇷🇩🇪)
+- Created /home/z/my-project/src/components/Providers.tsx client wrapper for LanguageProvider
+- Wrapped entire app in Providers in layout.tsx
+- Added 400+ lines of cinematic CSS utilities to globals.css:
+  * .font-cinematic (Playfair Display)
+  * .text-golden-shimmer (animated gold gradient text flow)
+  * .text-rainbow-flow (7-color mixed vibrant gradient flow)
+  * .eyebrow (letter-spaced uppercase label)
+  * .pill-cinematic (premium pill with golden dot + pulse)
+  * .btn-cinematic (gold gradient CTA with glow + slide hover)
+  * .btn-outline-cinematic (glass border with rainbow hover)
+  * .tilt-3d-wrap / .tilt-3d-inner / .tilt-3d-content (3D perspective hover)
+  * .card-premium (deep glass + golden border on hover + sheen)
+  * .holo-sheen (holographic sweep on hover)
+  * .discount-badge (animated gradient badge)
+  * .reveal-fade-up / .reveal-fade-scale / .reveal-slide-left / .reveal-slide-right (scroll animations)
+  * .marquee-cinematic (infinite horizontal scroll, pause on hover)
+  * .countdown-digit-cinematic (glass card with golden top border)
+  * .ig-tile + .ig-tile-overlay (instagram grid with hover reveal)
+  * .map-region (interactive map dots with glow on hover)
+  * .input-cinematic (rounded glass input with golden focus)
+  * .lang-switcher (glass pill with flag + code)
+  * .mega-menu (dropdown for nav)
+  * .scroll-progress-cinematic (golden shimmer scroll bar)
+  * .stat-counter-cinematic (Playfair numbers with gold gradient)
+  * .divider-golden (centered golden line)
+  * .section-wash-gold / .section-wash-aurora (subtle radial gradient tints)
+  * .magnetic (hover pull utility)
+  * .float-gentle (bobbing animation)
+  * .aurora-orb (drifting background glow blob)
+- Redesigned Hero section with:
+  * Cinematic eyebrow pill (.pill-cinematic)
+  * Oversized Playfair Display headline (text-8xl) with golden shimmer italic accent
+  * 3 aurora glow orbs (gold + purple + teal) drifting in background
+  * Cinematic CTA buttons (.btn-cinematic + .btn-outline-cinematic)
+  * Stat row with Playfair numbers + golden gradient
+  * All text uses text-readable for legibility over video
+- Redesigned Navigation:
+  * Logo uses font-cinematic + text-golden-shimmer
+  * Nav links use font-display with rainbow underline hover
+  * Currency + Language switchers use .lang-switcher glass pill style
+  * Language dropdown shows all 4 languages with flags (🇬🇧🇳🲠🇫🇷🇩🇪)
+  * CTA button uses .btn-cinematic
+  * Mobile menu includes language switcher row
+- Added golden scroll progress bar at top (.scroll-progress-cinematic)
+- Updated IntersectionObserver to handle new reveal classes (reveal-fade-up, reveal-fade-scale, reveal-slide-left, reveal-slide-right)
+- Added 6 NEW feature sections before footer:
+  1. TRUST BADGES MARQUEE — infinite scrolling strip of 8 publications (Lonely Planet, TripAdvisor, TAAN, NMA, TourRadar, Nat Geo, BBC Travel) with Playfair Display names + golden shimmer
+  2. LIVE COUNTDOWN — Spring 2026 trekking season countdown with 4 cinematic digit cards (days/hours/minutes/seconds), Playfair numbers with gold gradient
+  3. TESTIMONIALS — 3-column grid of testimonial cards with .card-premium + .holo-sheen, avatar with gold-orange gradient, 5-star ratings, quote
+  4. INTERACTIVE NEPAL MAP — SVG stylized Nepal shape with 6 clickable region dots (Everest, Annapurna, Manaslu, Mustang, Langtang, Dolpo) + region detail cards with prices
+  5. INSTAGRAM GRID — 12-tile photo grid with mixed vibrant gradients, hover overlay showing name + likes, Instagram follow button
+  6. NEWSLETTER CTA — 10% OFF badge + Playfair headline + glass email input + cinematic subscribe button, aurora orbs in background
+- All new sections use i18n translation keys (t('section.xxx')) so they switch language with the nav
+- Updated existing "Ready to Reach New Heights" CTA section to use .btn-cinematic + .btn-outline-cinematic
+- Verified via agent-browser + VLM across 5 views:
+  * Homepage: 8/10 — stunning mountain backdrop, Playfair headings, mixed vibrant colors
+  * Trust+Countdown: 7/10 — clean, functional, golden accents
+  * Testimonials+Map: 9/10 — vibrant gallery, dynamic imagery
+  * Instagram+Newsletter: 8/10 — cohesive design, gold/orange/purple
+  * Mobile homepage: 8/10 — responsive, clean mobile layout
+  * VLM confirms: cinematic typography visible, mixed vibrant colors present, new feature sections visible, no issues to fix
+
+Stage Summary:
+- Total new code: ~400 lines CSS + ~250 lines i18n + ~250 lines new sections = ~900 lines
+- Site now has: premium cinematic feel (Playfair Display), mixed vibrant palette (7 colors flowing through gradients), high-energy animations (scroll reveals, marquee, hover effects, aurora orbs), 4-language support (EN/NE/FR/DE with flags), 6 new feature sections (trust, countdown, testimonials, map, instagram, newsletter)
+- Hero redesigned with oversized cinematic headline + golden shimmer
+- Navigation redesigned with cinematic typography + language switcher
+- All sections use translation keys for multilingual support
+- VLM verified all 5 views score 7-9/10 for beauty/premium feel
+- Screenshots saved to /home/z/my-project/download/screenshots/v16-*.png
