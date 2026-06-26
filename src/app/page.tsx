@@ -866,27 +866,30 @@ _Sent from himalayanexploration.com_`;
             <span className="pill-cinematic mb-8">{t('hero.pill')}</span>
           </div>
 
-          {/* Oversized cinematic headline with word-by-word animation + float */}
+          {/* Oversized cinematic headline with MULTI-EFFECT animation:
+              per-letter 3D entrance + glow pulse + shimmer sweep + 3D float */}
           <h1 className="reveal-fade-up font-cinematic text-5xl sm:text-7xl md:text-8xl font-bold leading-[1.05] mt-8 mb-8 text-readable-hero hero-headline-float">
-            <span className="block text-white">
-              {t('hero.title1').split(' ').map((word, i) => (
+            {/* Line 1: "Discover Nepal's" — white with glow pulse */}
+            <span className="block hero-line-1 hero-shimmer-sweep">
+              {t('hero.title1').split('').map((char, i) => (
                 <span
                   key={i}
-                  className="hero-headline-word"
-                  style={{ animationDelay: `${0.3 + i * 0.15}s` }}
+                  className="hero-letter"
+                  style={{ animationDelay: `${0.3 + i * 0.04}s` }}
                 >
-                  {word}&nbsp;
+                  {char === ' ' ? '\u00A0' : char}
                 </span>
               ))}
             </span>
-            <span className="block hero-golden-shimmer-animated italic">
-              {t('hero.title2').split(' ').map((word, i) => (
+            {/* Line 2: "Breathtaking Landscapes" — red with glow pulse + shimmer */}
+            <span className="block hero-line-2 hero-shimmer-sweep italic">
+              {t('hero.title2').split('').map((char, i) => (
                 <span
                   key={i}
-                  className="hero-headline-word"
-                  style={{ animationDelay: `${0.8 + i * 0.15}s` }}
+                  className="hero-letter"
+                  style={{ animationDelay: `${0.8 + i * 0.04}s` }}
                 >
-                  {word}&nbsp;
+                  {char === ' ' ? '\u00A0' : char}
                 </span>
               ))}
             </span>
