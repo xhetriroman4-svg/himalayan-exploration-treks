@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useLang } from '@/lib/i18n';
+import NavBar from '@/components/NavBar';
 
 export default function ContactPage() {
   const { t } = useLang();
@@ -49,6 +50,7 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
+      <NavBar />
 
       {/* Header */}
       <section className="py-12 px-4 text-center">

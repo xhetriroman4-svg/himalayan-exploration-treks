@@ -1,6 +1,7 @@
 'use client';
 
 import { useLang } from '@/lib/i18n';
+import NavBar from '@/components/NavBar';
 
 const TEAM_MEMBERS = [
   { name: 'Kumar Lama', role: 'Founder & Managing Director', initials: 'KL', image: '/team/kumar-lama.jpg', bio: 'Born in Kabhre Palanchok, Kumar started as a trekking porter and kitchen assistant before founding Himalayan Exploration Treks in 2013. A member of the indigenous Tamang community, he works with guides who love their country and try to make a difference by working in their villages and mountains.', gradient: 'from-himalaya-gold/40 to-himalaya-gold/15' },
@@ -21,6 +22,7 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
+      <NavBar />
 
       {/* Header */}
       <section className="py-12 px-4 text-center">

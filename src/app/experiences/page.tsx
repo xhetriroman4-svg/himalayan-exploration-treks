@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useLang } from '@/lib/i18n';
+import NavBar from '@/components/NavBar';
 
 const FEATURES = [
   { title: 'Expert Local Guides', desc: 'Our team comprises experts in tourism and destinations, knowledgeable local guides who possess a deep understanding of the local culture and history.', icon: '🧭' },
@@ -169,6 +170,7 @@ export default function ExperiencesPage() {
 
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
+      <NavBar />
 
       {/* Header */}
       <section className="py-12 px-4 text-center">

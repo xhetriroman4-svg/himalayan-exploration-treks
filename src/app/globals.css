@@ -1439,15 +1439,14 @@ input[type="range"]::-moz-range-thumb {
    ✦ HERO HEADLINE — Simple Fade In/Out Effect ✦
    ════════════════════════════════════════════════════════════════ */
 
-/* Line 1 (Discover Nepal's) — white */
+/* Line 1 (Discover Nepal's) — white, solid (no animation) */
 .hero-line-1 {
   color: #ffffff;
   -webkit-text-fill-color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-  animation: hero-fade-in-out 6s ease-in-out infinite;
 }
 
-/* Line 2 (Breathtaking Landscapes) — red */
+/* Line 2 (Breathtaking Landscapes) — red, solid (no animation) */
 .hero-line-2 {
   color: #ef4444;
   -webkit-text-fill-color: #ef4444;
@@ -1455,7 +1454,6 @@ input[type="range"]::-moz-range-thumb {
   -webkit-background-clip: border-box;
   background-clip: border-box;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-  animation: hero-fade-in-out 6s ease-in-out 1.5s infinite;
 }
 
 /* Simple fade in/out keyframe */

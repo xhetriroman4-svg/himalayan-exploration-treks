@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useLang } from '@/lib/i18n';
+import NavBar from '@/components/NavBar';
 
 const TESTIMONIALS = [
   { name: 'Sarah Chen', trip: 'Everest Base Camp Trek', initials: 'SC', quote: 'The Everest Base Camp Trek is one of those adventures that changes everything. The breathtaking Himalayan views made me forget to breathe, and the Sherpa people became my heroes. Standing at the base of Mount Everest — that Everest — is something you never forget.' },
@@ -13,25 +14,25 @@ const TESTIMONIALS = [
 ];
 
 const GALLERY_ITEMS = [
-  { title: 'Everest Sunrise', location: 'Everest Region', gradient: 'from-amber-500 to-orange-600' },
-  { title: 'Annapurna Base Camp', location: 'Annapurna Region', gradient: 'from-rose-500 to-pink-600' },
-  { title: 'Monastery in Mustang', location: 'Mustang Region', gradient: 'from-purple-500 to-violet-600' },
-  { title: 'Thorong La Pass', location: 'Annapurna Region', gradient: 'from-cyan-500 to-blue-600' },
-  { title: 'Sherpa Village', location: 'Everest Region', gradient: 'from-emerald-500 to-teal-600' },
-  { title: 'Prayer Flags', location: 'Multiple Regions', gradient: 'from-yellow-500 to-amber-600' },
-  { title: 'Gokyo Lakes', location: 'Everest Region', gradient: 'from-blue-500 to-indigo-600' },
-  { title: 'Langtang Valley', location: 'Langtang Region', gradient: 'from-green-500 to-emerald-600' },
-  { title: 'Mera Peak Summit', location: 'Everest Region', gradient: 'from-orange-500 to-red-600' },
-  { title: 'Boudhanath Stupa', location: 'Kathmandu Valley', gradient: 'from-fuchsia-500 to-purple-600' },
-  { title: 'Phoksundo Lake', location: 'Dolpo Region', gradient: 'from-teal-500 to-cyan-600' },
-  { title: 'Himalayan Sunset', location: 'Multiple Regions', gradient: 'from-pink-500 to-rose-600' },
+  { title: 'Everest Sunrise', location: 'Everest Region', image: 'https://sfile.chatglm.cn/images-ppt/8f4b99205d53.jpg' },
+  { title: 'Annapurna Trail', location: 'Annapurna Region', image: 'https://sfile.chatglm.cn/images-ppt/51dae135f694.jpeg' },
+  { title: 'Prayer Flags', location: 'Multiple Regions', image: 'https://sfile.chatglm.cn/images-ppt/a584ed1012a4.jpg' },
+  { title: 'Sherpa Village', location: 'Everest Region', image: 'https://sfile.chatglm.cn/images-ppt/fbbf0535de7f.jpg' },
+  { title: 'Mountain Mist', location: 'Annapurna Region', image: 'https://sfile.chatglm.cn/images-ppt/a2a5f7dbfe1a.jpg' },
+  { title: 'Tea House Lodge', location: 'Everest Region', image: 'https://sfile.chatglm.cn/images-ppt/8acd3895ccb2.jpg' },
+  { title: 'Suspension Bridge', location: 'Multiple Regions', image: 'https://sfile.chatglm.cn/images-ppt/53a7a771425b.jpg' },
+  { title: 'Thorong La Pass', location: 'Annapurna Region', image: 'https://sfile.chatglm.cn/images-ppt/f6ac0d61e23a.jpg' },
+  { title: 'Base Camp', location: 'Everest Region', image: 'https://sfile.chatglm.cn/images-ppt/c0f8f8a55b8e.jpg' },
+  { title: 'Ancient Monastery', location: 'Mustang Region', image: 'https://sfile.chatglm.cn/images-ppt/51746f7caf03.jpg' },
+  { title: 'Yak Caravan', location: 'Everest Region', image: 'https://sfile.chatglm.cn/images-ppt/c3f423040db8.jpg' },
+  { title: 'Rhododendron Forest', location: 'Annapurna Region', image: 'https://sfile.chatglm.cn/images-ppt/b68ff7ecfce6.jpg' },
 ];
 
 const BLOG_POSTS = [
-  { title: 'Everest Base Camp Trek: Complete 14-Day Itinerary', category: 'Itinerary', readTime: '12 min', excerpt: 'Everything you need to know about the EBC trek — day-by-day breakdown, acclimatization, costs, packing list, and insider tips from our guides.', gradient: 'from-emerald-700/50 via-teal-700/40 to-cyan-800/50' },
-  { title: 'Best Time to Trek in Nepal: Month-by-Month Guide', category: 'Guide', readTime: '8 min', excerpt: 'When to go, what to expect weather-wise, and which treks are best in each season. Spring, summer, monsoon, autumn, or winter — we cover it all.', gradient: 'from-amber-700/50 via-orange-700/40 to-rose-800/50' },
-  { title: 'AMS: Preventing Altitude Sickness on Himalayan Treks', category: 'Safety', readTime: '10 min', excerpt: 'Altitude sickness is real. Learn the symptoms, prevention strategies, acclimatization techniques, and when to descend. Your safety depends on it.', gradient: 'from-rose-700/50 via-red-700/40 to-orange-800/50' },
-  { title: 'Packing List for Himalayan Treks: The Ultimate Guide', category: 'Gear', readTime: '15 min', excerpt: 'Don\'t overpack, don\'t underpack. Our comprehensive packing list covers clothing, footwear, gear, electronics, and medications for every trek type.', gradient: 'from-blue-700/50 via-indigo-700/40 to-violet-800/50' },
+  { title: 'Everest Base Camp Trek: Complete 14-Day Itinerary', category: 'Itinerary', readTime: '12 min', excerpt: 'Everything you need to know about the EBC trek — day-by-day breakdown, acclimatization, costs, packing list, and insider tips from our guides.', image: 'https://sfile.chatglm.cn/images-ppt/931b93f13c50.jpg' },
+  { title: 'Best Time to Trek in Nepal: Month-by-Month Guide', category: 'Guide', readTime: '8 min', excerpt: 'When to go, what to expect weather-wise, and which treks are best in each season. Spring, summer, monsoon, autumn, or winter — we cover it all.', image: 'https://sfile.chatglm.cn/images-ppt/beb25e4341d0.jpg' },
+  { title: 'AMS: Preventing Altitude Sickness on Himalayan Treks', category: 'Safety', readTime: '10 min', excerpt: 'Altitude sickness is real. Learn the symptoms, prevention strategies, acclimatization techniques, and when to descend. Your safety depends on it.', image: 'https://sfile.chatglm.cn/images-ppt/eddc45d8a60a.jpg' },
+  { title: 'Packing List for Himalayan Treks: The Ultimate Guide', category: 'Gear', readTime: '15 min', excerpt: 'Don\'t overpack, don\'t underpack. Our comprehensive packing list covers clothing, footwear, gear, electronics, and medications for every trek type.', image: 'https://sfile.chatglm.cn/images-ppt/bd16c81f7a2f.jpg' },
 ];
 
 const FAQ_DATA = [
@@ -55,6 +56,7 @@ export default function StoriesPage() {
 
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
+      <NavBar />
 
       {/* Header */}
       <section className="py-12 px-4 text-center">
@@ -102,6 +104,36 @@ export default function StoriesPage() {
         </div>
       </section>
 
+      {/* Founder — Kumar Lama */}
+      <section className="px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="card-premium p-6 sm:p-10">
+            <div className="flex flex-col md:flex-row items-center gap-6 mb-6">
+              <div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-himalaya-gold/40 flex-shrink-0">
+                <img src="/team/kumar-lama.jpg" alt="Kumar Lama" className="w-full h-full object-cover" />
+              </div>
+              <div className="text-center md:text-left">
+                <span className="pill-cinematic mb-3">🏔️ Founder Story</span>
+                <h2 className="font-cinematic text-3xl font-bold text-golden-shimmer mb-1">Kumar Lama</h2>
+                <p className="text-himalaya-gold font-display text-sm mb-2">Founder & Managing Director</p>
+                <p className="text-white text-xs">Tamang community · Kabhre Palanchok · Since 2013</p>
+              </div>
+            </div>
+            <div className="space-y-4 text-white leading-relaxed">
+              <p>
+                I am from the hill district of Kabhre Palanchok, a half-day road trip from Kathmandu. As a member of the Tamang family, one of the indigenous hill groups of Nepal, born to work in the mountains, I started my career as a trekking porter and kitchen assistant before founding this agency in 2013.
+              </p>
+              <p>
+                Your trip with our team means a lot to us. It&apos;s not just another trekking trip — it contributes to a group of local staff who care about their country, places, and fellow people. You are in good hands with us and will surely get a happy and lasting holiday!
+              </p>
+              <p>
+                At Himalayan Exploration Treks, our team is committed to assisting you in discovering Nepal&apos;s breathtaking natural landscapes and diverse cultural heritage. We provide easy access to the wonders of Nepal and ensure everyone can enjoy them to the fullest.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Gallery */}
       <section className="px-4 py-12">
         <div className="max-w-7xl mx-auto">
@@ -112,7 +144,7 @@ export default function StoriesPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {GALLERY_ITEMS.map((tile, i) => (
-              <div key={i} className={`ig-tile bg-gradient-to-br ${tile.gradient}`}>
+              <div key={i} className="ig-tile" style={{ backgroundImage: `url(${tile.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="ig-tile-overlay">
                   <div className="text-xs font-display text-white">{tile.title}</div>
                   <div className="text-[10px] text-white mt-0.5">📍 {tile.location}</div>
@@ -134,9 +166,11 @@ export default function StoriesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {BLOG_POSTS.map((post) => (
               <article key={post.title} className="card-premium overflow-hidden group cursor-pointer">
-                <div className={`relative h-40 bg-gradient-to-br ${post.gradient} flex items-end p-4`}>
-                  <span className="absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded bg-black/40 text-white">{post.category}</span>
-                  <h3 className="font-cinematic text-lg font-bold text-white text-readable-strong">{post.title}</h3>
+                <div className="relative h-40 overflow-hidden">
+                  <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                  <span className="absolute top-3 left-3 text-[10px] px-2 py-0.5 rounded bg-black/50 text-white backdrop-blur-sm">{post.category}</span>
+                  <h3 className="absolute bottom-3 left-3 right-3 font-cinematic text-lg font-bold text-white text-readable-strong">{post.title}</h3>
                 </div>
                 <div className="p-4">
                   <p className="text-white text-sm leading-relaxed mb-3">{post.excerpt}</p>

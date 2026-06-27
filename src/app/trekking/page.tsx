@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useLang } from '@/lib/i18n';
+import NavBar from '@/components/NavBar';
 
 const TOURS = [
   { title: 'Everest Base Camp Trek', days: 14, difficulty: 'strenuous' as const, price: 1299, oldPrice: 1599, country: 'Nepal', altitude: '5,545m', rating: 5, region: 'Everest Region', season: 'Mar-May, Sep-Nov', groupSize: '2-12', image: 'https://sfile.chatglm.cn/images-ppt/931b93f13c50.jpg', desc: 'Join the adventure of a lifetime with the Everest Base Camp Trek. Trek through Sagarmatha National Park, experience genuine Sherpa hospitality, and stand at the foot of the world\'s tallest mountain.', highlights: ['Sagarmatha National Park', 'Sherpa villages & monasteries', 'Kala Patthar sunrise viewpoint', 'Base Camp at 5,364m'] },
@@ -27,10 +28,30 @@ export default function TrekkingPage() {
   const [tourFilter, setTourFilter] = useState('All');
   const [selectedTour, setSelectedTour] = useState<typeof TOURS[0] | null>(null);
 
+  // Custom package state
+  const [customDests, setCustomDests] = useState<string[]>([]);
+  const [customTrip, setCustomTrip] = useState({
+    startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    duration: 14, travelers: 2, budget: '1000-2000',
+    name: '', email: '', phone: '', nationality: '', message: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [customResult, setCustomResult] = useState<string | null>(null);
+
+  const submitCustom = useCallback(() => {
+    if (customDests.length === 0 || !customTrip.name || !customTrip.email) return;
+    setSubmitting(true);
+    const msg = `🏔️ *CUSTOM TREK REQUEST* 🏔️\n\n*Destinations:* ${customDests.join(', ')}\n*Start Date:* ${customTrip.startDate}\n*Duration:* ${customTrip.duration} days\n*Travelers:* ${customTrip.travelers}\n*Budget:* ${customTrip.budget}\n\n*Name:* ${customTrip.name}\n*Email:* ${customTrip.email}\n*WhatsApp:* ${customTrip.phone || 'N/A'}\n*Nationality:* ${customTrip.nationality || 'N/A'}\n${customTrip.message ? `\n*Message:*\n${customTrip.message}` : ''}`;
+    window.open(`https://wa.me/9779841023371?text=${encodeURIComponent(msg)}`, '_blank');
+    setCustomResult('Request sent via WhatsApp! We\'ll contact you within 24 hours.');
+    setSubmitting(false);
+  }, [customDests, customTrip]);
+
   const REGIONS = ['All', 'Everest Region', 'Annapurna Region', 'Langtang Region', 'Manaslu Region', 'Mustang Region', 'Dolpo Region', 'Kanchenjunga Region', 'Far West Nepal', 'Kathmandu Valley'];
 
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
+      <NavBar />
 
       <section className="py-12 px-4 text-center">
         <div className="max-w-4xl mx-auto">
@@ -163,11 +184,73 @@ export default function TrekkingPage() {
         </div>
       )}
 
-      <section className="py-16 px-4 text-center">
-        <div className="max-w-3xl mx-auto card-premium p-8">
-          <h2 className="font-cinematic text-3xl font-bold text-readable-strong mb-3">Can&apos;t Find Your Perfect Trek?</h2>
-          <p className="text-white mb-6">Build a custom package tailored to your wishes. Select destinations, dates, and budget — we&apos;ll craft your dream adventure.</p>
-          <a href="/experiences" className="btn-cinematic">Build Custom Package →</a>
+      {/* Custom Package Builder */}
+      <section className="py-16 px-4 section-wash-aurora">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <span className="pill-cinematic mb-4">✦ Custom Package</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Build Your <span className="text-golden-shimmer italic">Dream Adventure</span>
+            </h2>
+            <p className="text-readable text-white text-sm max-w-2xl mx-auto">
+              Can&apos;t find the perfect trek? Create your own custom itinerary. Select destinations, tell us your preferences, and we&apos;ll craft a personalized trek just for you.
+            </p>
+            <div className="divider-golden" />
+          </div>
+
+          <div className="card-premium p-6 sm:p-8">
+            {/* Step 1: Select destinations */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">1</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Select Destinations</h3>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {TOURS.map((tour) => (
+                  <label key={tour.title} className={`flex items-center gap-2 p-2.5 rounded-lg cursor-pointer transition-all border ${customDests.includes(tour.title) ? 'bg-himalaya-gold/15 border-himalaya-gold/50 text-white' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}`}>
+                    <input type="checkbox" checked={customDests.includes(tour.title)} onChange={() => { setCustomDests(prev => prev.includes(tour.title) ? prev.filter(d => d !== tour.title) : [...prev, tour.title]); }} className="w-4 h-4 accent-himalaya-gold" />
+                    <span className="text-xs font-display leading-tight">{tour.title}</span>
+                  </label>
+                ))}
+              </div>
+              {customDests.length > 0 && <p className="text-xs text-himalaya-gold mt-2 font-display">✓ {customDests.length} destination{customDests.length > 1 ? 's' : ''} selected</p>}
+            </div>
+
+            {/* Step 2: Trip details */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">2</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Trip Details</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div><label className="text-xs text-white mb-1 block font-display">Start Date</label><input type="date" value={customTrip.startDate} onChange={(e) => setCustomTrip({...customTrip, startDate: e.target.value})} className="input-cinematic !py-2 !text-sm" /></div>
+                <div><label className="text-xs text-white mb-1 block font-display">Duration (days)</label><input type="number" min="1" max="60" value={customTrip.duration} onChange={(e) => setCustomTrip({...customTrip, duration: Number(e.target.value)})} className="input-cinematic !py-2 !text-sm" /></div>
+                <div><label className="text-xs text-white mb-1 block font-display">Travelers</label><input type="number" min="1" max="20" value={customTrip.travelers} onChange={(e) => setCustomTrip({...customTrip, travelers: Number(e.target.value)})} className="input-cinematic !py-2 !text-sm" /></div>
+                <div><label className="text-xs text-white mb-1 block font-display">Budget</label><select value={customTrip.budget} onChange={(e) => setCustomTrip({...customTrip, budget: e.target.value})} className="form-select w-full !py-2 !text-sm"><option value="500-1000">$500-$1,000</option><option value="1000-2000">$1,000-$2,000</option><option value="2000-3000">$2,000-$3,000</option><option value="3000+">$3,000+</option><option value="flexible">Flexible</option></select></div>
+              </div>
+            </div>
+
+            {/* Step 3: Contact */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-himalaya-gold to-himalaya-orange flex items-center justify-center font-cinematic font-bold text-red-600 text-sm">3</div>
+                <h3 className="font-cinematic text-xl font-bold text-white">Contact & Message</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <input type="text" placeholder="Full Name *" value={customTrip.name} onChange={(e) => setCustomTrip({...customTrip, name: e.target.value})} className="input-cinematic !py-2.5" />
+                <input type="email" placeholder="Email *" value={customTrip.email} onChange={(e) => setCustomTrip({...customTrip, email: e.target.value})} className="input-cinematic !py-2.5" />
+                <input type="tel" placeholder="WhatsApp Number" value={customTrip.phone} onChange={(e) => setCustomTrip({...customTrip, phone: e.target.value})} className="input-cinematic !py-2.5" />
+                <input type="text" placeholder="Nationality" value={customTrip.nationality} onChange={(e) => setCustomTrip({...customTrip, nationality: e.target.value})} className="input-cinematic !py-2.5" />
+              </div>
+              <textarea placeholder="Tell us your wishes, fitness level, dietary needs, special interests..." value={customTrip.message} onChange={(e) => setCustomTrip({...customTrip, message: e.target.value})} rows={3} className="input-cinematic !rounded-2xl resize-none" />
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+              <p className="text-xs text-white text-center sm:text-left">Our team will respond within 24 hours via WhatsApp.</p>
+              <button onClick={submitCustom} disabled={submitting || customDests.length === 0 || !customTrip.name || !customTrip.email} className="btn-cinematic disabled:opacity-40 disabled:cursor-not-allowed">{submitting ? 'Sending...' : 'Send via WhatsApp →'}</button>
+            </div>
+            {customResult && <div className="mt-4 p-4 rounded-xl bg-himalaya-emerald/10 border border-himalaya-emerald/30 text-center"><p className="text-himalaya-emerald font-display font-semibold">✓ {customResult}</p></div>}
+          </div>
         </div>
       </section>
     </main>
