@@ -1143,14 +1143,23 @@ _Sent from himalayanexploration.com_`;
           <div className="glass-card-static gradient-border-cycling p-6 sm:p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                [statsValues[0], '+', 'Happy Travelers'],
-                [statsValues[1], '+', 'Destinations'],
-                [statsValues[2], '+', 'Tours'],
-                [statsValues[3], '', 'Years Experience'],
-              ].map(([val, suffix, label], i) => (
-                <div key={label as string} className="text-center">
-                  <div className="text-readable-strong text-2xl sm:text-3xl font-bold gradient-text-shimmer font-display">{(val as number).toLocaleString()}{suffix}</div>
-                  <div className="text-readable text-xs text-white/90 mt-1">{label}</div>
+                { val: statsValues[0], suffix: '+', label: 'Happy Travelers', color: '#3b82f6' },  // Blue
+                { val: statsValues[1], suffix: '+', label: 'Destinations', color: '#10b981' },       // Green
+                { val: statsValues[2], suffix: '+', label: 'Tours', color: '#ef4444' },              // Red
+                { val: statsValues[3], suffix: '', label: 'Years Experience', color: '#f59e0b' },    // Gold
+              ].map((stat, i) => (
+                <div key={stat.label} className="text-center">
+                  <div
+                    className="text-readable-strong text-2xl sm:text-3xl font-bold font-display"
+                    style={{
+                      color: stat.color,
+                      WebkitTextFillColor: stat.color,
+                      textShadow: `0 0 20px ${stat.color}80, 0 2px 8px rgba(0,0,0,0.7)`,
+                    }}
+                  >
+                    {stat.val.toLocaleString()}{stat.suffix}
+                  </div>
+                  <div className="text-readable text-xs text-white mt-1">{stat.label}</div>
                 </div>
               ))}
             </div>

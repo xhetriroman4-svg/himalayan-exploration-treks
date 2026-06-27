@@ -533,45 +533,57 @@
 
 /* ========== Gradient Text ========== */
 .gradient-text {
-  background: linear-gradient(135deg, #d4a853, #f0d68a, #e8c06a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text-cool {
-  background: linear-gradient(135deg, #4a90d9, #2dd4bf);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text-aurora {
-  background: linear-gradient(135deg, #7c3aed, #2dd4bf, #4a90d9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text-sunset {
-  background: linear-gradient(135deg, #f97316, #ec4899, #f43f5e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text-ocean {
-  background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text-forest {
-  background: linear-gradient(135deg, #10b981, #84cc16, #2dd4bf);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 /* ========== SVG Pattern Overlay ========== */
@@ -991,21 +1003,12 @@ input[type="range"]::-moz-range-thumb {
 
 /* ─── Animated Shimmering Gradient Text (rainbow flow) ─── */
 .gradient-text-shimmer {
-  background: linear-gradient(
-    90deg,
-    #d4a853 0%,
-    #2dd4bf 20%,
-    #4a90d9 40%,
-    #7c3aed 60%,
-    #ec4899 80%,
-    #d4a853 100%
-  );
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: text-shimmer-flow 8s linear infinite;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 @keyframes text-shimmer-flow {
