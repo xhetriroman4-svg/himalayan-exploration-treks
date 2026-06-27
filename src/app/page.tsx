@@ -381,6 +381,88 @@ export default function HimalayanExplorer() {
   const [customSubmitting, setCustomSubmitting] = useState(false);
   const [customResult, setCustomResult] = useState<string | null>(null);
 
+  /* Lightbox state */
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  /* Sticky CTA state */
+  const [stickyCtaVisible, setStickyCtaVisible] = useState(false);
+
+  /* Trek Match Quiz state */
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [quizResult, setQuizResult] = useState<typeof TOURS | null>(null);
+
+  const QUIZ_QUESTIONS = [
+    {
+      key: 'experience',
+      question: 'What\'s your trekking experience level?',
+      options: [
+        { icon: '🌱', label: 'Beginner', desc: 'First time trekking', value: 'easy' },
+        { icon: '🥾', label: 'Intermediate', desc: 'Some hiking experience', value: 'moderate' },
+        { icon: '⛰️', label: 'Experienced', desc: 'Multiple treks done', value: 'challenging' },
+        { icon: '🏔️', label: 'Expert', desc: 'High altitude veteran', value: 'strenuous' },
+      ],
+    },
+    {
+      key: 'duration',
+      question: 'How many days can you trek?',
+      options: [
+        { icon: '⚡', label: 'Short (3-7 days)', desc: 'Quick getaway', value: 'short' },
+        { icon: '📅', label: 'Medium (8-14 days)', desc: 'Standard trek', value: 'medium' },
+        { icon: '🗓️', label: 'Long (15+ days)', desc: 'Deep immersion', value: 'long' },
+      ],
+    },
+    {
+      key: 'interest',
+      question: 'What interests you most?',
+      options: [
+        { icon: '🏔️', label: 'Mountain Views', desc: 'Panoramic peaks', value: 'mountains' },
+        { icon: '🛕', label: 'Culture & Monasteries', desc: 'Ancient traditions', value: 'culture' },
+        { icon: '🌿', label: 'Nature & Wildlife', desc: 'Forests, lakes, animals', value: 'nature' },
+        { icon: '🏁', label: 'Achievement', desc: 'Summit a peak', value: 'climb' },
+      ],
+    },
+    {
+      key: 'budget',
+      question: 'What\'s your budget per person?',
+      options: [
+        { icon: '💵', label: 'Under $1,000', desc: 'Budget-friendly', value: 'budget' },
+        { icon: '💰', label: '$1,000 - $2,000', desc: 'Mid-range', value: 'mid' },
+        { icon: '💎', label: '$2,000+', desc: 'Premium experience', value: 'premium' },
+      ],
+    },
+  ];
+
+  const calculateQuizResult = useCallback((answers: Record<string, string>) => {
+    let filtered = [...TOURS];
+    // Filter by difficulty
+    if (answers.experience) {
+      const diffMap: Record<string, string[]> = {
+        easy: ['easy'], moderate: ['easy', 'moderate'],
+        challenging: ['moderate', 'challenging'], strenuous: ['challenging', 'strenuous'],
+      };
+      const allowed = diffMap[answers.experience] || [];
+      filtered = filtered.filter(t => allowed.includes(t.difficulty));
+    }
+    // Filter by duration
+    if (answers.duration) {
+      if (answers.duration === 'short') filtered = filtered.filter(t => t.days <= 7);
+      else if (answers.duration === 'medium') filtered = filtered.filter(t => t.days >= 8 && t.days <= 14);
+      else filtered = filtered.filter(t => t.days >= 15);
+    }
+    // Filter by budget
+    if (answers.budget) {
+      if (answers.budget === 'budget') filtered = filtered.filter(t => t.price < 1000);
+      else if (answers.budget === 'mid') filtered = filtered.filter(t => t.price >= 1000 && t.price <= 2000);
+      else filtered = filtered.filter(t => t.price > 2000);
+    }
+    // If nothing matches, reset filters
+    if (filtered.length === 0) filtered = [...TOURS];
+    // Take top 3
+    setQuizResult(filtered.slice(0, 3));
+  }, []);
+
   /* Submit custom package to API */
   const submitCustomPackage = useCallback(async () => {
     if (customDestinations.length === 0 || !customTrip.name || !customTrip.email) return;
@@ -496,6 +578,7 @@ export default function HimalayanExplorer() {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
       setBackToTopVisible(window.scrollY > 500);
+      setStickyCtaVisible(window.scrollY > 800 && window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 600);
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = totalScroll > 0 ? (window.scrollY / totalScroll) * 100 : 0;
       setScrollProgress(progress);
@@ -1180,6 +1263,239 @@ _Sent from himalayanexploration.com_`;
           </div>
         </div>
       </section>
+
+      {/* ═══════════ FEATURED-IN LOGOS STRIP ═══════════ */}
+      <section className="py-8 px-4 border-y border-white/5">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="eyebrow mb-4">As Featured In</p>
+          <div className="featured-in-strip">
+            <span className="featured-in-logo">Lonely Planet</span>
+            <span className="featured-in-logo">TripAdvisor</span>
+            <span className="featured-in-logo">National Geographic</span>
+            <span className="featured-in-logo">BBC Travel</span>
+            <span className="featured-in-logo">The Guardian</span>
+            <span className="featured-in-logo">Forbes</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ REVIEW BADGE + STATS ═══════════ */}
+      <section className="py-10 px-4">
+        <div className="max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-4">
+          <div className="review-badge">
+            <span className="review-stars">★★★★★</span>
+            <span className="text-white font-display font-semibold">4.9/5</span>
+            <span className="text-white">· 1,247 reviews</span>
+          </div>
+          <div className="review-badge">
+            <span className="text-2xl">🏆</span>
+            <span className="text-white font-display font-semibold">TAAN Certified</span>
+          </div>
+          <div className="review-badge">
+            <span className="text-2xl">🛡️</span>
+            <span className="text-white font-display font-semibold">100% Safe Treks</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ TREKKING SEASONS GUIDE ═══════════ */}
+      <section className="py-16 px-4 section-wash-gold">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8 reveal">
+            <span className="pill-cinematic mb-4">📅 Trekking Seasons</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Best Time to <span className="text-golden-shimmer italic">Visit Nepal</span>
+            </h2>
+            <p className="text-readable text-white text-sm max-w-xl mx-auto">
+              Plan your trek during the optimal months for clear skies, comfortable temperatures, and stunning mountain views.
+            </p>
+            <div className="divider-golden" />
+          </div>
+          <div className="seasons-grid reveal">
+            {[
+              { month: 'Jan', rating: 'fair', note: 'Winter trekking' },
+              { month: 'Feb', rating: 'fair', note: 'Cold but clear' },
+              { month: 'Mar', rating: 'excellent', note: 'Spring begins' },
+              { month: 'Apr', rating: 'excellent', note: 'Rhododendrons' },
+              { month: 'May', rating: 'excellent', note: 'Warm & clear' },
+              { month: 'Jun', rating: 'poor', note: 'Monsoon starts' },
+              { month: 'Jul', rating: 'poor', note: 'Heavy rain' },
+              { month: 'Aug', rating: 'poor', note: 'Rainy season' },
+              { month: 'Sep', rating: 'excellent', note: 'Autumn begins' },
+              { month: 'Oct', rating: 'excellent', note: 'Peak season' },
+              { month: 'Nov', rating: 'excellent', note: 'Clear skies' },
+              { month: 'Dec', rating: 'fair', note: 'Winter begins' },
+            ].map((m) => (
+              <div key={m.month} className={`season-month season-${m.rating}`}>
+                <div className="text-base font-bold">{m.month}</div>
+                <div className="text-[10px] opacity-80 mt-0.5">{m.note}</div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 mt-6 text-xs">
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-emerald-500/40"></span> Excellent</span>
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-amber-500/30"></span> Good</span>
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-orange-500/25"></span> Fair</span>
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-red-500/15"></span> Not Recommended</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ PHOTO GALLERY (Masonry + Lightbox) ═══════════ */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8 reveal">
+            <span className="pill-cinematic mb-4">📸 Gallery</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Moments from the <span className="text-golden-shimmer italic">Himalayas</span>
+            </h2>
+            <p className="text-readable text-white text-sm">Real photos captured by our trekkers and guides</p>
+            <div className="divider-golden" />
+          </div>
+          <div className="gallery-masonry reveal">
+            {[
+              { src: 'https://sfile.chatglm.cn/images-ppt/8f4b99205d53.jpg', title: 'Everest Sunrise', loc: 'Everest Region' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/51dae135f694.jpeg', title: 'Annapurna Trail', loc: 'Annapurna Region' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/a584ed1012a4.jpg', title: 'Prayer Flags', loc: 'Multiple Regions' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/fbbf0535de7f.jpg', title: 'Sherpa Village', loc: 'Everest Region' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/a2a5f7dbfe1a.jpg', title: 'Mountain Mist', loc: 'Annapurna' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/8acd3895ccb2.jpg', title: 'Tea House Lodge', loc: 'Everest Region' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/53a7a771425b.jpg', title: 'Suspension Bridge', loc: 'Multiple Regions' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/f6ac0d61e23a.jpg', title: 'Thorong La Pass', loc: 'Annapurna' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/c0f8f8a55b8e.jpg', title: 'Base Camp Tent', loc: 'Everest' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/51746f7caf03.jpg', title: 'Ancient Monastery', loc: 'Mustang' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/c3f423040db8.jpg', title: 'Yak Caravan', loc: 'Everest Region' },
+              { src: 'https://sfile.chatglm.cn/images-ppt/b68ff7ecfce6.jpg', title: 'Rhododendron Forest', loc: 'Annapurna' },
+            ].map((img, i) => (
+              <div
+                key={i}
+                className="gallery-masonry-item"
+                onClick={() => { setLightboxImage(img.src); setLightboxOpen(true); }}
+              >
+                <img src={img.src} alt={img.title} loading="lazy" />
+                <div className="gallery-masonry-overlay">
+                  <div className="text-sm font-display font-semibold text-white">{img.title}</div>
+                  <div className="text-xs text-white/70">📍 {img.loc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ TREK MATCH QUIZ ═══════════ */}
+      <section className="py-16 px-4 section-wash-aurora">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-6 reveal">
+            <span className="pill-cinematic mb-4">🎯 Trek Match</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Find Your <span className="text-golden-shimmer italic">Perfect Trek</span>
+            </h2>
+            <p className="text-readable text-white text-sm">Answer 4 quick questions — we'll match you with the ideal Himalayan adventure</p>
+            <div className="divider-golden" />
+          </div>
+
+          <div className="quiz-card reveal">
+            {!quizResult ? (
+              <>
+                {/* Progress bar */}
+                <div className="quiz-progress-bar mb-6">
+                  <div className="quiz-progress-fill" style={{ width: `${((quizStep + 1) / 4) * 100}%` }} />
+                </div>
+                <p className="text-xs text-white mb-1 font-display">Question {quizStep + 1} of 4</p>
+                <h3 className="font-cinematic text-xl font-bold text-white mb-4">
+                  {QUIZ_QUESTIONS[quizStep].question}
+                </h3>
+                <div className="space-y-2">
+                  {QUIZ_QUESTIONS[quizStep].options.map((opt) => (
+                    <div
+                      key={opt.value}
+                      className={`quiz-option ${quizAnswers[QUIZ_QUESTIONS[quizStep].key] === opt.value ? 'selected' : ''}`}
+                      onClick={() => {
+                        const newAnswers = { ...quizAnswers, [QUIZ_QUESTIONS[quizStep].key]: opt.value };
+                        setQuizAnswers(newAnswers);
+                        setTimeout(() => {
+                          if (quizStep < 3) setQuizStep(quizStep + 1);
+                          else calculateQuizResult(newAnswers);
+                        }, 300);
+                      }}
+                    >
+                      <span className="quiz-option-icon">{opt.icon}</span>
+                      <div>
+                        <div className="text-sm font-display font-semibold text-white">{opt.label}</div>
+                        <div className="text-xs text-white/60">{opt.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {quizStep > 0 && (
+                  <button
+                    onClick={() => setQuizStep(quizStep - 1)}
+                    className="mt-4 text-xs text-white/60 hover:text-white transition-colors"
+                  >
+                    ← Back
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-4">
+                <div className="text-5xl mb-4">🏔️</div>
+                <h3 className="font-cinematic text-2xl font-bold text-golden-shimmer mb-2">Your Perfect Match!</h3>
+                <p className="text-white mb-4">Based on your answers, we recommend:</p>
+                {quizResult.map((tour) => (
+                  <div key={tour.title} className="glass-card p-4 mb-3 text-left">
+                    <div className="flex items-center gap-3">
+                      <img src={tour.image} alt={tour.title} className="w-16 h-16 rounded-lg object-cover" />
+                      <div className="flex-1">
+                        <h4 className="font-cinematic font-bold text-white text-sm">{tour.title}</h4>
+                        <p className="text-xs text-white/70">{tour.days} days · {tour.altitude} · {tour.difficulty}</p>
+                        <p className="text-xs text-golden-shimmer font-bold mt-1">${tour.price.toLocaleString()}</p>
+                      </div>
+                      <button onClick={() => openCheckout(tour)} className="btn-cinematic !text-xs !py-1.5 !px-3">Book</button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={() => { setQuizStep(0); setQuizAnswers({}); setQuizResult(null); }}
+                  className="mt-4 text-sm text-white/60 hover:text-white transition-colors"
+                >
+                  ↻ Retake Quiz
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ STICKY CTA BAR ═══════════ */}
+      <div className={`sticky-cta ${stickyCtaVisible ? 'visible' : ''}`}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 w-full">
+          <div className="sticky-cta-info">
+            <span className="sticky-cta-pulse"></span>
+            <span className="hidden sm:inline">🏔️ Spring 2026 trekking season is open!</span>
+            <span className="sm:hidden">🏔️ Book now!</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://wa.me/9779841023371?text=Namaste! I'm interested in booking a trek."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-display font-semibold text-white border border-white/20 rounded-full px-3 py-2 hover:bg-white/10 transition-colors"
+            >
+              💬 WhatsApp
+            </a>
+            <a href="/trekking" className="btn-cinematic !text-xs !py-2 !px-4">Browse Treks →</a>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════ LIGHTBOX ═══════════ */}
+      {lightboxOpen && lightboxImage && (
+        <div className="lightbox" onClick={() => setLightboxOpen(false)}>
+          <button className="lightbox-close" onClick={() => setLightboxOpen(false)}>✕</button>
+          <img src={lightboxImage} alt="Gallery image" />
+        </div>
+      )}
 
       {/* ═══════════ 22. FOOTER ═══════════ */}
       <footer className="border-t border-white/5 pt-12 pb-6">

@@ -2035,3 +2035,337 @@ input[type="range"]::-moz-range-thumb {
   33% { transform: translate(50px, -40px) scale(1.15); }
   66% { transform: translate(-40px, 50px) scale(0.9); }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   ✦ BEAUTIFICATION PLAN — New Feature Styles ✦
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─── Masonry Photo Gallery ─── */
+.gallery-masonry {
+  column-count: 2;
+  column-gap: 12px;
+}
+@media (min-width: 768px) {
+  .gallery-masonry { column-count: 3; }
+}
+@media (min-width: 1024px) {
+  .gallery-masonry { column-count: 4; column-gap: 16px; }
+}
+.gallery-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.gallery-masonry-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  z-index: 1;
+}
+.gallery-masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.gallery-masonry-item:hover img {
+  transform: scale(1.1);
+}
+.gallery-masonry-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.gallery-masonry-item:hover .gallery-masonry-overlay {
+  opacity: 1;
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: pointer;
+}
+.lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+/* ─── Trekking Seasons Calendar ─── */
+.seasons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+@media (min-width: 768px) {
+  .seasons-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 1024px) {
+  .seasons-grid { grid-template-columns: repeat(6, 1fr); }
+}
+.season-month {
+  padding: 12px 8px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform 0.2s ease;
+}
+.season-month:hover { transform: translateY(-2px); }
+.season-excellent {
+  background: rgba(16,185,129,0.2);
+  border-color: rgba(16,185,129,0.4);
+  color: #34d399;
+}
+.season-good {
+  background: rgba(212,168,83,0.15);
+  border-color: rgba(212,168,83,0.3);
+  color: #f0d68a;
+}
+.season-fair {
+  background: rgba(249,115,22,0.12);
+  border-color: rgba(249,115,22,0.25);
+  color: #fb923c;
+}
+.season-poor {
+  background: rgba(239,68,68,0.08);
+  border-color: rgba(239,68,68,0.15);
+  color: rgba(239,68,68,0.5);
+}
+
+/* ─── Featured-In Logos Strip ─── */
+.featured-in-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  opacity: 0.7;
+}
+.featured-in-logo {
+  font-family: var(--font-cinematic);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.3s ease, opacity 0.3s ease;
+  letter-spacing: 0.02em;
+}
+.featured-in-logo:hover {
+  color: #ef4444;
+  opacity: 1;
+}
+
+/* ─── Sticky CTA Bar ─── */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  padding: 12px 16px;
+  background: rgba(8,8,12,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(239,68,68,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.2,0.6,0.3,1);
+}
+.sticky-cta.visible { transform: translateY(0); }
+.sticky-cta-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+}
+.sticky-cta-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: sticky-pulse 1.5s ease-in-out infinite;
+}
+@keyframes sticky-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+/* ─── Trek Match Quiz ─── */
+.quiz-card {
+  background: rgba(8,8,12,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 20px;
+  padding: 2rem;
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.quiz-option:hover {
+  border-color: rgba(239,68,68,0.4);
+  background: rgba(239,68,68,0.05);
+  transform: translateX(4px);
+}
+.quiz-option.selected {
+  border-color: rgba(239,68,68,0.6);
+  background: rgba(239,68,68,0.1);
+}
+.quiz-option-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.quiz-progress-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ─── Trek Comparison Tool ─── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.compare-table th {
+  text-align: left;
+  padding: 12px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.compare-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.9);
+}
+.compare-table tr:hover td {
+  background: rgba(239,68,68,0.03);
+}
+
+/* ─── Hero Search Overlay ─── */
+.hero-search-overlay {
+  background: rgba(8,8,12,0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 768px) {
+  .hero-search-overlay {
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+    align-items: end;
+  }
+}
+.hero-search-field label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── Review Badge ─── */
+.review-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(8,8,12,0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+.review-stars {
+  color: #fbbf24;
+  letter-spacing: 1px;
+}
+
+/* ─── Day-by-day itinerary ─── */
+.itinerary-day {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.itinerary-day-num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  font-family: var(--font-cinematic);
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
