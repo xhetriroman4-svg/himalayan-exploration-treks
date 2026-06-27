@@ -393,6 +393,9 @@ export default function HimalayanExplorer() {
   const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
   const [quizResult, setQuizResult] = useState<typeof TOURS | null>(null);
 
+  /* Trek Comparison state */
+  const [compareSelections, setCompareSelections] = useState<string[]>(['', '', '']);
+
   const QUIZ_QUESTIONS = [
     {
       key: 'experience',
@@ -961,7 +964,7 @@ _Sent from himalayanexploration.com_`;
           </p>
 
           {/* Cinematic CTAs */}
-          <div className="reveal-fade-up flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <div className="reveal-fade-up flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <a href="/trekking" className="btn-cinematic magnetic">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               {t('hero.cta1')}
@@ -972,17 +975,66 @@ _Sent from himalayanexploration.com_`;
             </button>
           </div>
 
-          {/* Cinematic stat row with Playfair numbers */}
+          {/* Hero Search Overlay — region + difficulty + duration */}
+          <div className="reveal-fade-up hero-search-overlay max-w-4xl mx-auto mb-8">
+            <div className="hero-search-field">
+              <label>Region</label>
+              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
+                <option value="">All Regions</option>
+                <option>Everest Region</option>
+                <option>Annapurna Region</option>
+                <option>Langtang Region</option>
+                <option>Manaslu Region</option>
+                <option>Mustang Region</option>
+                <option>Dolpo Region</option>
+                <option>Kanchenjunga Region</option>
+              </select>
+            </div>
+            <div className="hero-search-field">
+              <label>Difficulty</label>
+              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
+                <option value="">Any Level</option>
+                <option>Easy</option>
+                <option>Moderate</option>
+                <option>Challenging</option>
+                <option>Strenuous</option>
+              </select>
+            </div>
+            <div className="hero-search-field">
+              <label>Duration</label>
+              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
+                <option value="">Any Duration</option>
+                <option>3-7 days</option>
+                <option>8-14 days</option>
+                <option>15+ days</option>
+              </select>
+            </div>
+            <a href="/trekking" className="btn-cinematic !py-2.5 !px-6 whitespace-nowrap flex items-center justify-center gap-2">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              Search
+            </a>
+          </div>
+
+          {/* Cinematic stat row with Playfair numbers — each stat a different vibrant color */}
           <div className="reveal-fade-up flex flex-wrap justify-center gap-8 sm:gap-16 pt-8 border-t border-white/10">
             {[
-              ['8,849m', t('hero.stat.peak')],
-              ['50+', t('hero.stat.dest')],
-              ['300+', t('hero.stat.tours')],
-              [t('common.since'), t('hero.stat.exp')],
-            ].map(([val, label]) => (
-              <div key={label} className="text-center">
-                <div className="stat-counter-cinematic text-readable-strong">{val}</div>
-                <div className="eyebrow mt-2 text-white/90">{label}</div>
+              { val: '8,849m', label: t('hero.stat.peak'), color: '#3b82f6' },      // Blue
+              { val: '50+', label: t('hero.stat.dest'), color: '#10b981' },           // Green
+              { val: '300+', label: t('hero.stat.tours'), color: '#ef4444' },         // Red
+              { val: t('common.since'), label: t('hero.stat.exp'), color: '#f59e0b' }, // Gold/Amber
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div
+                  className="font-cinematic text-2xl sm:text-3xl font-bold text-readable-strong"
+                  style={{
+                    color: stat.color,
+                    WebkitTextFillColor: stat.color,
+                    textShadow: `0 0 20px ${stat.color}80, 0 2px 8px rgba(0,0,0,0.7)`,
+                  }}
+                >
+                  {stat.val}
+                </div>
+                <div className="eyebrow mt-2 text-white">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -1379,6 +1431,100 @@ _Sent from himalayanexploration.com_`;
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ TREK COMPARISON TOOL ═══════════ */}
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8 reveal">
+            <span className="pill-cinematic mb-4">⚖️ Compare Treks</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Compare <span className="text-golden-shimmer italic">Side by Side</span>
+            </h2>
+            <p className="text-readable text-white text-sm">Select 2 or 3 treks to compare difficulty, price, duration, and altitude</p>
+            <div className="divider-golden" />
+          </div>
+
+          <div className="card-premium p-6 reveal">
+            {/* Trek selectors */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+              {[0, 1, 2].map((idx) => (
+                <div key={idx}>
+                  <label className="text-xs text-white font-display mb-1 block">Trek {idx + 1}</label>
+                  <select
+                    value={compareSelections[idx]}
+                    onChange={(e) => {
+                      const newSel = [...compareSelections];
+                      newSel[idx] = e.target.value;
+                      setCompareSelections(newSel);
+                    }}
+                    className="form-select w-full !py-2 !text-sm"
+                  >
+                    <option value="">— Select a trek —</option>
+                    {TOURS.map((tour) => (
+                      <option key={tour.title} value={tour.title}>{tour.title}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {/* Comparison table */}
+            {compareSelections.filter(s => s).length >= 2 && (
+              <div className="overflow-x-auto">
+                <table className="compare-table">
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      {compareSelections.filter(s => s).map((title) => {
+                        const tour = TOURS.find(t => t.title === title);
+                        return <th key={title}>{tour?.title.substring(0, 25)}{tour && tour.title.length > 25 ? '...' : ''}</th>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: 'Duration', key: 'days', suffix: ' days' },
+                      { label: 'Max Altitude', key: 'altitude', suffix: '' },
+                      { label: 'Difficulty', key: 'difficulty', suffix: '' },
+                      { label: 'Price', key: 'price', prefix: '$', isPrice: true },
+                      { label: 'Region', key: 'region', suffix: '' },
+                      { label: 'Best Season', key: 'season', suffix: '' },
+                      { label: 'Group Size', key: 'groupSize', suffix: '' },
+                      { label: 'Rating', key: 'rating', suffix: ' ★' },
+                    ].map((row) => (
+                      <tr key={row.key}>
+                        <td className="font-display font-semibold text-white">{row.label}</td>
+                        {compareSelections.filter(s => s).map((title) => {
+                          const tour = TOURS.find(t => t.title === title);
+                          if (!tour) return <td key={title}>—</td>;
+                          const val = (tour as Record<string, unknown>)[row.key];
+                          const display = row.isPrice ? `$${Number(val).toLocaleString()}` : `${row.prefix || ''}${val}${row.suffix || ''}`;
+                          return (
+                            <td key={title}>
+                              {row.key === 'difficulty' ? (
+                                <span className={`text-xs px-2 py-0.5 rounded font-bold uppercase difficulty-${val}`}>{val}</span>
+                              ) : row.key === 'price' ? (
+                                <span className="font-cinematic font-bold text-golden-shimmer">{display}</span>
+                              ) : (
+                                display
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {compareSelections.filter(s => s).length < 2 && (
+              <p className="text-center text-sm text-white/60 py-4">
+                👆 Select at least 2 treks above to see the comparison
+              </p>
+            )}
           </div>
         </div>
       </section>
