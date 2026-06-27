@@ -1049,7 +1049,7 @@ _Sent from himalayanexploration.com_`;
       {/* ═══════════ 3. SEARCH BAR SECTION ═══════════ */}
       <section className="relative z-10 -mt-8 px-4">
         <div className="max-w-5xl mx-auto glass-card-strong p-4 sm:p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
               <label className="text-xs text-white/80 mb-1 block">Destination</label>
               <select className="form-select w-full">
@@ -1070,16 +1070,6 @@ _Sent from himalayanexploration.com_`;
               <label className="text-xs text-white/80 mb-1 block">Travelers</label>
               <select className="form-select w-full">
                 {[1,2,3,4,5,6,7,8,9,'10+'].map((n) => <option key={String(n)}>{n} Traveler{n !== 1 ? 's' : ''}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="text-xs text-white/80 mb-1 block">Trip Type</label>
-              <select className="form-select w-full">
-                <option>Trekking Holiday</option>
-                <option>Trekking Peak</option>
-                <option>Family Holiday</option>
-                <option>Cultural Holiday</option>
-                <option>Safari Holiday</option>
               </select>
             </div>
             <div className="flex items-end">
