@@ -1200,7 +1200,7 @@ _Sent from himalayanexploration.com_`;
                   {/* Urgency badge */}
                   <div className="absolute top-3 right-16 urgency-badge">
                     <span className="urgency-dot"></span>
-                    {Math.floor(Math.random() * 15) + 3} viewing
+                    {tour.rating + 7} viewing
                   </div>
                   <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full">
                     <svg className="w-3 h-3 text-himalaya-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.4-6.3-4.6-6.3 4.6L7.9 14 2 9.4h7.6z"/></svg>
