@@ -982,46 +982,6 @@ _Sent from himalayanexploration.com_`;
             </button>
           </div>
 
-          {/* Hero Search Overlay — region + difficulty + duration */}
-          <div className="reveal-fade-up hero-search-overlay max-w-4xl mx-auto mb-8">
-            <div className="hero-search-field">
-              <label>Region</label>
-              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
-                <option value="">All Regions</option>
-                <option>Everest Region</option>
-                <option>Annapurna Region</option>
-                <option>Langtang Region</option>
-                <option>Manaslu Region</option>
-                <option>Mustang Region</option>
-                <option>Dolpo Region</option>
-                <option>Kanchenjunga Region</option>
-              </select>
-            </div>
-            <div className="hero-search-field">
-              <label>Difficulty</label>
-              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
-                <option value="">Any Level</option>
-                <option>Easy</option>
-                <option>Moderate</option>
-                <option>Challenging</option>
-                <option>Strenuous</option>
-              </select>
-            </div>
-            <div className="hero-search-field">
-              <label>Duration</label>
-              <select className="form-select w-full !py-2 !text-sm" defaultValue="">
-                <option value="">Any Duration</option>
-                <option>3-7 days</option>
-                <option>8-14 days</option>
-                <option>15+ days</option>
-              </select>
-            </div>
-            <a href="/trekking" className="btn-cinematic !py-2.5 !px-6 whitespace-nowrap flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-              Search
-            </a>
-          </div>
-
           {/* Cinematic stat row with Playfair numbers — each stat a different vibrant color */}
           <div className="reveal-fade-up flex flex-wrap justify-center gap-8 sm:gap-16 pt-8 border-t border-white/10">
             {[
