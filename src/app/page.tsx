@@ -365,7 +365,6 @@ export default function HimalayanExplorer() {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   /* Tour filter + Custom package states */
-  const [tourFilter, setTourFilter] = useState('All');
   const [customDestinations, setCustomDestinations] = useState<string[]>([]);
   const [customTrip, setCustomTrip] = useState({
     startDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -556,7 +555,6 @@ export default function HimalayanExplorer() {
   });
   const [bookingResult, setBookingResult] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
   const checkoutRef = useRef<HTMLDivElement>(null);
 
   const heroRef = useRef<HTMLDivElement>(null);

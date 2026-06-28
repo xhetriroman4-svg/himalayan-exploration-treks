@@ -81,20 +81,51 @@
   }
 }
 
-/* ========== Video Background ========== */
-/* Simple autoplay looping muted video. object-fit:cover scales to fill viewport. */
+/* ========== Video Background ==========
+   Fits perfectly on ANY device — mobile, tablet, desktop, ultrawide.
+   Uses min-width/min-height technique so the video always covers
+   the entire viewport without distortion (like background-size: cover). */
 .video-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  top: 50%;
+  left: 50%;
+  min-width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
   z-index: -1;
   pointer-events: none;
   background: #000;
+}
+
+/* Mobile-specific: ensure perfect fit on phones */
+@media (max-width: 768px) {
+  .video-bg {
+    min-width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* Landscape mobile: ensure coverage */
+@media (max-width: 768px) and (orientation: landscape) {
+  .video-bg {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    min-width: 100vw;
+    min-height: auto;
+    object-position: center center;
+  }
 }
 
 /* Subtle dark overlay so text stays readable over the video.
