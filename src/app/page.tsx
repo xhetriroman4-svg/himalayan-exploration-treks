@@ -396,6 +396,13 @@ export default function HimalayanExplorer() {
   /* Trek Comparison state */
   const [compareSelections, setCompareSelections] = useState<string[]>(['', '', '']);
 
+  /* Video modal state */
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+
+  /* Packing checklist state */
+  const [packingEmail, setPackingEmail] = useState('');
+  const [packingResult, setPackingResult] = useState<string | null>(null);
+
   const QUIZ_QUESTIONS = [
     {
       key: 'experience',
@@ -1315,6 +1322,103 @@ _Sent from himalayanexploration.com_`;
         </div>
       </section>
 
+      {/* ═══════════ WHY CHOOSE US VIDEO SECTION ═══════════ */}
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8 reveal">
+            <span className="pill-cinematic mb-4">🎬 Why Choose Us</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              Experience the <span className="text-golden-shimmer italic">Difference</span>
+            </h2>
+            <div className="divider-golden" />
+          </div>
+          <div className="relative rounded-2xl overflow-hidden group cursor-pointer" onClick={() => setVideoModalOpen(true)}>
+            <img src="https://sfile.chatglm.cn/images-ppt/931b93f13c50.jpg" alt="Why choose us" className="w-full h-64 sm:h-80 object-cover" />
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="w-20 h-20 rounded-full bg-himalaya-gold/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-10 h-10 text-black ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            <div className="absolute bottom-4 left-4 right-4 text-center">
+              <p className="text-white font-display font-semibold text-readable-strong">See why 5,000+ trekkers chose us</p>
+              <p className="text-white/80 text-xs">2 min video · Founder's story & client testimonials</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ INTERACTIVE DIFFICULTY GUIDE ═══════════ */}
+      <section className="py-16 px-4 section-wash-gold">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 reveal">
+            <span className="pill-cinematic mb-4">⚡ Difficulty Guide</span>
+            <h2 className="font-cinematic text-3xl sm:text-4xl font-bold mt-4 mb-2 text-readable-strong">
+              What Does <span className="text-golden-shimmer italic">Each Level Mean?</span>
+            </h2>
+            <p className="text-readable text-white text-sm">Understand trek difficulty before you book</p>
+            <div className="divider-golden" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 reveal">
+            {[
+              { level: 'Easy', color: '#10b981', icon: '🚶', desc: '3-5 hrs/day walking', fitness: 'Basic fitness, no experience needed', maxAlt: 'Below 3,500m', duration: '5-10 days' },
+              { level: 'Moderate', color: '#d4a853', icon: '🥾', desc: '5-7 hrs/day walking', fitness: 'Regular hiking, good stamina', maxAlt: 'Up to 4,500m', duration: '10-18 days' },
+              { level: 'Challenging', color: '#f97316', icon: '⛰️', desc: '6-8 hrs/day on rough trails', fitness: 'Strong fitness, high-altitude experience', maxAlt: 'Up to 5,500m', duration: '14-20 days' },
+              { level: 'Strenuous', color: '#ef4444', icon: '🏔️', desc: '8+ hrs/day, technical sections', fitness: 'Elite fitness, mountaineering skills', maxAlt: 'Above 5,500m', duration: '16-24 days' },
+            ].map((d) => (
+              <div key={d.level} className="card-premium p-5 text-center">
+                <div className="text-4xl mb-2">{d.icon}</div>
+                <h3 className="font-cinematic text-lg font-bold mb-3" style={{ color: d.color }}>{d.level}</h3>
+                <div className="space-y-2 text-xs text-white text-left">
+                  <div className="flex justify-between"><span>Walking:</span><span className="font-medium">{d.desc}</span></div>
+                  <div className="flex justify-between"><span>Fitness:</span><span className="font-medium">{d.fitness}</span></div>
+                  <div className="flex justify-between"><span>Max Alt:</span><span className="font-medium">{d.maxAlt}</span></div>
+                  <div className="flex justify-between"><span>Duration:</span><span className="font-medium">{d.duration}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ PACKING CHECKLIST DOWNLOAD ═══════════ */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="card-premium p-8 text-center reveal">
+            <div className="text-5xl mb-4">🎒</div>
+            <h2 className="font-cinematic text-3xl font-bold text-readable-strong mb-2">
+              Free <span className="text-golden-shimmer italic">Packing Checklist</span>
+            </h2>
+            <p className="text-readable text-white text-sm mb-6">
+              Download our comprehensive packing list tailored for Himalayan treks. Enter your email and we&apos;ll send it instantly.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={packingEmail}
+                onChange={(e) => setPackingEmail(e.target.value)}
+                className="input-cinematic flex-1 !py-2.5"
+              />
+              <button
+                onClick={() => {
+                  if (packingEmail) {
+                    setPackingResult('✓ Checklist sent! Check your inbox.');
+                    setPackingEmail('');
+                  }
+                }}
+                className="btn-cinematic whitespace-nowrap"
+              >
+                📥 Get Checklist
+              </button>
+            </div>
+            {packingResult && (
+              <p className="mt-4 text-himalaya-emerald font-display text-sm">{packingResult}</p>
+            )}
+            <p className="text-xs text-white/60 mt-3">Includes: clothing, footwear, gear, electronics, first aid, and documents.</p>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ FEATURED-IN LOGOS STRIP ═══════════ */}
       <section className="py-8 px-4 border-y border-white/5">
         <div className="max-w-5xl mx-auto text-center">
@@ -1633,6 +1737,24 @@ _Sent from himalayanexploration.com_`;
           </div>
         </div>
       </div>
+
+      {/* ═══════════ VIDEO MODAL ═══════════ */}
+      {videoModalOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setVideoModalOpen(false)}>
+          <div className="absolute inset-0 bg-black/90" />
+          <div className="relative w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setVideoModalOpen(false)} className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 text-xl">✕</button>
+            <div className="aspect-video rounded-2xl overflow-hidden bg-black flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎬</div>
+                <p className="text-white font-display text-lg mb-2">Video Coming Soon</p>
+                <p className="text-white/60 text-sm">We're producing our promotional video. In the meantime, WhatsApp us for a personal introduction!</p>
+                <a href="https://wa.me/9779841023371" target="_blank" rel="noopener noreferrer" className="btn-cinematic mt-4 inline-block">💬 Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══════════ LIGHTBOX ═══════════ */}
       {lightboxOpen && lightboxImage && (

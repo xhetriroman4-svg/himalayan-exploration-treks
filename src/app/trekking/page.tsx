@@ -49,6 +49,54 @@ export default function TrekkingPage() {
 
   const REGIONS = ['All', 'Everest Region', 'Annapurna Region', 'Langtang Region', 'Manaslu Region', 'Mustang Region', 'Dolpo Region', 'Kanchenjunga Region', 'Far West Nepal', 'Kathmandu Valley'];
 
+  // Generate a day-by-day itinerary based on tour data
+  function generateItinerary(tour: typeof TOURS[0]) {
+    const days = tour.days;
+    const isShort = days <= 7;
+    const isMedium = days > 7 && days <= 14;
+    const altNum = parseInt(tour.altitude.replace(/[^0-9]/g, '')) || 3000;
+    const itinerary = [];
+
+    // Day 1: Arrival
+    itinerary.push({ title: 'Arrival & Briefing', desc: 'Arrive in Kathmandu, hotel check-in, trek briefing and gear check.', altitude: '1,400m' });
+
+    // Day 2: Travel to starting point
+    itinerary.push({ title: 'Travel to Trek Start', desc: isShort ? 'Drive to trailhead and begin trek.' : 'Fly/drive to starting point, begin acclimatization.', altitude: '2,000m' });
+
+    // Middle days: trekking with gradual altitude gain
+    const trekDays = days - 4; // subtract arrival, travel, rest, departure
+    for (let i = 0; i < trekDays; i++) {
+      const dayNum = i + 3;
+      const currentAlt = Math.round(2000 + (altNum - 2000) * (i / Math.max(trekDays - 1, 1)));
+      const isAcclimatization = i === Math.floor(trekDays / 2);
+      if (isAcclimatization) {
+        itinerary.push({ title: `Acclimatization Day`, desc: 'Rest day for altitude acclimatization. Short hike to higher elevation, explore local village.', altitude: `${currentAlt.toLocaleString()}m` });
+      } else if (i === trekDays - 1) {
+        itinerary.push({ title: 'Summit / High Point', desc: `Reach the highest point of the trek at ${tour.altitude}. Celebrate and take photos!`, altitude: tour.altitude });
+      } else {
+        itinerary.push({ title: `Trek Day ${dayNum - 2}`, desc: `Trek through scenic trails, crossing villages and landscapes. Gradual ascent toward high camp.`, altitude: `${currentAlt.toLocaleString()}m` });
+      }
+    }
+
+    // Second to last day: descend
+    itinerary.push({ title: 'Descent & Return', desc: 'Trek down to trailhead, celebrate completing the adventure.', altitude: '2,000m' });
+
+    // Last day: departure
+    itinerary.push({ title: 'Departure', desc: 'Return to Kathmandu, free time for shopping. Farewell dinner.', altitude: '1,400m' });
+
+    return itinerary.slice(0, days);
+  }
+
+  // Generate trek-specific FAQ
+  function generateTrekFAQ(tour: typeof TOURS[0]) {
+    return [
+      { q: `How difficult is the ${tour.title}?`, a: `This trek is rated "${tour.difficulty}" — ${tour.difficulty === 'easy' ? 'suitable for beginners with basic fitness. No prior trekking experience needed.' : tour.difficulty === 'moderate' ? 'requires reasonable fitness and some hiking experience.' : tour.difficulty === 'challenging' ? 'requires good fitness, stamina, and some high-altitude experience.' : 'requires excellent fitness, mountaineering experience, and mental toughness.'}` },
+      { q: `What permits do I need?`, a: `You'll need a TIMS card and ${tour.region.includes('Mustang') || tour.region.includes('Dolpo') ? 'a restricted area permit (approx $500-700 for 10 days)' : 'a conservation area permit (approx $20-30)'}. We handle all permits for you.` },
+      { q: `What's included in the $${tour.price.toLocaleString()} price?`, a: `Includes: guide & porter, all meals during trek, accommodation (tea houses/lodges), permits, ground transportation, and emergency evacuation arrangement. Excludes: international flights, travel insurance, personal gear, and tips.` },
+      { q: `Can beginners do this trek?`, a: tour.difficulty === 'easy' ? `Yes! This trek is perfect for beginners. The trails are well-maintained and altitude is manageable.` : `We recommend some prior hiking experience. Start a fitness routine 2-3 months before — cardio, stairs, and walking with a daypack.` },
+    ];
+  }
+
   return (
     <main className="min-h-screen bg-transparent text-[#f0f4f8] overflow-x-hidden relative z-0 pt-20">
       <NavBar />
@@ -168,6 +216,37 @@ export default function TrekkingPage() {
                   ))}
                 </ul>
               </div>
+
+              {/* Day-by-day itinerary */}
+              <div className="mb-6">
+                <h4 className="font-cinematic font-bold text-golden-shimmer mb-3">📅 Day-by-Day Itinerary</h4>
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                  {generateItinerary(selectedTour).map((day, i) => (
+                    <div key={i} className="itinerary-day">
+                      <div className="itinerary-day-num">{i + 1}</div>
+                      <div className="flex-1">
+                        <div className="text-sm font-display font-semibold text-white">{day.title}</div>
+                        <div className="text-xs text-white/80">{day.desc}</div>
+                        {day.altitude && <div className="text-[10px] text-himalaya-gold mt-0.5">⛰️ {day.altitude}</div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Trek-specific FAQ */}
+              <div className="mb-6">
+                <h4 className="font-cinematic font-bold text-golden-shimmer mb-3">❓ Quick Questions</h4>
+                <div className="space-y-2">
+                  {generateTrekFAQ(selectedTour).map((faq, i) => (
+                    <div key={i} className="glass-card-static p-3 rounded-lg">
+                      <div className="text-sm font-display font-semibold text-white mb-1">{faq.q}</div>
+                      <div className="text-xs text-white/80">{faq.a}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
                 <div><span className="text-white">Best Season:</span> <span className="text-white font-medium">{selectedTour.season}</span></div>
                 <div><span className="text-white">Group Size:</span> <span className="text-white font-medium">{selectedTour.groupSize}</span></div>
